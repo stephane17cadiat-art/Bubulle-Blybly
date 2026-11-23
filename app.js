@@ -10,13 +10,13 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, runTransaction, serverTi
   4) Crée une base Firestore en mode production et publie firestore.rules.
 */
 const firebaseConfig = {
-  apiKey: "REMPLACER_PAR_VOTRE_API_KEY",
-  authDomain: "REMPLACER.firebaseapp.com",
-  projectId: "REMPLACER",
-  storageBucket: "REMPLACER.firebasestorage.app",
-  messagingSenderId: "REMPLACER",
-  appId: "REMPLACER"
-};
+    apiKey: "AIzaSyBBAqdZJGPVCdkNfouhC9lYH51yuYfaw3E",
+    authDomain: "bubulle-blybly.firebaseapp.com",
+    projectId: "bubulle-blybly",
+    storageBucket: "bubulle-blybly.firebasestorage.app",
+    messagingSenderId: "61199635297",
+    appId: "1:61199635297:web:9c440eaa89b6a94d846b20"
+  };
 
 const stages = [
   {place:"Forêt des murmures",emoji:"🌲",question:"Quel animal est réputé pour hululer la nuit ?",answers:["Le hibou","Le lapin","Le papillon"],correct:0,hint:"Il possède de grands yeux et vit souvent dans les arbres.",reward:"💎 Diamant de la forêt"},
