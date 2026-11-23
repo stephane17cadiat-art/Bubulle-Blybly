@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#211b3d">
+  <title>Bubulle & Blybly — La Forêt des Trésors</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-mark">✦</div>
+      <div><p class="eyebrow">UNE AVENTURE À DEUX</p><h1>Bubulle <span>&</span> Blybly</h1></div>
+      <div class="top-gem">💎</div>
+    </header>
+
+    <section id="welcome" class="panel hero">
+      <div class="hero-art">🏰<span>✨</span><i>🌲</i></div>
+      <p class="eyebrow">LE ROYAUME ENCHANTÉ VOUS ATTEND</p>
+      <h2>La Forêt des Trésors</h2>
+      <p class="intro">Deux aventurières, cinq mondes mystérieux et une couronne légendaire à retrouver.</p>
+      <div class="welcome-actions">
+        <button id="createBtn" class="primary">Créer une aventure <span>✦</span></button>
+        <div class="join-row">
+          <input id="inviteInput" type="text" placeholder="Code d’invitation" autocomplete="off" aria-label="Code d’invitation">
+          <button id="joinBtn" class="secondary">Rejoindre</button>
+        </div>
+      </div>
+      <p id="welcomeMessage" class="message" role="status"></p>
+      <p class="fineprint">Accès par invitation · Sauvegarde automatique · iPhone & Android</p>
+    </section>
+
+    <section id="game" class="hidden">
+      <div class="game-heading">
+        <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
+        <button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button>
+      </div>
+      <div class="player-strip">
+        <article class="player-card" id="bubulleCard"><div class="avatar">🧭</div><div><b>BUBULLE</b><small id="bubulleStatus">En attente</small></div><strong id="bubulleScore">0 pts</strong></article>
+        <article class="player-card" id="blyblyCard"><div class="avatar">🌷</div><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
+      </div>
+      <div class="map-panel panel">
+        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Choisissez votre prochaine étape</h3></div><span class="map-sparkle">✧</span></div>
+        <div id="map" class="map"></div>
+      </div>
+      <div class="play-layout">
+        <section class="panel challenge">
+          <div class="challenge-top"><span id="stageLabel" class="pill">ÉPREUVE 1 / 5</span><span class="chest">🎁</span></div>
+          <p class="eyebrow" id="stagePlace">FORÊT DES MURMURES</p>
+          <h3 id="question">Quel animal hulule la nuit ?</h3>
+          <div id="answers" class="answers"></div>
+          <p id="hint" class="hint hidden"></p>
+          <p id="gameMessage" class="message" role="status"></p>
+          <div class="challenge-actions">
+            <button id="hintBtn" class="text-button">💡 Un indice</button>
+            <button id="nextBtn" class="primary hidden">Étape suivante →</button>
+          </div>
+        </section>
+        <aside class="panel treasure">
+          <p class="eyebrow">VOTRE COLLECTION</p>
+          <h3>Trésors trouvés</h3>
+          <div id="treasures" class="treasures"><p class="muted">Vos trésors apparaîtront ici…</p></div>
+          <div class="crown">👑</div>
+          <p class="muted small">Réunissez les 5 fragments pour découvrir le trésor final.</p>
+        </aside>
+      </div>
+      <footer class="game-footer"><span id="syncStatus">● Connexion en cours…</span><button id="leaveBtn" class="text-button">Quitter la partie</button></footer>
+    </section>
+    <footer class="site-footer">Fait avec ✨ pour Bubulle & Blybly</footer>
+  </main>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card panel"><div class="modal-icon">👑</div><p class="eyebrow">TRÉSOR LÉGENDAIRE</p><h2>La Couronne des Besties !</h2><p>Vous avez exploré les cinq mondes. Votre duo entre dans la légende de la forêt enchantée.</p><button id="closeModal" class="primary">Hourra !</button></div>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
