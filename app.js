@@ -85,6 +85,8 @@ function listen(){
 }
 function render(){
   const p=roomData.players;
+  $("bubulleCard").style.display = myRole==="BUBULLE" ? "" : "none";
+$("blyblyCard").style.display = myRole==="BLYBLY" ? "" : "none";
   $("bubulleScore").textContent=p.BUBULLE.score+" pts";
   $("blyblyScore").textContent=p.BLYBLY.score+" pts";
   $("bubulleStatus").textContent=p.BUBULLE.joined?"Dans l'aventure":"En attente";
