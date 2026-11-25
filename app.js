@@ -175,24 +175,52 @@ function render(){
 
 let activeReward = null;
 const rewardStyle = "parchment";
+const surpriseMessages = [
+  "Une étoile vient de choisir ta lumière. Continue de briller ! ✨",
+  "Le royaume te réserve encore de jolies merveilles… 🌷",
+  "Un petit sortilège de chance vient de se poser sur ton chemin. 🍀",
+  "Ton courage fait scintiller toute la forêt enchantée. 💗",
+  "Un trésor se gagne avec l’esprit… et se garde avec le cœur. 🎀",
+  "Les lucioles applaudissent ta belle victoire ! ✨",
+  "Un papillon magique t’apporte une pensée toute douce. 🦋",
+  "Chaque énigme révèle un peu plus ta magie. 🔮"
+];
+const milestoneMessages = {
+  5: "Premier grand cap franchi ! La forêt entière célèbre ta persévérance. 🌟",
+  10: "Dix trésors déjà ! Le château ouvre un nouveau passage secret. 🏰",
+  15: "Tu approches du grand secret… Les étoiles sont de ton côté. 💫",
+  21: "Le trésor légendaire est à portée de main : quelle belle aventure ! 👑"
+};
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
   visual.className="reward-visual "+rewardStyle;
-  // Relance les animations à chaque aperçu.
+  visual.querySelectorAll(".reward-spark").forEach(node=>node.remove());
   const symbol=$("rewardSymbol");
   if(symbol) symbol.remove();
   const span=document.createElement("span");
-  span.id="rewardSymbol";span.className="reward-symbol"+(activeReward.reward.startsWith("💗")?" heart-bow":"");
+  span.id="rewardSymbol";
+  span.className="reward-symbol"+(activeReward.reward.startsWith("💗")?" heart-bow":"");
   span.textContent=activeReward.reward.split(" ")[0] || "🎁";
   visual.appendChild(span);
+  ["✦","✧","✨","💫","✦","🌸"].forEach((spark,index)=>{
+    const particle=document.createElement("span");
+    particle.className="reward-spark spark-"+index;
+    particle.textContent=spark;
+    particle.setAttribute("aria-hidden","true");
+    visual.appendChild(particle);
+  });
 }
 function showReward(stageIndex){
   const s=stages[stageIndex];
-  activeReward={reward:s.reward,owner:myRole==="BUBULLE"?"Bubulle":"Blybly"};
-  $("rewardTitle").textContent="Bravo, trésor découvert !";
-  $("rewardOwner").textContent=activeReward.owner+" vient de réussir l’épreuve.";
+  const owner=myRole==="BUBULLE"?"Bubulle":"Blybly";
+  const completedCount=stageIndex+1;
+  const milestone=milestoneMessages[completedCount];
+  activeReward={reward:s.reward,owner};
+  $("rewardTitle").textContent=milestone?"✨ Une surprise spéciale !":"Bravo, trésor découvert !";
+  $("rewardOwner").textContent=owner+" vient de réussir l’épreuve.";
   $("rewardName").textContent=s.reward;
+  $("rewardMessage").textContent=milestone || surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)];
   $("rewardModal").style.display="grid";
   show("rewardModal");
   playRewardAnimation();
