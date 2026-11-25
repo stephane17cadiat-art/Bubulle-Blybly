@@ -532,8 +532,20 @@ function buildRealisticLook(g){
   const radius=outfit==="princess"?.56:outfit==="boho"?.48:outfit==="magic"?.51:outfit==="forest"?.36:.30;
   const skirt=new THREE.Mesh(new THREE.LatheGeometry([new THREE.Vector2(.19,top),new THREE.Vector2(.23,.98),new THREE.Vector2(radius*.72,.72),new THREE.Vector2(radius,bottom)],48),cloth);skirt.castShadow=true;g.add(skirt);
   const belt=new THREE.Mesh(new THREE.TorusGeometry(.205,.016,8,48),gold);belt.rotation.x=Math.PI/2;belt.position.y=1.13;g.add(belt);
+  const buckle=new THREE.Mesh(new THREE.OctahedronGeometry(.045,1),gold);buckle.position.set(0,1.13,.205);g.add(buckle);
+  const gem=new THREE.MeshPhysicalMaterial({color:state.outfitColor||"#d98ab9",metalness:.18,roughness:.2,emissive:state.outfitColor||"#d98ab9",emissiveIntensity:.12});
+  const jewel=new THREE.Mesh(new THREE.SphereGeometry(.027,12,10),gem);jewel.position.set(0,1.13,.244);g.add(jewel);
   if(outfit==="forest"||outfit==="magic"){for(const side of [-1,1]){const cape=new THREE.Mesh(new THREE.ConeGeometry(.22,.8,14,1,true),cloth);cape.position.set(side*.14,.9,-.2);cape.rotation.z=-side*.1;cape.scale.z=.25;g.add(cape);}}
-  if(outfit==="princess"||outfit==="boho"){for(let i=0;i<3;i++){const trim=new THREE.Mesh(new THREE.TorusGeometry(radius*(.45+i*.2),.008,6,40),gold);trim.rotation.x=Math.PI/2;trim.position.y=bottom+.07+i*.1;g.add(trim);}}
+  if(outfit==="princess"||outfit==="boho"||outfit==="magic"){for(let i=0;i<3;i++){const trim=new THREE.Mesh(new THREE.TorusGeometry(radius*(.45+i*.2),.009,6,48),gold);trim.rotation.x=Math.PI/2;trim.position.y=bottom+.07+i*.1;g.add(trim);}}
+  for(const side of [-1,1]){
+    const puff=new THREE.Mesh(new THREE.SphereGeometry(.105,16,12),cloth);puff.scale.set(1,.78,.82);puff.position.set(side*.235,1.49,.015);g.add(puff);
+    const cuff=new THREE.Mesh(new THREE.TorusGeometry(.067,.012,8,24),gold);cuff.position.set(side*.285,1.27,.035);cuff.rotation.y=Math.PI/2;g.add(cuff);
+    const bootMat=new THREE.MeshPhysicalMaterial({color:outfit==="modern"||outfit==="forest"?"#493b35":outfit==="magic"?"#59436f":"#8b5b78",roughness:.38,metalness:.12});
+    const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.065,.075,.22,16),bootMat);shaft.position.set(side*.105,.16,.005);g.add(shaft);
+    const toe=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),bootMat);toe.scale.set(.075,.055,.14);toe.position.set(side*.105,.055,.075);g.add(toe);
+    const shoeTrim=new THREE.Mesh(new THREE.TorusGeometry(.067,.009,6,24),gold);shoeTrim.position.set(side*.105,.245,.005);shoeTrim.rotation.x=Math.PI/2;g.add(shoeTrim);
+    if(outfit==="princess"||outfit==="boho"){const rosette=new THREE.Mesh(new THREE.SphereGeometry(.035,12,10),gem);rosette.position.set(side*.105,.13,.073);g.add(rosette);}
+  }
 }
 function buildRealisticAccessories(){
   if(!realisticRoot)return;
