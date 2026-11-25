@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-golden-trail">
+  <link rel="stylesheet" href="./style.css?v=20261126-besties-garden">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -93,6 +93,14 @@
         <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
         <div class="map-legend"><span><i class="legend-dot found"></i> Découvert</span><span><i class="legend-dot next"></i> Prochaine étape</span><span><i class="legend-dot secret"></i> Mystère</span></div>
       </div>
+      <section class="besties-garden panel" aria-labelledby="gardenTitle">
+        <div class="garden-heading">
+          <div><p class="eyebrow">LE JARDIN SECRET</p><h3 id="gardenTitle">Le Jardin des Besties 🌷</h3><p>Chaque grande étape accomplie à deux fait éclore une nouvelle fleur.</p></div>
+          <div class="garden-counter"><span>🌱</span><b id="gardenProgress">0 / 5</b><small>fleurs écloses</small></div>
+        </div>
+        <div id="bestiesGarden" class="garden-flowerbeds" aria-live="polite"></div>
+        <p id="gardenMessage" class="garden-message">Votre jardin attend vos premières victoires partagées… 💗</p>
+      </section>
       <div class="play-layout">
         <section class="panel challenge">
           <div class="challenge-top"><span id="stageLabel" class="pill">ÉPREUVE 1 / 21</span><span class="chest">🎁</span></div>
@@ -264,6 +272,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261126-golden-trail"></script>
+  <script type="module" src="./app.js?v=20261126-besties-garden"></script>
 </body>
 </html>
