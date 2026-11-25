@@ -181,3 +181,49 @@
   .royal-titles{margin:6px 0}
   .finale-message{margin:6px 0;padding:8px 10px}
 }
+
+
+/* Correctif de superposition du coffre dans le grand final */
+.finale-card{position:relative;isolation:isolate}
+.finale-card>.eyebrow,
+.finale-card>h2,
+.finale-card>.finale-intro,
+.finale-card>.royal-titles,
+.finale-card>.finale-message,
+.finale-card>.finale-preview-note,
+.finale-card>button{position:relative;z-index:2}
+.finale-chest{
+  position:relative;
+  z-index:1;
+  flex:none;
+  height:clamp(88px,13vh,118px);
+  max-width:230px;
+  margin:2px auto 5px;
+  overflow:visible;
+}
+.treasure-illustration{position:relative;z-index:1}
+.treasure-pop{
+  z-index:3;
+  top:0;
+  width:170px;
+  height:112px;
+  transform:translate(-50%,-10px);
+}
+.finale-chest.opening .treasure-pop{
+  animation:treasureEmergeCompact 1.25s .38s cubic-bezier(.16,.88,.24,1.22) forwards;
+}
+.floating-crown{width:132px;height:99px;left:0;top:0}
+.floating-heart{width:58px;height:58px;right:0;top:23px}
+@keyframes treasureEmergeCompact{
+  0%{opacity:0;transform:translate(-50%,25px) scale(.4)}
+  55%{opacity:1;transform:translate(-50%,-24px) scale(1.08)}
+  78%{transform:translate(-50%,-15px) scale(.98)}
+  100%{opacity:1;transform:translate(-50%,-20px) scale(1)}
+}
+@media(max-width:430px){
+  .finale-card{overflow-y:auto;overflow-x:hidden}
+  .finale-chest{height:clamp(78px,11vh,98px);max-width:195px;margin:0 auto 3px}
+  .treasure-pop{top:0;width:148px;height:100px;transform:translate(-50%,-5px)}
+  .floating-crown{width:116px;height:87px}
+  .floating-heart{width:49px;height:49px;right:0;top:20px}
+}
