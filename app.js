@@ -128,7 +128,7 @@ async function joinRoom(code){
     history.replaceState({}, "", "?room="+roomId); enterGame(); listen();
   }catch(e){say("welcomeMessage",friendlyError(e));}
 }
-function enterGame(){hide("welcome");show("game");}
+function enterGame(){hide("welcome");show("game");if ($("previewSurpriseBtn")) $("previewSurpriseBtn").classList.toggle("hidden", myRole !== "BUBULLE");}
 function listen(){
   if(unsubscribe) unsubscribe();
   unsubscribe=onSnapshot(roomRef,snap=>{
