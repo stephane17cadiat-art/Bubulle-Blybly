@@ -529,3 +529,30 @@ body.portal-leaving .shell>.topbar,body.portal-leaving .site-footer{transition:o
 @keyframes chapterStopGlow{from{filter:brightness(1)}to{filter:brightness(1.28)}}
 @media(max-width:430px){.chapter-gateway-card{padding:20px 16px 17px}.chapter-gateway-orbit{width:88px;height:88px}.chapter-gateway-icon{font-size:42px}}
 @media(prefers-reduced-motion:reduce){.chapter-transition:before,.chapter-transition:after,.chapter-gateway-icon,.chapter-gateway-orbit i,.chapter-gateway-card,.chapter-map-glow,.map-stop.chapter-highlight{animation:none!important}.chapter-transition:before,.chapter-transition:after{opacity:.3}}
+
+
+/* Décors évolutifs selon le chapitre découvert */
+.forest-atmosphere:before,.forest-atmosphere:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.1s ease}
+.forest-atmosphere:before{background:radial-gradient(ellipse at 18% 82%,#5c9b6a22,transparent 38%),radial-gradient(ellipse at 82% 18%,#8bbf7d18,transparent 35%)}
+.forest-atmosphere:after{background:radial-gradient(ellipse at 50% 100%,#8acb8b12,transparent 55%)}
+body.realm-forest .forest-atmosphere:before,body.realm-forest .forest-atmosphere:after{opacity:1}
+body.realm-forest .forest-firefly{background:#fff3b8;box-shadow:0 0 7px 3px #f6d98b99,0 0 17px 5px #f4b9e655}
+body.realm-forest .forest-petal{color:#f5b9df}
+body.realm-castle{background:radial-gradient(ellipse at 15% 5%,#65466f 0,transparent 37%),radial-gradient(ellipse at 90% 25%,#72513d44 0,transparent 34%),linear-gradient(145deg,#21172f,#382447 55%,#29213c)}
+body.realm-castle .forest-atmosphere:before{opacity:1;background:repeating-linear-gradient(90deg,transparent 0 13%,#f4d58b08 13.2% 13.8%,transparent 14% 27%),radial-gradient(ellipse at 50% 100%,#f6cf8b25,transparent 62%)}
+body.realm-castle .forest-atmosphere:after{opacity:.9;background:radial-gradient(ellipse at 20% 28%,#ffe6a822,transparent 24%),radial-gradient(ellipse at 78% 43%,#f5c77a20,transparent 26%)}
+body.realm-castle .forest-firefly{background:#ffe2a0;box-shadow:0 0 8px 3px #f5c878aa,0 0 20px 6px #f0b96b66}
+body.realm-castle .forest-petal{color:#f8d68e;text-shadow:0 0 13px #f4c77b99}
+body.realm-crystals{background:radial-gradient(ellipse at 18% 8%,#624d91 0,transparent 39%),radial-gradient(ellipse at 88% 30%,#a34c9566 0,transparent 34%),linear-gradient(145deg,#17152f,#30234b 54%,#241c42)}
+body.realm-crystals .forest-atmosphere:before{opacity:1;background:repeating-conic-gradient(from 12deg at 52% 48%,#d7b4ff00 0deg,#d7b4ff12 3deg,#d7b4ff00 7deg),radial-gradient(ellipse at 50% 50%,#a68bff25,transparent 57%)}
+body.realm-crystals .forest-atmosphere:after{opacity:1;background:radial-gradient(ellipse at 16% 72%,#d58bff22,transparent 29%),radial-gradient(ellipse at 82% 24%,#8edbff20,transparent 30%)}
+body.realm-crystals .forest-firefly{width:6px;height:6px;background:#e7d7ff;box-shadow:0 0 9px 4px #c6a5ffbb,0 0 23px 7px #b58cff77}
+body.realm-crystals .forest-petal{color:#d9b7ff;text-shadow:0 0 14px #b98cff}
+body.realm-treasure{background:radial-gradient(ellipse at 18% 7%,#78533766 0,transparent 38%),radial-gradient(ellipse at 88% 25%,#815c3d55 0,transparent 35%),linear-gradient(145deg,#21182e,#39283b 55%,#2d2435)}
+body.realm-treasure .forest-atmosphere:before{opacity:1;background:radial-gradient(ellipse at 50% 50%,#f7d58b22,transparent 55%),repeating-linear-gradient(115deg,transparent 0 18%,#ffe8a00a 18.2% 18.6%,transparent 19% 36%)}
+body.realm-treasure .forest-atmosphere:after{opacity:1;background:radial-gradient(ellipse at 12% 30%,#ffe6a822,transparent 22%),radial-gradient(ellipse at 85% 72%,#f7c8e822,transparent 25%)}
+body.realm-treasure .forest-firefly{width:5px;height:5px;background:#fff0b8;box-shadow:0 0 9px 4px #f5d58baa,0 0 24px 7px #f4c36a77}
+body.realm-treasure .forest-petal{color:#ffe3a1;text-shadow:0 0 15px #f4c66f}
+body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphere:before,body.realm-treasure .forest-atmosphere:before{animation:realmLightDrift 14s ease-in-out infinite alternate}
+@keyframes realmLightDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.04)}}
+@media(prefers-reduced-motion:reduce){.forest-atmosphere:before,.forest-atmosphere:after{transition:none;animation:none!important}}
