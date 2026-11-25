@@ -73,6 +73,23 @@
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-card panel"><div class="modal-icon">👑</div><p class="eyebrow">TRÉSOR LÉGENDAIRE</p><h2>La Couronne des Besties !</h2><p>Vous avez exploré les cinq mondes. Votre duo entre dans la légende de la forêt enchantée.</p><button id="closeModal" class="primary">Hourra !</button></div>
   </div>
-  <script type="module" src="./app.js?v=20261125-21enigmes"></script>
+  <div id="rewardModal" class="reward-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
+    <section class="reward-card">
+      <button id="closeReward" class="reward-close" aria-label="Fermer">×</button>
+      <p class="reward-kicker">✨ TRÉSOR DÉCOUVERT ✨</p>
+      <div id="rewardVisual" class="reward-visual chest-style" aria-hidden="true"><span class="reward-glow">✦</span><span class="reward-symbol">🎁</span></div>
+      <h2 id="rewardTitle">Une merveille t’attend !</h2>
+      <p id="rewardOwner" class="reward-owner"></p>
+      <div id="rewardName" class="reward-name">💎 Diamant de la forêt</div>
+      <p class="reward-choice-label">Choisis ton animation préférée :</p>
+      <div class="reward-styles">
+        <button class="reward-style active" data-style="chest">🎁 Coffre magique</button>
+        <button class="reward-style" data-style="stars">✨ Pluie d’étoiles</button>
+        <button class="reward-style" data-style="scroll">📜 Parchemin</button>
+      </div>
+      <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
+    </section>
+  </div>
+  <script type="module" src="./app.js?v=20261125-rewards"></script>
 </body>
 </html>
