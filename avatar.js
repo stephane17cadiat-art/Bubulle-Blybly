@@ -49,9 +49,13 @@ function buildAvatar() {
   faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null; powerBurstGroup = null; powerStarted = 0;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
-  const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
+  const skin=new THREE.MeshPhysicalMaterial({color:state.skinColor,roughness:.43,metalness:0,clearcoat:.12,clearcoatRoughness:.62});
+  const hair=new THREE.MeshPhysicalMaterial({color:state.hairColor,roughness:.29,metalness:.025,clearcoat:.32,clearcoatRoughness:.38});
+  const dress=new THREE.MeshPhysicalMaterial({color:state.outfitColor,roughness:.32,metalness:.035,clearcoat:.18,clearcoatRoughness:.5,sheen:.28,sheenColor:new THREE.Color("#fff0f7")});
+  const dark=material("#342536");
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
-  const lip=material(state.lipColor||"#b96e78",.48), blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72);
+  const lip=new THREE.MeshPhysicalMaterial({color:state.lipColor||"#b96e78",roughness:.3,clearcoat:.42,clearcoatRoughness:.25});
+  const blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72,{transparent:true,opacity:.72});
   const smooth=(g)=>{g.computeVertexNormals();return g;};
   const curveTube=(points,mat,r=.025)=>{
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
@@ -585,14 +589,18 @@ function initScene(){
   const host=$("avatarView");
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(35,1,.1,100);camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);
-  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
   host.innerHTML="";host.appendChild(renderer.domElement);
-  scene.add(new THREE.HemisphereLight(0xffeaff,0x34445a,2.1));
-  const key=new THREE.DirectionalLight(0xffe4f3,2.4);key.position.set(-3,5,5);key.castShadow=true;scene.add(key);
-  const fill=new THREE.PointLight(0x9edfd0,35,9);fill.position.set(3,2,2);scene.add(fill);
+  scene.add(new THREE.HemisphereLight(0xffeaff,0x34445a,1.65));
+  const key=new THREE.DirectionalLight(0xffe9dc,3.1);key.position.set(-3.5,5.5,4.5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-3;key.shadow.camera.right=3;key.shadow.camera.top=4;key.shadow.camera.bottom=-1;key.shadow.bias=-.00025;key.shadow.radius=5;scene.add(key);
+  const fill=new THREE.PointLight(0x9edfd0,24,9);fill.position.set(3,2.4,2.2);scene.add(fill);
+  const faceLight=new THREE.PointLight(0xffd9e8,13,5);faceLight.position.set(-.3,2.7,3.2);scene.add(faceLight);
+  const rimLight=new THREE.DirectionalLight(0xb6c9ff,2.2);rimLight.position.set(1.5,3,-3);scene.add(rimLight);
+  const lowBounce=new THREE.PointLight(0x9cdbb5,8,5);lowBounce.position.set(0,.45,1.8);scene.add(lowBounce);
   buildForestDecor();
-  const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,48),material("#b6a0ca",.9,{transparent:true,opacity:.15}));
-  floor.rotation.x=-Math.PI/2;floor.position.y=.08;scene.add(floor);
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,64),new THREE.MeshStandardMaterial({color:"#a6c7a6",roughness:1,metalness:0,transparent:true,opacity:.2}));
+  floor.rotation.x=-Math.PI/2;floor.position.y=.075;floor.receiveShadow=true;scene.add(floor);
+  const shadowDisc=new THREE.Mesh(new THREE.CircleGeometry(.58,48),new THREE.MeshBasicMaterial({color:"#10151b",transparent:true,opacity:.19,depthWrite:false}));shadowDisc.rotation.x=-Math.PI/2;shadowDisc.position.y=.078;shadowDisc.scale.set(1,.48,1);scene.add(shadowDisc);
   clock=new THREE.Clock();buildAvatar();resize();loadRealisticCharacter();
   const observer=new ResizeObserver(resize);observer.observe(host);
   renderer.domElement.addEventListener("pointerdown",e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
@@ -612,8 +620,9 @@ function animate(){
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
-  const powerActive=powerBurstGroup&&powerElapsed>=0&&powerElapsed<1900;
-  const powerProgress=powerActive?powerElapsed/1900:1;
+  const powerActive=powerBurstGroup&&powerElapsed>=0&&powerElapsed<2400;
+  const powerProgress=powerActive?powerElapsed/2400:1;
+  const powerPulse=powerActive?Math.sin(Math.PI*powerProgress):0;
   if(powerBurstGroup){
     powerBurstGroup.visible=!!powerActive;
     if(powerActive){
@@ -769,7 +778,7 @@ $("powerBtn").addEventListener("click",()=>{
     else if(power==="crystalWave"){geometry=new THREE.OctahedronGeometry(.095,0);scale=[1,1.35,.8];}
     else{geometry=new THREE.SphereGeometry(.045,12,10);scale=[1,1,1];}
     const color=palette[i%palette.length];
-    const mat=material(color,.22,{emissive:color,emissiveIntensity:1.65,transparent:true,opacity:1,side:THREE.DoubleSide});
+    const mat=material(color,.2,{emissive:color,emissiveIntensity:2.1,transparent:true,opacity:1,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false});
     const particle=addMesh(powerBurstGroup,geometry,mat,[0,1.22,.22],scale);
     particle.userData={angle,delay:(i%4)*.045,rise:.25+(i%5)*.13,spin:(i%2?1:-1)*(.5+(i%3)*.35),baseScale:particle.scale.clone()};
   }
