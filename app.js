@@ -347,6 +347,7 @@ function showMemoryCelebration(item){
 function launchNextMemoryCelebration(){if(!pendingMemoryCelebrations.length)return;showMemoryCelebration(pendingMemoryCelebrations.shift());}
 function closeMemoryCelebration(){$("memoryCelebration").classList.add("hidden");if(pendingMemoryCelebrations.length)launchNextMemoryCelebration();}
 $("memoryCelebrationContinue").addEventListener("click",closeMemoryCelebration);
+$("memoryTestBtn")?.addEventListener("click",()=>showMemoryCelebration({title:"La magie des Besties !",message:"Un cœur enchanté, des étincelles roses, violettes et blanches… juste pour le plaisir de la surprise ! 💗"}));
 async function answer(choice,stageIndex){
   const s=stages[stageIndex];
   if(choice!==s.correct){say("gameMessage","Pas tout à fait ! Essaie encore 😊");return;}
