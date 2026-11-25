@@ -158,6 +158,7 @@ function showReward(stageIndex){
   $("rewardTitle").textContent="Bravo, trésor découvert !";
   $("rewardOwner").textContent=activeReward.owner+" vient de réussir l’épreuve.";
   $("rewardName").textContent=s.reward;
+  $("rewardModal").style.display="grid";
   show("rewardModal");
   playRewardAnimation();
 }
@@ -174,11 +175,12 @@ $("rewardTestBtn").addEventListener("click",()=>{
   $("rewardTitle").textContent="Choisis ton effet préféré !";
   $("rewardOwner").textContent=activeReward.owner;
   $("rewardName").textContent=activeReward.reward;
+  $("rewardModal").style.display="grid";
   show("rewardModal");
   playRewardAnimation();
 });
-$("closeReward").addEventListener("click",()=>hide("rewardModal"));
-$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal")hide("rewardModal");});
+$("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";});
+$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";}});
 
 async function answer(choice,stageIndex){
   const s=stages[stageIndex];
