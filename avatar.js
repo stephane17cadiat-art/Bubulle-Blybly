@@ -19,7 +19,7 @@ const status = message => $("saveStatus").textContent = message;
 const defaults = {
   hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",accessoryStyle:"none",skinColor:"#f3c6a5",
   eyeColor:"#8b6049",eyeShape:"almond",lipColor:"#b96e78",makeup:"soft",freckles:"none",
-  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",companion:"none",theme:"forest"
+  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",magicColor:"rose",magicMotion:"orbit",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
 let companionMotion = null, magicParticles = [], magicAura = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
@@ -479,7 +479,9 @@ function buildAvatar() {
   magicParticles=[];
   if(state.magicEffect && state.magicEffect!=="none"){
     const effect=state.magicEffect;
-    const palette=effect==="stars"?["#fff1a8","#d9c8ff","#b9e7ff"]:effect==="butterflies"?["#f7a9d2","#b9a7f5","#ffe3a3"]:effect==="aura"||effect==="aurora"?["#a8f0df","#d8b7ff","#fff0c2"]:effect==="fireflies"?["#fff0a6","#f7d77b","#d5f4b2"]:effect==="hearts"?["#ff9fc8","#f7c4df","#e8a9e8"]:effect==="crystals"?["#b9e7ff","#d9c8ff","#fff1d1"]:["#f6b5d1","#f4d89a","#d8c5ff"];
+    const effectPalette=effect==="stars"?["#fff1a8","#d9c8ff","#b9e7ff"]:effect==="butterflies"?["#f7a9d2","#b9a7f5","#ffe3a3"]:effect==="aura"||effect==="aurora"?["#a8f0df","#d8b7ff","#fff0c2"]:effect==="fireflies"?["#fff0a6","#f7d77b","#d5f4b2"]:effect==="hearts"?["#ff9fc8","#f7c4df","#e8a9e8"]:effect==="crystals"?["#b9e7ff","#d9c8ff","#fff1d1"]:["#f6b5d1","#f4d89a","#d8c5ff"];
+    const magicPalettes={rose:["#ff9fc8","#f7c4df","#e8a9e8"],violet:["#b9a7f5","#d9c8ff","#eee5ff"],turquoise:["#8debdc","#b4fff0","#d5f4ee"],gold:["#ffe28a","#f7c86a","#fff0b5"],blue:["#9bcfff","#c6e7ff","#e0f4ff"]};
+    const palette=magicPalettes[state.magicColor]||effectPalette;
     const glowMats=palette.map(c=>material(c,.28,{emissive:c,emissiveIntensity:effect==="fireflies"?1.35:.7,transparent:true,opacity:.92}));
     const heartShape=new THREE.Shape();
     heartShape.moveTo(0,-.035);heartShape.bezierCurveTo(-.075,.02,-.075,.075,-.025,.075);heartShape.bezierCurveTo(0,.075,.018,.045,0,.025);heartShape.bezierCurveTo(.035,.09,.09,.065,.075,.015);heartShape.bezierCurveTo(.065,-.005,.025,-.03,0,-.035);
@@ -492,7 +494,8 @@ function buildAvatar() {
       magicParticles.push(particle);
     }
     if(effect==="aura"||effect==="aurora"){
-      const auraMat=material(effect==="aurora"?"#b7a2f4":"#b8f0e1",.24,{emissive:effect==="aurora"?"#8e72d0":"#83d9c9",emissiveIntensity:1.05,transparent:true,opacity:.7});
+      const auraColor=(magicPalettes[state.magicColor]||["#b8f0e1"])[0];
+      const auraMat=material(auraColor,.24,{emissive:auraColor,emissiveIntensity:1.05,transparent:true,opacity:.7});
       magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(effect==="aurora"?.52:.43,.014,8,72),auraMat,[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
     }else magicAura=null;
   }else magicAura=null;
@@ -608,13 +611,17 @@ function animate(){
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   for(const p of magicParticles){
-    const d=p.userData, a=d.angle+t*(d.kind==="butterflies" ? .62 : .34);
-    p.position.set(Math.cos(a)*d.radius,d.baseY+Math.sin(t*1.7+d.phase)*.075,Math.sin(a)*.20+.23);
-    p.rotation.z=Math.sin(t*2+d.phase)*.45;
+    const d=p.userData, motion=state.magicMotion||"orbit";
+    const speed=motion==="swirl"?.82:motion==="gentle"?.2:(d.kind==="butterflies"?.62:.34);
+    const bob=motion==="swirl"?.12:motion==="gentle"?.045:.075;
+    const wobble=motion==="swirl"?.75:motion==="gentle"?.18:.45;
+    const a=d.angle+t*speed;
+    p.position.set(Math.cos(a)*d.radius,d.baseY+Math.sin(t*(motion==="swirl"?2.6:1.7)+d.phase)*bob,Math.sin(a)*.20+.23);
+    p.rotation.z=Math.sin(t*(motion==="swirl"?3:2)+d.phase)*wobble;
     const pulse=.82+.24*(.5+.5*Math.sin(t*2.5+d.phase));
     p.scale.copy(d.baseScale).multiplyScalar(pulse);
   }
-  if(magicAura){magicAura.rotation.z=t*.22;magicAura.material.opacity=.48+.22*(.5+.5*Math.sin(t*2));}
+  if(magicAura){magicAura.rotation.z=t*(state.magicMotion==="swirl"?.55:state.magicMotion==="gentle"?.12:.22);magicAura.material.opacity=.48+.22*(.5+.5*Math.sin(t*(state.magicMotion==="swirl"?3:2)));}
   if(faceBlinkMeshes.length){
     const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;
     for(let i=0;i<faceBlinkMeshes.length;i++){
