@@ -484,3 +484,19 @@ body.portal-leaving .shell>.topbar,body.portal-leaving .site-footer{transition:o
 @keyframes forestPetalDrift{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:.42}75%{opacity:.28}100%{opacity:0;transform:translate3d(35px,-115vh,0) rotate(230deg)}}
 @media(max-width:600px){.forest-firefly{width:4px;height:4px;box-shadow:0 0 6px 2px #f6d98b88,0 0 12px 3px #f4b9e644}.forest-petal{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.forest-firefly,.forest-petal{animation:none!important;opacity:.35}}
+
+
+/* Réactions magiques aux réponses */
+.answer{position:relative;overflow:visible;isolation:isolate;transition:background .2s,border-color .2s,transform .2s}
+.answer-wrong{animation:answerWrongShake .48s cubic-bezier(.36,.07,.19,.97) both;border-color:#ff91ad!important;background:#ff78901c!important}
+.answer-correct-burst{border-color:#f7d58b!important;background:linear-gradient(100deg,#a8e6cf38,#f7d58b30)!important;box-shadow:0 0 0 1px #f7d58b55,0 0 24px #f7d58b66!important;animation:answerCorrectPop .62s cubic-bezier(.18,.9,.25,1.25) both}
+.answer-spark{position:absolute;left:50%;top:50%;z-index:3;pointer-events:none;color:#fff1bd;font-size:18px;font-weight:800;text-shadow:0 0 8px #fff,0 0 17px #f6c8e6;animation:answerSparkBurst .78s ease-out both}
+.answer-feedback-wrong{color:#ffb0c4!important;animation:answerMessageShake .38s ease}
+.answer-feedback-success{color:#f7d58b!important;text-shadow:0 0 13px #f7d58b88}
+.challenge.answer-success-flash{animation:challengeMagicFlash .82s ease}
+@keyframes answerWrongShake{0%,100%{transform:translateX(0)}18%,54%{transform:translateX(-5px)}36%,72%{transform:translateX(5px)}}
+@keyframes answerMessageShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes answerCorrectPop{0%{transform:scale(1)}38%{transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes answerSparkBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(0) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + cos(var(--spark-angle))*var(--spark-distance)),calc(-50% + sin(var(--spark-angle))*var(--spark-distance))) rotate(70deg) scale(1.25)}}
+@keyframes challengeMagicFlash{0%{box-shadow:0 18px 50px #09081755}35%{box-shadow:0 0 0 2px #f7d58b88,0 0 34px #f5b8e855,0 18px 50px #09081755}100%{box-shadow:0 18px 50px #09081755}}
+@media(prefers-reduced-motion:reduce){.answer-wrong,.answer-correct-burst,.answer-feedback-wrong,.challenge.answer-success-flash{animation:none!important}.answer-spark{display:none}}
