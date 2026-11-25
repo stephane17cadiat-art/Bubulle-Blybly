@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-realm-worlds">
+  <link rel="stylesheet" href="./style.css?v=20261126-living-map">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -89,8 +89,9 @@
         <article class="player-card" id="blyblyCard"><div class="avatar">🌷</div><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
       </div>
       <div class="map-panel panel">
-        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Choisissez votre prochaine étape</h3></div><span class="map-sparkle">✧</span></div>
-        <div id="map" class="map"></div>
+        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 21 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 21 trésors</b></div></div>
+        <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
+        <div class="map-legend"><span><i class="legend-dot found"></i> Découvert</span><span><i class="legend-dot next"></i> Prochaine étape</span><span><i class="legend-dot secret"></i> Mystère</span></div>
       </div>
       <div class="play-layout">
         <section class="panel challenge">
@@ -263,6 +264,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261126-realm-worlds"></script>
+  <script type="module" src="./app.js?v=20261126-living-map"></script>
 </body>
 </html>
