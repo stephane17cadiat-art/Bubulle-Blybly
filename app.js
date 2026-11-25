@@ -148,6 +148,7 @@ function render(){
   $("blyblyStatus").textContent=p.BLYBLY.joined?"Dans l'aventure":"En attente";
   $("bubulleCard").classList.toggle("active",myRole==="BUBULLE");
   $("blyblyCard").classList.toggle("active",myRole==="BLYBLY");
+  if ($("previewSurpriseBtn")) $("previewSurpriseBtn").classList.toggle("hidden", myRole !== "BUBULLE");
   const mine=p[myRole], stage=Math.min(mine.stage,stages.length-1), s=stages[stage];
   $("stageLabel").textContent=`${s.chapter || "Premiers pas"} · ÉPREUVE ${stage+1} / ${stages.length}`;
   $("stagePlace").textContent=s.emoji+" "+s.place.toUpperCase();
