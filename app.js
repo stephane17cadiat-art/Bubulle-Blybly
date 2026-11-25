@@ -221,7 +221,7 @@ function showReward(stageIndex){
   $("rewardTitle").textContent=milestone?"✨ Une surprise spéciale !":"Bravo, trésor découvert !";
   $("rewardOwner").textContent=owner+" vient de réussir l’épreuve.";
   $("rewardName").textContent=s.reward;
-  $("rewardMessage").textContent=myRole==="BUBULLE" ? "🎀 Surprise réservée à Blybly… Le message apparaîtra sur son écran !" : (milestone || surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)]);
+  $("rewardMessage").textContent=milestone || surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)];
   $("rewardModal").style.display="grid";
   show("rewardModal");
   playRewardAnimation();
@@ -273,7 +273,7 @@ if (previewSurpriseBtn) previewSurpriseBtn.addEventListener("click", () => {
   $("rewardTitle").textContent = "✨ Aperçu de la surprise";
   $("rewardOwner").textContent = "Voici l’animation qui accompagnera les trésors.";
   $("rewardName").textContent = activeReward.reward;
-  $("rewardMessage").textContent = "🎀 Surprise réservée à Blybly… Le message apparaîtra sur son écran !";
+  $("rewardMessage").textContent = surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)];
   $("rewardModal").style.display = "grid";
   show("rewardModal");
   playRewardAnimation();
