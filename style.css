@@ -331,3 +331,25 @@
 .album-chapter-track{height:4px;margin:8px 0 2px;overflow:hidden;border-radius:99px;background:#ead8d8}
 .album-chapter-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#d98db6,#b18ac9);transition:width .4s ease}
 @media(max-width:430px){.album-duo-summary{padding:13px 9px}.album-duo-grid{gap:5px}.album-duo-stat{padding:8px 2px}.album-duo-stat strong{font-size:19px}.album-duo-stat small{font-size:8px}}
+
+
+/* Galerie des souvenirs à débloquer */
+.album-memory-section{margin:22px 0 23px;padding:15px 12px 13px;border:1px solid #d7ad81;border-radius:17px;background:linear-gradient(145deg,#fff8ed,#f4e3e9);box-shadow:inset 0 0 0 3px #fffaf2,0 5px 14px #69465b10}
+.album-memory-section .album-section-heading{margin-bottom:6px}
+.album-memory-intro{margin:0 auto 13px;text-align:center;color:#936f7b;font:italic 11px/1.5 Georgia,serif}
+.album-memories{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.album-memory{position:relative;display:flex;align-items:center;gap:8px;min-width:0;min-height:76px;padding:9px 8px;border:1px solid #dfc9bb;border-radius:13px;background:#fffaf3;overflow:hidden}
+.album-memory.unlocked{border-color:#d4a3bd;background:linear-gradient(135deg,#fffaf3,#f9e6ef);box-shadow:0 4px 13px #bd75a022;animation:memoryUnlock .65s ease-out both}
+.album-memory.locked{filter:saturate(.55);background:#f3e9df}
+.album-memory-icon{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#f2e2e9;font-size:21px}
+.album-memory.locked .album-memory-icon{filter:grayscale(.9);opacity:.55}
+.album-memory-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
+.album-memory-copy b{font:700 11px/1.25 Georgia,serif;color:#70466c}
+.album-memory-copy small{font-size:9px;line-height:1.35;color:#987b83}
+.album-memory-state{position:absolute;right:6px;bottom:4px;font-size:7px;letter-spacing:.25px;color:#ad8292}
+.album-memory.unlocked .album-memory-state{color:#a45e85}
+.album-heart-count{position:absolute;top:4px;right:6px;color:#c45c91;font-size:10px;font-weight:800}
+.album-memory.crown.unlocked .album-memory-icon{animation:crownMemoryGlow 1.8s ease-in-out infinite}
+@keyframes memoryUnlock{0%{opacity:.4;transform:scale(.92)}65%{opacity:1;transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes crownMemoryGlow{0%,100%{filter:drop-shadow(0 0 2px #e7b66c)}50%{filter:drop-shadow(0 0 9px #e7b66c)}}
+@media(max-width:430px){.album-memory-section{padding:13px 8px}.album-memories{gap:6px}.album-memory{gap:6px;padding:8px 6px;min-height:82px}.album-memory-icon{width:29px;height:29px;font-size:18px}.album-memory-copy b{font-size:10px}.album-memory-copy small{font-size:8px}.album-memory-state{font-size:6px}}
