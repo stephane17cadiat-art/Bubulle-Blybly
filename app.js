@@ -208,7 +208,42 @@ function openFinale(preview=false){
 }
 $("finaleTestBtn").addEventListener("click",()=>openFinale(true));
 $("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
-$("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
+$("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});\n
+const albumGroups = [
+  {title:"Les premiers pas",subtitle:"Les cinq premières découvertes",start:0,end:4},
+  {title:"Chapitre 1 · La forêt des secrets",subtitle:"Là où la magie commence",start:5,end:8},
+  {title:"Chapitre 2 · Le château mystérieux",subtitle:"Les secrets derrière les portes",start:9,end:12},
+  {title:"Chapitre 3 · Les cristaux enchantés",subtitle:"Quatre éclats à réunir",start:13,end:16},
+  {title:"Chapitre 4 · Le trésor des besties",subtitle:"Le dernier chemin vers la couronne",start:17,end:20}
+];
+function openAlbum(){
+  if(!roomData) return;
+  const players=roomData.players;
+  $("albumProgress").innerHTML=[
+    {key:"BUBULLE",name:"Bubulle",symbol:"🧭"},
+    {key:"BLYBLY",name:"Blybly",symbol:"🌷"}
+  ].map(player=>{
+    const data=players[player.key];
+    const count=(data.completed||[]).length;
+    return `<article class="album-stat"><span>${player.symbol}</span><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/21*100)}%"></i></div></article>`;
+  }).join("");
+  $("albumChapters").innerHTML=albumGroups.map(group=>{
+    const items=stages.slice(group.start,group.end+1).map((stage,offset)=>{
+      const index=group.start+offset;
+      const bubulle=(players.BUBULLE.completed||[]).includes(index);
+      const blybly=(players.BLYBLY.completed||[]).includes(index);
+      const status=bubulle&&blybly?"Validée à deux":bubulle?"Validée par Bubulle":blybly?"Validée par Blybly":"À découvrir";
+      const mark=bubulle&&blybly?"✦":bubulle||blybly?"✧":"◇";
+      return `<li class="${bubulle&&blybly?"both-done":bubulle||blybly?"one-done":""}"><span class="album-check">${mark}</span><span>${stage.place}</span><small>${status}</small></li>`;
+    }).join("");
+    return `<section class="album-chapter"><header><div><h3>${group.title}</h3><p>${group.subtitle}</p></div><span>${group.end-group.start+1} étapes</span></header><ol>${items}</ol></section>`;
+  }).join("");
+  $("albumModal").classList.remove("hidden");
+}
+$("albumOpenBtn").addEventListener("click",openAlbum);
+$("albumCloseBtn").addEventListener("click",()=>hide("albumModal"));
+$("albumModal").addEventListener("click",event=>{if(event.target.id==="albumModal")hide("albumModal");});
+
 
 function playRewardAnimation(){
   if(!activeReward) return;
