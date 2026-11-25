@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261125-album-memories">
+  <link rel="stylesheet" href="./style.css?v=20261125-fireworks">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -152,6 +152,17 @@
     </div>
   </div>
 
+  <div id="memoryCelebration" class="memory-celebration hidden" role="status" aria-live="polite">
+    <div class="memory-fireworks" aria-hidden="true"></div>
+    <div class="memory-celebration-card">
+      <div class="memory-celebration-heart" aria-hidden="true">💗</div>
+      <p class="memory-celebration-kicker">UN NOUVEAU SOUVENIR EST NÉ</p>
+      <h2 id="memoryCelebrationTitle">Le cœur des Besties</h2>
+      <p id="memoryCelebrationMessage">Votre complicité vient de faire éclore un nouveau trésor.</p>
+      <button id="memoryCelebrationContinue" class="primary">Continuer l’aventure ✨</button>
+    </div>
+  </div>
+
   <div id="albumModal" class="album-modal hidden" role="dialog" aria-modal="true" aria-labelledby="albumTitle">
     <section class="album-book">
       <button id="albumCloseBtn" class="album-close" aria-label="Fermer l’album">×</button>
@@ -194,6 +205,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261125-album-memories"></script>
+  <script type="module" src="./app.js?v=20261125-fireworks"></script>
 </body>
 </html>
