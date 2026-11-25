@@ -21,7 +21,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null;
+let companionMotion = null, faceBlinkMeshes = [];
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -45,6 +45,7 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   return mesh;
 }
 function buildAvatar() {
+  faceBlinkMeshes = [];
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.48), dark=material("#342536");
@@ -132,25 +133,31 @@ function buildAvatar() {
 
   sphere(avatarRoot,skin,[-.285,2.1,0],[.055,.09,.065]);
   sphere(avatarRoot,skin,[.285,2.1,0],[.055,.09,.065]);
-  sphere(avatarRoot,white,[-.105,2.15,.245],[.071,.073,.029]);
-  sphere(avatarRoot,white,[.105,2.15,.245],[.071,.073,.029]);
-  // Cils et paupières pour un regard plus fin
-  curveTube([[-.18,2.18,.256],[-.12,2.225,.27],[-.055,2.18,.256]],dark,.009);
-  curveTube([[.055,2.18,.256],[.12,2.225,.27],[.18,2.18,.256]],dark,.009);
+  // Yeux brillants en plusieurs couches : iris, anneau, pupille et reflets.
+  const irisMat=material("#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
   for(const side of [-1,1]){
-    curveTube([[side*.16,2.18,.26],[side*.20,2.205,.25]],dark,.006);
-    curveTube([[side*.14,2.18,.265],[side*.18,2.21,.255]],dark,.006);
+    const eyeWhite=sphere(avatarRoot,white,[side*.105,2.15,.245],[.073,.076,.031]);
+    faceBlinkMeshes.push(eyeWhite);
+    sphere(avatarRoot,irisRing,[side*.105,2.15,.271],[.041,.052,.015]);
+    sphere(avatarRoot,irisMat,[side*.105,2.15,.281],[.034,.045,.012]);
+    sphere(avatarRoot,pupilMat,[side*.105,2.15,.291],[.018,.031,.008]);
+    sphere(avatarRoot,white,[side*.105-.012,2.17,.299],[.011,.014,.006]);
+    sphere(avatarRoot,white,[side*.105+.014,2.135,.299],[.005,.007,.004]);
+    // Paupière supérieure et cils fins.
+    curveTube([[side*.18,2.15,.259],[side*.14,2.205,.27],[side*.105,2.218,.27],[side*.07,2.205,.27],[side*.03,2.15,.259]],dark,.008);
+    for(let k=0;k<3;k++){
+      const ex=side*(.145+k*.012);
+      curveTube([[ex,2.196,.269],[ex+side*.018,2.215,.264]],dark,.0045);
+    }
+    curveTube([[side*.17,2.255,.245],[side*.11,2.275,.26],[side*.055,2.255,.245]],hair,.012);
+    // Reflet doux sur la pommette.
+    sphere(avatarRoot,material("#f7d8c9",.7),[side*.19,2.075,.218],[.035,.012,.009]);
   }
-  sphere(avatarRoot,material("#7a594b",.22),[-.105,2.15,.269],[.036,.052,.018]);
-  sphere(avatarRoot,material("#7a594b",.22),[.105,2.15,.269],[.036,.052,.018]);
-  sphere(avatarRoot,material("#17131a",.18),[-.105,2.15,.284],[.018,.033,.01]);
-  sphere(avatarRoot,material("#17131a",.18),[.105,2.15,.284],[.018,.033,.01]);
-  sphere(avatarRoot,white,[-.116,2.17,.296],[.012,.014,.008]);
-  sphere(avatarRoot,white,[.094,2.17,.296],[.012,.014,.008]);
-  curveTube([[-.17,2.255,.245],[-.11,2.275,.26],[-.055,2.255,.245]],hair,.012);
-  curveTube([[.055,2.255,.245],[.11,2.275,.26],[.17,2.255,.245]],hair,.012);
-  sphere(avatarRoot,skin,[0,2.08,.272],[.027,.052,.035]);
-  sphere(avatarRoot,lip,[0,1.99,.25],[.052,.018,.018]);
+  // Nez délicat et sourire discret, plutôt qu'une simple pastille.
+  sphere(avatarRoot,skin,[0,2.085,.273],[.025,.043,.032]);
+  sphere(avatarRoot,material("#d99a91",.65),[0,2.055,.297],[.012,.008,.006]);
+  curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
+  curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
   sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
   sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
@@ -501,6 +508,7 @@ function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
+  if(faceBlinkMeshes.length){const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;for(const eyeMesh of faceBlinkMeshes)eyeMesh.scale.y=.076*(1-.88*blink);}
   if(companionMotion){const p=companionMotion; p.head.rotation.z=Math.sin(t*2.1)*.035; for(let i=0;i<p.ears.length;i++){const side=i===0?-1:1;p.ears[i].rotation.z=side*(.10+Math.sin(t*3+i)*.07);} for(let i=0;i<p.wings.length;i++){p.wings[i].rotation.y=Math.sin(t*10+i)*.48;} for(let i=0;i<p.tailParts.length;i++){p.tailParts[i].rotation.x=Math.sin(t*2.4+i)*.13;p.tailParts[i].rotation.z=Math.sin(t*1.8+i)*.12;} p.petRoot.position.y=Math.sin(t*2)*.018;}
   if(avatarRoot){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
