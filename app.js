@@ -149,6 +149,10 @@ function render(){
   $("bubulleCard").classList.toggle("active",myRole==="BUBULLE");
   $("blyblyCard").classList.toggle("active",myRole==="BLYBLY");
   const mine=p[myRole], stage=Math.min(mine.stage,stages.length-1), s=stages[stage];
+  // Le décor suit le chapitre actuellement découvert par le joueur.
+  const realm=stage>=17?"treasure":stage>=13?"crystals":stage>=9?"castle":"forest";
+  document.body.classList.remove("realm-forest","realm-castle","realm-crystals","realm-treasure");
+  document.body.classList.add("realm-"+realm);
   $("stageLabel").textContent=`${s.chapter || "Premiers pas"} · ÉPREUVE ${stage+1} / ${stages.length}`;
   $("stagePlace").textContent=s.emoji+" "+s.place.toUpperCase();
   $("question").textContent=s.question;
