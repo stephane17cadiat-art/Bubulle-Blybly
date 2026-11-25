@@ -40,3 +40,6 @@
 @keyframes starBurst{0%{transform:scale(.1) rotate(-35deg);opacity:0}65%{transform:scale(1.25) rotate(12deg)}100%{transform:scale(1);opacity:1}}
 @keyframes scrollReveal{0%{transform:translateY(25px) scaleX(.35);opacity:0}100%{transform:translateY(0) scaleX(1);opacity:1}}
 @media(max-width:420px){.reward-card{padding:22px 13px 17px}.reward-style{font-size:10px}.reward-visual{height:125px}}
+
+.reward-test{width:100%;padding:10px 12px;border:1px solid #f5a9d277;border-radius:12px;background:#f5a9d218;color:#ffd5ea;font:700 12px 'DM Sans';cursor:pointer;transition:transform .15s,background .15s}
+.reward-test:hover{transform:translateY(-1px);background:#f5a9d22b}
