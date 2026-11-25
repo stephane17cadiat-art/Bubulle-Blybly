@@ -249,7 +249,7 @@ function openAlbum(){
     const complete=Array.from({length:group.end-group.start+1},(_,offset)=>group.start+offset)
       .every(stageIndex=>bubulleDone.has(stageIndex)&&blyblyDone.has(stageIndex));
     const flowers=["🌸","🌷","🌼","🌺"];
-    return {icon:flowers[index],title:group.title.replace(/^Chapitre \\d+ · /,""),detail:complete?"Souvenir révélé à deux":"À révéler en terminant ce chapitre ensemble",unlocked:complete,kind:"flower"};
+    return {icon:flowers[index],title:group.title.replace(/^Chapitre \d+ · /,""),detail:complete?"Souvenir révélé à deux":"À révéler en terminant ce chapitre ensemble",unlocked:complete,kind:"flower"};
   });
   memoryCards.push({icon:"💗",title:"Le cœur des Besties",detail:sharedCount>0?sharedCount+" énigme(s) réussie(s) ensemble":"À débloquer avec votre première énigme commune",unlocked:sharedCount>0,kind:"heart",count:sharedCount});
   const crownUnlocked=stages.every((stage,index)=>bubulleDone.has(index)&&blyblyDone.has(index));
