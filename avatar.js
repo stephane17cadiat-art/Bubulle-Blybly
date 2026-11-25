@@ -301,8 +301,9 @@ function buildAvatar() {
       }
     }
     if(["necklace","set"].includes(state.accessoryStyle)){
-      curveTube([[-.16,1.93,.14],[-.10,1.87,.19],[0,1.84,.205],[.10,1.87,.19],[.16,1.93,.14]],jewel,.018);
-      sphere(avatarRoot,gem,[0,1.82,.21],[.035,.045,.022]);
+      // Collier replacé à la base du cou, sur le haut du buste et sous le visage.
+      curveTube([[-.17,1.80,.14],[-.11,1.73,.205],[0,1.69,.225],[.11,1.73,.205],[.17,1.80,.14]],jewel,.016);
+      sphere(avatarRoot,gem,[0,1.66,.23],[.029,.038,.02]);
     }
   }
   // Compagnon miniature assorti
