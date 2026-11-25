@@ -55,6 +55,54 @@ const say = (id,msg) => $(id).textContent = msg;
 const show = (id) => $(id).classList.remove("hidden");
 const hide = (id) => $(id).classList.add("hidden");
 
+
+/* Ambiance musicale féerique — générée localement, sans fichier externe */
+let musicContext=null, musicMaster=null, musicTimer=null, musicStep=0;
+const musicNotes=[523.25,659.25,783.99,659.25,587.33,698.46,880,698.46,523.25,587.33,659.25,587.33];
+function playMusicNote(){
+  if(!musicContext || !musicMaster) return;
+  const now=musicContext.currentTime, osc=musicContext.createOscillator(), gain=musicContext.createGain();
+  osc.type="sine"; osc.frequency.value=musicNotes[musicStep % musicNotes.length];
+  gain.gain.setValueAtTime(0.0001,now);
+  gain.gain.exponentialRampToValueAtTime(0.035,now+0.18);
+  gain.gain.exponentialRampToValueAtTime(0.0001,now+1.9);
+  osc.connect(gain); gain.connect(musicMaster); osc.start(now); osc.stop(now+2);
+  musicStep++;
+}
+async function startEnchantedMusic(){
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx){say("syncStatus","La musique n’est pas prise en charge par ce navigateur.");return;}
+  try{
+    if(!musicContext){
+      musicContext=new AudioCtx();
+      musicMaster=musicContext.createGain(); musicMaster.gain.value=0.72; musicMaster.connect(musicContext.destination);
+      [174.61,220,261.63].forEach((freq,i)=>{
+        const osc=musicContext.createOscillator(), gain=musicContext.createGain();
+        osc.type="sine"; osc.frequency.value=freq; gain.gain.value=[0.012,0.009,0.007][i];
+        osc.connect(gain); gain.connect(musicMaster); osc.start();
+      });
+    }
+    await musicContext.resume();
+    playMusicNote();
+    if(musicTimer) clearInterval(musicTimer);
+    musicTimer=setInterval(playMusicNote,2200);
+    $("musicToggleBtn").textContent="🔇 Couper la musique";
+    $("musicToggleBtn").setAttribute("aria-pressed","true");
+    localStorage.setItem("bubulleMusic","on");
+  }catch(e){say("syncStatus","Impossible de démarrer la musique sur cet appareil.");}
+}
+async function stopEnchantedMusic(){
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
+  if(musicContext) await musicContext.suspend();
+  $("musicToggleBtn").textContent="🎵 Activer la musique";
+  $("musicToggleBtn").setAttribute("aria-pressed","false");
+  localStorage.setItem("bubulleMusic","off");
+}
+$("musicToggleBtn").addEventListener("click",()=>{
+  if(musicContext && musicContext.state==="running") stopEnchantedMusic();
+  else startEnchantedMusic();
+});
+
 async function boot(){
   if(firebaseConfig.apiKey.startsWith("REMPLACER")) {
     say("welcomeMessage","Le site est prêt à configurer : ajoute d'abord les clés Firebase dans app.js (guide fourni).");
