@@ -22,7 +22,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",magicColor:"rose",magicMotion:"orbit",magicPower:"petalBurst",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null, magicParticles = [], magicAura = null, powerFlash = null, powerStarted = 0, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
+let companionMotion = null, magicParticles = [], magicAura = null, powerBurstGroup = null, powerStarted = 0, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -46,7 +46,7 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   return mesh;
 }
 function buildAvatar() {
-  faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null; powerFlash = null; powerStarted = 0;
+  faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null; powerBurstGroup = null; powerStarted = 0;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
@@ -499,11 +499,7 @@ function buildAvatar() {
       magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(effect==="aurora"?.52:.43,.014,8,72),auraMat,[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
     }else magicAura=null;
   }else magicAura=null;
-  const powerColors={rose:"#ff9fc8",violet:"#b9a7f5",turquoise:"#8debdc",gold:"#ffe28a",blue:"#9bcfff"};
-  const powerColor=powerColors[state.magicColor]||"#f6c5ed";
-  const powerMaterial=material(powerColor,.2,{emissive:powerColor,emissiveIntensity:1.8,transparent:true,opacity:0});
-  powerFlash=addMesh(avatarRoot,new THREE.TorusGeometry(.48,.025,10,72),powerMaterial,[0,1.34,.16],[.001,.001,.001]);
-  powerFlash.visible=false;
+  powerBurstGroup=new THREE.Group();avatarRoot.add(powerBurstGroup);powerBurstGroup.visible=false;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
 async function loadRealisticCharacter(){
@@ -616,12 +612,28 @@ function animate(){
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
-  const powerActive=powerElapsed>=0&&powerElapsed<1800;
-  const powerPulse=powerActive?Math.sin(Math.PI*powerElapsed/1800):0;
-  if(powerFlash){
-    powerFlash.visible=powerActive;
-    if(powerActive){powerFlash.scale.setScalar(.7+powerPulse*.85);powerFlash.material.opacity=powerPulse*.88;powerFlash.rotation.z=t*(state.magicPower==="crystalWave"?1.8:state.magicPower==="fireflyDance"?-1.4:.55);}
-    else powerFlash.scale.setScalar(.001);
+  const powerActive=powerBurstGroup&&powerElapsed>=0&&powerElapsed<1900;
+  const powerProgress=powerActive?powerElapsed/1900:1;
+  if(powerBurstGroup){
+    powerBurstGroup.visible=!!powerActive;
+    if(powerActive){
+      for(const particle of powerBurstGroup.children){
+        const d=particle.userData;
+        const progress=THREE.MathUtils.clamp((powerProgress-d.delay)/(1-d.delay),0,1);
+        const ease=1-Math.pow(1-progress,2);
+        if(state.magicPower==="heartShield"){
+          const a=d.angle+t*.9;
+          particle.position.set(Math.cos(a)*(.48+progress*.12),1.12+Math.sin(a)*.58,.22+Math.sin(a)*.12);
+          particle.rotation.z=-a*.18;
+          particle.scale.copy(d.baseScale).multiplyScalar(.25+.8*Math.sin(Math.PI*progress));
+        }else{
+          particle.position.set(Math.cos(d.angle)*(.12+ease*.88),1.22+ease*(d.rise||.5),.22+Math.sin(d.angle)*(.12+ease*.18));
+          particle.rotation.z=d.spin+progress*2.4;
+          particle.scale.copy(d.baseScale).multiplyScalar(Math.sin(Math.PI*progress)*1.15+.08);
+        }
+        particle.material.opacity=(1-progress)*.95;
+      }
+    }else if(powerStarted){powerBurstGroup.visible=false;}
   }
   for(const p of magicParticles){
     const d=p.userData, motion=state.magicMotion||"orbit";
@@ -732,7 +744,37 @@ $("waveBtn").addEventListener("click",()=>playPose("wave"));
 $("princessBtn").addEventListener("click",()=>playPose("princess"));
 $("curtsyBtn").addEventListener("click",()=>playPose("curtsy"));
 $("blowkissBtn").addEventListener("click",()=>{playPose("blowkiss");playFace("kiss");});
-$("powerBtn").addEventListener("click",()=>{powerStarted=Date.now();});
+$("powerBtn").addEventListener("click",()=>{
+  if(!avatarRoot||!powerBurstGroup)return;
+  while(powerBurstGroup.children.length){
+    const old=powerBurstGroup.children[0];powerBurstGroup.remove(old);
+    old.geometry.dispose();old.material.dispose();
+  }
+  const colors={rose:["#ff9fc8","#f7c4df","#e8a9e8"],violet:["#b9a7f5","#d9c8ff","#eee5ff"],turquoise:["#8debdc","#b4fff0","#d5f4ee"],gold:["#ffe28a","#f7c86a","#fff0b5"],blue:["#9bcfff","#c6e7ff","#e0f4ff"]};
+  const palette=colors[state.magicColor]||["#ffb9df","#e4d4ff","#fff0b5"];
+  const power=state.magicPower||"petalBurst";
+  let shape;
+  if(power==="starPulse"){
+    shape=new THREE.Shape();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2===0?.12:.052,x=Math.cos(a)*r,y=Math.sin(a)*r;i===0?shape.moveTo(x,y):shape.lineTo(x,y);}shape.closePath();
+  }else if(power==="heartShield"){
+    shape=new THREE.Shape();shape.moveTo(0,-.12);shape.bezierCurveTo(-.22,.02,-.16,.2,0,.1);shape.bezierCurveTo(.16,.2,.22,.02,0,-.12);
+  }
+  const count=power==="heartShield"?12:22;
+  for(let i=0;i<count;i++){
+    const angle=i*Math.PI*2/count+(Math.random()-.5)*.12;
+    let geometry,scale;
+    if(power==="petalBurst"){geometry=new THREE.SphereGeometry(1,12,10);scale=[.045,.105,.025];}
+    else if(power==="starPulse"){geometry=new THREE.ShapeGeometry(shape);scale=[1,1,1];}
+    else if(power==="heartShield"){geometry=new THREE.ShapeGeometry(shape);scale=[.72,.72,.72];}
+    else if(power==="crystalWave"){geometry=new THREE.OctahedronGeometry(.095,0);scale=[1,1.35,.8];}
+    else{geometry=new THREE.SphereGeometry(.045,12,10);scale=[1,1,1];}
+    const color=palette[i%palette.length];
+    const mat=material(color,.22,{emissive:color,emissiveIntensity:1.65,transparent:true,opacity:1,side:THREE.DoubleSide});
+    const particle=addMesh(powerBurstGroup,geometry,mat,[0,1.22,.22],scale);
+    particle.userData={angle,delay:(i%4)*.045,rise:.25+(i%5)*.13,spin:(i%2?1:-1)*(.5+(i%3)*.35),baseScale:particle.scale.clone()};
+  }
+  powerStarted=Date.now();powerBurstGroup.visible=true;
+});
 function playFace(action){
   faceAction=action;faceActionUntil=Date.now()+(action==="smile"?2200:action==="wink"?950:action==="laugh"?1900:1400);
   if(action==="kiss"&&avatarRoot)avatarRoot.rotation.y+=.08;
