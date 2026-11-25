@@ -23,7 +23,7 @@ const defaults = {
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
 let companionMotion = null, magicParticles = [], magicAura = null, powerBurstGroup = null, powerStarted = 0, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
-let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
+let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticExtras = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
   return new THREE.MeshPhysicalMaterial({
@@ -508,6 +508,18 @@ function buildAvatar() {
   powerBurstGroup=new THREE.Group();avatarRoot.add(powerBurstGroup);powerBurstGroup.visible=false;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
+function buildRealisticAccessories(){
+  if(!realisticRoot)return;
+  if(realisticExtras){realisticRoot.remove(realisticExtras);realisticExtras=null;}
+  const g=new THREE.Group();realisticExtras=g;realisticRoot.add(g);
+  const gold=new THREE.MeshPhysicalMaterial({color:'#e8c77f',metalness:.7,roughness:.25});
+  const gem=new THREE.MeshPhysicalMaterial({color:state.outfitColor||'#d98ab9',roughness:.22,metalness:.15,emissive:state.outfitColor||'#d98ab9',emissiveIntensity:.1});
+  const wc={fairy:'#d9a8ef',butterfly:'#8bd9ce',crystal:'#b7d8ff'}[state.wings];
+  if(wc){const wm=new THREE.MeshPhysicalMaterial({color:wc,transparent:true,opacity:.76,side:THREE.DoubleSide,roughness:.25,emissive:wc,emissiveIntensity:.12});const sh=new THREE.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.12,.24,.42,.55,.66,.52);sh.bezierCurveTo(.62,.28,.43,.03,.16,-.12);sh.bezierCurveTo(.34,-.04,.38,-.27,.12,-.32);sh.bezierCurveTo(.06,-.22,-.02,-.12,0,0);const geo=new THREE.ShapeGeometry(sh,20);for(const side of [-1,1]){const w=new THREE.Mesh(geo,wm);w.position.set(side*.12,1.55,-.16);w.scale.x=side;w.rotation.z=side*.08;g.add(w);}}
+  if(state.hairAccessory==='crown'||state.accessoryStyle==='tiara'||state.accessoryStyle==='set'){const c=new THREE.Group();c.position.set(0,2.18,.11);g.add(c);const b=new THREE.Mesh(new THREE.TorusGeometry(.19,.018,8,48,Math.PI),gold);b.rotation.x=Math.PI/2;c.add(b);for(let i=-2;i<=2;i++){const x=new THREE.Mesh(new THREE.SphereGeometry(i===0?.045:.028,12,10),gem);x.position.set(i*.075,.045+.09-Math.abs(i)*.025,0);c.add(x);}}
+  else if(state.hairAccessory==='flower'||state.hairAccessory==='bow'){const o=new THREE.Group();o.position.set(.19,2.12,.13);g.add(o);for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.SphereGeometry(.05,12,10),gem);p.scale.set(.75,1.2,.4);p.position.set(Math.cos(i*Math.PI*2/5)*.055,Math.sin(i*Math.PI*2/5)*.055,0);o.add(p);}}
+  if(['earrings','necklace','set'].includes(state.accessoryStyle)){const n=new THREE.Mesh(new THREE.TorusGeometry(.17,.012,8,48,Math.PI),gold);n.position.set(0,1.55,.145);n.rotation.x=Math.PI/2;g.add(n);const p=new THREE.Mesh(new THREE.OctahedronGeometry(.05),gem);p.position.set(0,1.39,.16);g.add(p);}
+}
 async function applyRealisticStyle(){
   if(!realisticRoot)return;
   const colors={
@@ -554,7 +566,7 @@ function loadRealisticCharacter(){
       }
     });
     scene.add(realisticRoot);
-    applyRealisticStyle();
+    applyRealisticStyle();buildRealisticAccessories();
     if(gltf.animations?.length){realisticMixer=new THREE.AnimationMixer(realisticRoot);realisticAction=realisticMixer.clipAction(gltf.animations[0]);}
     realisticReady=true;
     status("✓ Modèle 3D détaillé chargé — tu peux l’essayer dans le miroir.");
@@ -735,7 +747,7 @@ function fillControls(){
   document.body.className="theme-"+state.theme;
 }
 function changed(){
-  readControls();document.body.className="theme-"+state.theme;buildAvatar();applyRealisticStyle();scheduleSave();
+  readControls();document.body.className="theme-"+state.theme;buildAvatar();applyRealisticStyle();buildRealisticAccessories();scheduleSave();
 }
 function scheduleSave(){
   status("☁️ Sauvegarde de tes choix…");clearTimeout(saveTimer);
