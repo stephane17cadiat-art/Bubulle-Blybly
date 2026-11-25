@@ -697,7 +697,8 @@ function resize(){
 }
 function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
-  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);\n  if(realisticRoot&&realisticVisible){realisticRoot.position.y=Math.sin(t*1.35)*.018;realisticRoot.rotation.z=Math.sin(t*.82)*.008;}
+  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
+  if(realisticRoot&&realisticVisible){realisticRoot.position.y=Math.sin(t*1.35)*.018;realisticRoot.rotation.z=Math.sin(t*.82)*.008;}
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
