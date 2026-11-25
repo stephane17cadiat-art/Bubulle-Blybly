@@ -584,7 +584,7 @@ async function applyRealisticStyle(){
     });
   });
 }
-function loadRealisticCharacter(){
+async function loadRealisticCharacter(){
   if(realisticReady || !scene) return;
   status("✨ Chargement du modèle 3D détaillé…");
   const loader=new GLTFLoader();
