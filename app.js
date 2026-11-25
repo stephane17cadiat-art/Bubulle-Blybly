@@ -314,8 +314,8 @@ function showReward(stageIndex){
   playRewardAnimation();
 }
 $("replayReward").addEventListener("click",playRewardAnimation);
-$("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";launchNextMemoryCelebration();});
-$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";launchNextMemoryCelebration();}});
+$("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";if(pendingChapterTransition)showChapterTransition();else launchNextMemoryCelebration();});
+$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";if(pendingChapterTransition)showChapterTransition();else launchNextMemoryCelebration();}});
 
 function getUnlockedMemories(players){
   const bubulle=new Set(players.BUBULLE?.completed||[]);
@@ -330,6 +330,34 @@ function getUnlockedMemories(players){
   if(stages.every((stage,index)=>bubulle.has(index)&&blybly.has(index))) unlocked.push({id:"crown",title:"Votre légende est complète !",message:"Les 21 énigmes sont terminées par vous deux. La couronne légendaire vous appartient ! 👑"});
   return unlocked;
 }
+
+const chapterGateways = {
+  5:{icon:"🌲",message:"Les lucioles éclairent le sentier et les arbres murmurent vos premiers secrets. Ouvrez grand les yeux : la forêt vous attend."},
+  9:{icon:"🏰",message:"Au bout du sentier, les portes du château s’entrouvrent. De nouveaux mystères et de belles surprises vous attendent derrière ses murs."},
+  13:{icon:"🔮",message:"Une lueur rose et violette traverse le royaume. Les cristaux enchantés vous appellent : suivez leur lumière pour poursuivre votre quête."},
+  17:{icon:"👑",message:"Le dernier chemin s’illumine. Le trésor des Besties se rapproche… Encore quelques énigmes avant votre grande légende."}
+};
+let pendingChapterTransition=null;
+function showChapterTransition(){
+  if(!pendingChapterTransition)return;
+  const chapter=pendingChapterTransition;
+  pendingChapterTransition=null;
+  const overlay=$("chapterTransition");
+  const icon=overlay.querySelector(".chapter-gateway-icon");
+  icon.textContent=chapter.icon;
+  $("chapterTransitionTitle").textContent=chapter.title;
+  $("chapterTransitionMessage").textContent=chapter.message;
+  const stops=[...$("map").children];
+  stops.forEach((stop,index)=>stop.classList.toggle("chapter-highlight",index>=chapter.start&&index<=chapter.end));
+  overlay.classList.remove("hidden");
+}
+function closeChapterTransition(){
+  $("chapterTransition").classList.add("hidden");
+  $("map").querySelectorAll(".chapter-highlight").forEach(stop=>stop.classList.remove("chapter-highlight"));
+  launchNextMemoryCelebration();
+}
+$("chapterTransitionContinue").addEventListener("click",closeChapterTransition);
+
 let pendingMemoryCelebrations=[];
 function showMemoryCelebration(item){
   const overlay=$("memoryCelebration");
@@ -406,7 +434,13 @@ async function answer(choice,stageIndex,button){
       newlyUnlocked=after.filter(item=>!before.some(old=>old.id===item.id));
       tx.update(roomRef,{[`players.${myRole}`]:player});
     });
-    pendingMemoryCelebrations.push(...newlyUnlocked);showReward(stageIndex);
+    pendingMemoryCelebrations.push(...newlyUnlocked);
+    const nextStage=stageIndex+1;
+    if(chapterGateways[nextStage]){
+      const groupEnd=nextStage+3;
+      pendingChapterTransition={...chapterGateways[nextStage],title:stages[nextStage].chapter,start:nextStage,end:groupEnd};
+    }
+    showReward(stageIndex);
   }catch(e){
     if(button)button.disabled=false;
     feedback.classList.remove("answer-feedback-success");
