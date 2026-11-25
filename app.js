@@ -85,9 +85,9 @@ function listen(){
 }
 function render(){
   const p=roomData.players;
-  // Les deux personnages restent visibles pour chaque joueuse ; seule la carte active est mise en évidence.
-  $("bubulleCard").style.display = "";
-  $("blyblyCard").style.display = "";
+  // Chaque appareil affiche uniquement le profil de la joueuse connectée.
+  $("bubulleCard").style.display = myRole === "BUBULLE" ? "" : "none";
+  $("blyblyCard").style.display = myRole === "BLYBLY" ? "" : "none";
   $("bubulleScore").textContent=p.BUBULLE.score+" pts";
   $("blyblyScore").textContent=p.BLYBLY.score+" pts";
   $("bubulleStatus").textContent=p.BUBULLE.joined?"Dans l'aventure":"En attente";
