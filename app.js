@@ -227,16 +227,35 @@ function openAlbum(){
     const count=(data.completed||[]).length;
     return `<article class="album-stat"><span>${player.symbol}</span><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/21*100)}%"></i></div></article>`;
   }).join("");
+  const bubulleDone=new Set(players.BUBULLE.completed||[]);
+  const blyblyDone=new Set(players.BLYBLY.completed||[]);
+  const sharedCount=[...bubulleDone].filter(index=>blyblyDone.has(index)).length;
+  const discoveredCount=new Set([...bubulleDone,...blyblyDone]).size;
+  const soloCount=discoveredCount-sharedCount;
+  const waitingCount=stages.length-discoveredCount;
+  $("albumDuoSummary").innerHTML=[
+    {symbol:"✦",value:sharedCount,label:"Énigmes partagées"},
+    {symbol:"♡",value:discoveredCount,label:"Trésors découverts"},
+    {symbol:"✧",value:soloCount,label:"Défis en solo"},
+    {symbol:"◇",value:waitingCount,label:"Secrets à découvrir"}
+  ].map(item=>`<article class="album-duo-stat"><span>${item.symbol}</span><strong>${item.value}</strong><small>${item.label}</small></article>`).join("");
+  $("albumDuoPhrase").textContent=discoveredCount===21
+    ?"Les 21 secrets ont été révélés : votre légende est complète !"
+    :sharedCount>0
+      ? "Chaque énigme partagée ajoute une nouvelle page à votre belle histoire."
+      : "Votre album attend ses premiers souvenirs : l’aventure ne fait que commencer.";
   $("albumChapters").innerHTML=albumGroups.map(group=>{
-    const items=stages.slice(group.start,group.end+1).map((stage,offset)=>{
+    const groupStages=stages.slice(group.start,group.end+1);
+    const doneCount=groupStages.filter((stage,offset)=>bubulleDone.has(group.start+offset)||blyblyDone.has(group.start+offset)).length;
+    const items=groupStages.map((stage,offset)=>{
       const index=group.start+offset;
-      const bubulle=(players.BUBULLE.completed||[]).includes(index);
-      const blybly=(players.BLYBLY.completed||[]).includes(index);
+      const bubulle=bubulleDone.has(index);
+      const blybly=blyblyDone.has(index);
       const status=bubulle&&blybly?"Validée à deux":bubulle?"Validée par Bubulle":blybly?"Validée par Blybly":"À découvrir";
       const mark=bubulle&&blybly?"✦":bubulle||blybly?"✧":"◇";
       return `<li class="${bubulle&&blybly?"both-done":bubulle||blybly?"one-done":""}"><span class="album-check">${mark}</span><span>${stage.place}</span><small>${status}</small></li>`;
     }).join("");
-    return `<section class="album-chapter"><header><div><h3>${group.title}</h3><p>${group.subtitle}</p></div><span>${group.end-group.start+1} étapes</span></header><ol>${items}</ol></section>`;
+    return `<section class="album-chapter"><header><div><h3>${group.title}</h3><p>${group.subtitle}</p></div><span>${doneCount}/${groupStages.length} découvertes</span></header><div class="album-chapter-track"><i style="width:${doneCount/groupStages.length*100}%"></i></div><ol>${items}</ol></section>`;
   }).join("");
   $("albumModal").classList.remove("hidden");
 }
