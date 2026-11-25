@@ -403,7 +403,22 @@ async function resetGame(){
 $("resetGameBtn").addEventListener("click",resetGame);
 
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
-$("goConnectionBtn").addEventListener("click",()=>{hide("welcome");show("connection");});
+$("goConnectionBtn").addEventListener("click",()=>{
+  if(document.body.classList.contains("portal-leaving")) return;
+  const overlay=$("portalTransition");
+  document.body.classList.add("portal-leaving");
+  show("portalTransition");
+  window.setTimeout(()=>{
+    hide("welcome");
+    show("connection");
+    $("connection").classList.remove("portal-entering");
+    void $("connection").offsetWidth;
+    $("connection").classList.add("portal-entering");
+    document.body.classList.remove("portal-leaving");
+    hide("portalTransition");
+    window.setTimeout(()=>$("connection").classList.remove("portal-entering"),520);
+  },620);
+});
 $("backHomeBtn").addEventListener("click",()=>{hide("connection");show("welcome");});
 $("createBtn").addEventListener("click",createRoom);
 $("joinBtn").addEventListener("click",()=>joinRoom($("inviteInput").value));
