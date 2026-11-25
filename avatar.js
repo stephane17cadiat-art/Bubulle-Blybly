@@ -59,12 +59,13 @@ function buildAvatar() {
   cylinderBetween(avatarRoot,skin,[.105,.25,.015],[.13,.91,.015],.075,.095);
   sphere(avatarRoot,dark,[-.14,.17,.11],[.13,.065,.24]);
   sphere(avatarRoot,dark,[.14,.17,.11],[.13,.065,.24]);
-  // Robe longue avec volume, taille marquée et plis sculptés
-  // Robe plus élégante et près du corps, avec une évasée légère plutôt qu'un grand volume.
+  // Robe longue : ourlet arrondi et évasé, hanches douces, taille marquée, buste ajusté.
+  // LatheGeometry lit le profil du bas vers le haut : l'ourlet doit donc être le plus large.
   const profile=[
-    new THREE.Vector2(.12,0),new THREE.Vector2(.145,.18),new THREE.Vector2(.15,.42),
-    new THREE.Vector2(.18,.62),new THREE.Vector2(.23,.83),new THREE.Vector2(.30,1.08),
-    new THREE.Vector2(.37,1.27),new THREE.Vector2(.39,1.34)
+    new THREE.Vector2(.39,0),new THREE.Vector2(.395,.07),new THREE.Vector2(.37,.16),
+    new THREE.Vector2(.32,.30),new THREE.Vector2(.255,.48),new THREE.Vector2(.205,.66),
+    new THREE.Vector2(.165,.82),new THREE.Vector2(.15,.98),new THREE.Vector2(.16,1.12),
+    new THREE.Vector2(.19,1.27),new THREE.Vector2(.205,1.34)
   ];
   const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,64)),dress,[0,.43,0]);
   gown.scale.z=.78;
