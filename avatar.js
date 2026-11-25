@@ -104,9 +104,10 @@ function buildAvatar() {
   // Fine bordure et plis lumineux sur la jupe
   const trim=material("#f3dcae",.38,{metalness:.18});
   const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.49,.018,8,64),trim,[0,.47,0]);hem.scale.z=.78;
+  // Plis de robe discrets : on évite les longues lignes tubulaires qui traversaient le modèle.
   for(let i=0;i<8;i++){
     const a=i*Math.PI/4;
-    curveTube([[Math.sin(a)*.19,.58,Math.cos(a)*.15],[Math.sin(a)*.28,.82,Math.cos(a)*.22],[Math.sin(a)*.39,1.12,Math.cos(a)*.29],[Math.sin(a)*.47,1.48,Math.cos(a)*.35]],material(state.outfitColor,.58));
+    curveTube([[Math.sin(a)*.19,.58,Math.cos(a)*.15],[Math.sin(a)*.28,.82,Math.cos(a)*.22],[Math.sin(a)*.39,1.12,Math.cos(a)*.29],[Math.sin(a)*.47,1.48,Math.cos(a)*.35]],material(state.outfitColor,.58),.008);
   }
   // Bras fins, épaules et mains
   leftArm=new THREE.Group();leftArm.position.set(-.25,1.62,0);avatarRoot.add(leftArm);
@@ -180,7 +181,10 @@ function buildAvatar() {
     }else{
       const side=Math.cos(a);
       const front=Math.sin(a);
-      curveTube([[x*.22,2.48,z*.20],[x*.29,2.35,z*.24],[x*.32,2.12,z*.24],[x*.34,1.8,z*.18],[x*.3,1.58,z*.12]],hair,state.hairStyle==="braid"?.035:.045);
+      // Les longues mèches restent derrière les épaules pour ne pas dessiner de traits sur le visage ou la robe.
+      if(z<-.25){
+        curveTube([[x*.18,2.43,-.16],[x*.24,2.28,-.22],[x*.28,2.02,-.24],[x*.27,1.78,-.22],[x*.22,1.62,-.18]],hair,.025);
+      }
     }
   }
   if(state.hairStyle==="braid"){
