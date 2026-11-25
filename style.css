@@ -14,7 +14,7 @@
 @media(max-width:650px){.game-heading{flex-wrap:wrap}.game-tools{width:100%;justify-content:flex-start}.game-tools .secondary{flex:1}}
 
 
-/* Récompenses animées — aperçu des trois styles */
+/* Récompenses animées — style officiel parchemin enchanté */
 .reward-overlay{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:#090817df;backdrop-filter:blur(9px);animation:rewardFade .25s ease both}
 .reward-card{position:relative;width:min(100%,470px);padding:25px 20px 22px;text-align:center;border:1px solid #f7d58b77;border-radius:27px;background:radial-gradient(ellipse at 50% 0%,#59416f,#29213f 58%,#1b1931);box-shadow:0 24px 90px #0009,0 0 35px #f7d58b22;overflow:hidden}
 .reward-close{position:absolute;right:13px;top:10px;width:34px;height:34px;border:1px solid #ffffff30;border-radius:50%;background:#ffffff12;color:white;font-size:24px;cursor:pointer}
@@ -30,14 +30,11 @@
 .reward-style{padding:10px 5px;border:1px solid #ffffff28;border-radius:12px;background:#ffffff0c;color:var(--white);font:600 11px 'DM Sans';cursor:pointer}
 .reward-style.active{border-color:var(--gold);background:#f7d58b20;color:#ffe8ad;box-shadow:0 0 0 2px #f7d58b18}
 .reward-replay{margin-top:12px;padding:9px 15px;border:0;border-radius:99px;background:#c7b2ff20;color:#e4d8ff;font:700 12px 'DM Sans';cursor:pointer}
-.reward-visual.stars .reward-symbol{animation:starBurst .9s ease both}
-.reward-visual.stars .reward-glow{content:"✧ ✦ ✧";font-size:42px;opacity:.9;letter-spacing:13px;text-shadow:0 0 22px #f7d58b}
-.reward-visual.scroll .reward-symbol{font-size:88px;animation:scrollReveal .8s ease both}
-.reward-visual.scroll .reward-glow{color:#f5a9d2}
+.reward-visual.parchment .reward-symbol{font-size:88px;animation:scrollReveal .8s ease both}
+.reward-visual.parchment .reward-glow{color:#f5a9d2;text-shadow:0 0 28px #f7d58b;opacity:.5}
 @keyframes rewardFade{from{opacity:0}to{opacity:1}}
 @keyframes rewardPop{0%{transform:scale(.25) rotate(-12deg);opacity:0}70%{transform:scale(1.12) rotate(4deg)}100%{transform:scale(1);opacity:1}}
 @keyframes rewardGlow{50%{transform:scale(1.18) rotate(18deg);opacity:.45}}
-@keyframes starBurst{0%{transform:scale(.1) rotate(-35deg);opacity:0}65%{transform:scale(1.25) rotate(12deg)}100%{transform:scale(1);opacity:1}}
 @keyframes scrollReveal{0%{transform:translateY(25px) scaleX(.35);opacity:0}100%{transform:translateY(0) scaleX(1);opacity:1}}
 @media(max-width:420px){.reward-card{padding:22px 13px 17px}.reward-style{font-size:10px}.reward-visual{height:125px}}
 
