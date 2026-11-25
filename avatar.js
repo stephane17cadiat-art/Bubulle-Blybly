@@ -514,10 +514,31 @@ function buildAvatar() {
   powerBurstGroup=new THREE.Group();avatarRoot.add(powerBurstGroup);powerBurstGroup.visible=false;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
+function buildRealisticLook(g){
+  const hairMat=new THREE.MeshPhysicalMaterial({color:state.hairColor||defaults.hairColor,roughness:.38,clearcoat:.25});
+  const cloth=new THREE.MeshPhysicalMaterial({color:state.outfitColor||defaults.outfitColor,roughness:.42,sheen:.3,side:THREE.DoubleSide});
+  const gold=new THREE.MeshPhysicalMaterial({color:"#e8c77f",metalness:.6,roughness:.3});
+  const cap=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),hairMat);cap.scale.set(.205,.22,.19);cap.position.set(0,2.105,-.015);g.add(cap);
+  const lock=(pts,r)=>{const c=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=new THREE.Mesh(new THREE.TubeGeometry(c,22,r,9,false),hairMat);m.castShadow=true;g.add(m);};
+  const h=state.hairStyle||"long";
+  if(h==="bun"||h==="doublebun"){for(const x of (h==="bun"?[0]:[-.16,.16])){const b=new THREE.Mesh(new THREE.SphereGeometry(.13,16,12),hairMat);b.scale.y=.8;b.position.set(x,2.22,-.04);g.add(b);}}
+  else if(h==="bob"){const b=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),hairMat);b.scale.set(.23,.34,.21);b.position.set(0,1.94,-.02);g.add(b);}
+  else if(h==="curly"){for(let i=0;i<14;i++){const side=i%2?1:-1;const b=new THREE.Mesh(new THREE.SphereGeometry(.105,12,10),hairMat);b.position.set(side*(.14+(i%3)*.03),1.98-Math.floor(i/2)*.085,.02);g.add(b);}}
+  else if(h==="braid"){lock([[.1,2.08,-.1],[.2,1.9,-.1],[.2,1.65,-.05],[.12,1.4,0]],.06);for(let i=0;i<8;i++){const b=new THREE.Mesh(new THREE.SphereGeometry(.05,12,10),hairMat);b.position.set(.2+Math.sin(i*1.5)*.035,1.94-i*.065,-.04);g.add(b);}}
+  else {for(const side of [-1,1]){lock([[side*.15,2.08,.08],[side*.22,1.9,.1],[side*.23,1.65,.08],[side*.17,1.4,.04]],.055);if(h==="ponytail")lock([[side*.1,2.1,-.12],[side*.18,1.95,-.2],[side*.2,1.7,-.2]],.065);}}
+  if(h==="halfup"){const tie=new THREE.Mesh(new THREE.TorusGeometry(.075,.018,8,24),gold);tie.position.set(0,2.12,-.08);g.add(tie);}
+  const outfit=state.outfit||"princess", top=1.17;
+  const bottom=outfit==="princess"?.62:outfit==="boho"?.53:outfit==="magic"?.58:outfit==="forest"?.42:.34;
+  const radius=outfit==="princess"?.56:outfit==="boho"?.48:outfit==="magic"?.51:outfit==="forest"?.36:.30;
+  const skirt=new THREE.Mesh(new THREE.LatheGeometry([new THREE.Vector2(.19,top),new THREE.Vector2(.23,.98),new THREE.Vector2(radius*.72,.72),new THREE.Vector2(radius,bottom)],48),cloth);skirt.castShadow=true;g.add(skirt);
+  const belt=new THREE.Mesh(new THREE.TorusGeometry(.205,.016,8,48),gold);belt.rotation.x=Math.PI/2;belt.position.y=1.13;g.add(belt);
+  if(outfit==="forest"||outfit==="magic"){for(const side of [-1,1]){const cape=new THREE.Mesh(new THREE.ConeGeometry(.22,.8,14,1,true),cloth);cape.position.set(side*.14,.9,-.2);cape.rotation.z=-side*.1;cape.scale.z=.25;g.add(cape);}}
+  if(outfit==="princess"||outfit==="boho"){for(let i=0;i<3;i++){const trim=new THREE.Mesh(new THREE.TorusGeometry(radius*(.45+i*.2),.008,6,40),gold);trim.rotation.x=Math.PI/2;trim.position.y=bottom+.07+i*.1;g.add(trim);}}
+}
 function buildRealisticAccessories(){
   if(!realisticRoot)return;
   if(realisticExtras){realisticRoot.remove(realisticExtras);realisticExtras=null;}
-  const g=new THREE.Group();realisticExtras=g;realisticRoot.add(g);
+  const g=new THREE.Group();realisticExtras=g;realisticRoot.add(g);buildRealisticLook(g);
   const gold=new THREE.MeshPhysicalMaterial({color:'#e8c77f',metalness:.7,roughness:.25});
   const gem=new THREE.MeshPhysicalMaterial({color:state.outfitColor||'#d98ab9',roughness:.22,metalness:.15,emissive:state.outfitColor||'#d98ab9',emissiveIntensity:.1});
   const wc={fairy:'#d9a8ef',butterfly:'#8bd9ce',crystal:'#b7d8ff'}[state.wings];
