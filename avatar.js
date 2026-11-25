@@ -574,7 +574,7 @@ function animate(){
   }
   if(kissPucker){
     const kissing=faceAction==="kiss"&&expressionActive;
-    kissPucker.scale.set(kissing?.028:0.001,kissing?.022:0.001,kissing?.012:0.001);
+    kissPucker.scale.set(kissing ? 0.028 : 0.001,kissing ? 0.022 : 0.001,kissing ? 0.012 : 0.001);
   }
   if(companionMotion){const p=companionMotion; p.head.rotation.z=Math.sin(t*2.1)*.035; for(let i=0;i<p.ears.length;i++){const side=i===0?-1:1;p.ears[i].rotation.z=side*(.10+Math.sin(t*3+i)*.07);} for(let i=0;i<p.wings.length;i++){p.wings[i].rotation.y=Math.sin(t*10+i)*.48;} for(let i=0;i<p.tailParts.length;i++){p.tailParts[i].rotation.x=Math.sin(t*2.4+i)*.13;p.tailParts[i].rotation.z=Math.sin(t*1.8+i)*.12;} p.petRoot.position.y=Math.sin(t*2)*.018;}
   if(avatarRoot){
