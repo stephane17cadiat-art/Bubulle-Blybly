@@ -162,6 +162,16 @@ function showReward(stageIndex){
   playRewardAnimation();
 }
 $("replayReward").addEventListener("click",playRewardAnimation);
+$("rewardTestBtn").addEventListener("click",()=>{
+  activeReward={reward:"💗 Cœur enchanté au nœud rose",owner:"Aperçu de démonstration — aucun point ne sera ajouté."};
+  $("rewardTitle").textContent="Un cœur rien que pour vous !";
+  $("rewardOwner").textContent=activeReward.owner;
+  $("rewardName").textContent=activeReward.reward;
+  $("rewardModal").style.display="grid";
+  show("rewardModal");
+  playRewardAnimation();
+});
+
 $("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";});
 $("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";}});
 
