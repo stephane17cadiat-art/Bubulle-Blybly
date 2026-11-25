@@ -446,11 +446,17 @@ function buildAvatar() {
     const palette=magicPalettes[state.magicColor]||effectPalette;
     const glowMats=palette.map(c=>material(c,.28,{emissive:c,emissiveIntensity:effect==="fireflies"?1.35:.7,transparent:true,opacity:.92}));
     const heartShape=new THREE.Shape();
-    heartShape.moveTo(0,-.035);heartShape.bezierCurveTo(-.075,.02,-.075,.075,-.025,.075);heartShape.bezierCurveTo(0,.075,.018,.045,0,.025);heartShape.bezierCurveTo(.035,.09,.09,.065,.075,.015);heartShape.bezierCurveTo(.065,-.005,.025,-.03,0,-.035);
+    heartShape.moveTo(0,-.09);heartShape.bezierCurveTo(-.12,-.01,-.14,.10,-.07,.14);heartShape.bezierCurveTo(-.02,.17,0,.13,0,.10);heartShape.bezierCurveTo(0,.13,.02,.17,.07,.14);heartShape.bezierCurveTo(.14,.10,.12,-.01,0,-.09);
+    const petalShape=new THREE.Shape();
+    petalShape.moveTo(0,-.13);petalShape.bezierCurveTo(-.13,-.04,-.105,.12,0,.17);petalShape.bezierCurveTo(.105,.12,.13,-.04,0,-.13);
+    const butterflyShape=new THREE.Shape();
+    butterflyShape.moveTo(0,-.10);butterflyShape.bezierCurveTo(-.035,-.02,-.19,.17,-.25,.12);butterflyShape.bezierCurveTo(-.34,.045,-.18,-.075,0,-.10);butterflyShape.bezierCurveTo(.18,-.075,.34,.045,.25,.12);butterflyShape.bezierCurveTo(.19,.17,.035,-.02,0,-.10);
+    const starShape=new THREE.Shape();
+    for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,r=k%2===0?.12:.052,x=Math.cos(a)*r,y=Math.sin(a)*r;k===0?starShape.moveTo(x,y):starShape.lineTo(x,y);}starShape.closePath();
     for(let i=0;i<24;i++){
       const angle=i*2.399, y=.48+(i%8)*.255, radius=.38+(i%3)*.055;
-      const geo=effect==="stars"||effect==="crystals"?new THREE.OctahedronGeometry(effect==="crystals"?.052:.038,0):effect==="hearts"?new THREE.ShapeGeometry(heartShape):new THREE.SphereGeometry(effect==="fireflies"?.027:.035,12,10);
-      const scale=effect==="petals"?[.48,1.25,.42]:effect==="butterflies"?[1.25,.72,.35]:effect==="hearts"?[1.25,1.25,.35]:effect==="crystals"?[.8,1.35,.8]:[1,1,.65];
+      const geo=effect==="petals"?new THREE.ShapeGeometry(petalShape):effect==="butterflies"?new THREE.ShapeGeometry(butterflyShape):effect==="stars"?new THREE.ShapeGeometry(starShape):effect==="hearts"?new THREE.ShapeGeometry(heartShape):effect==="crystals"?new THREE.OctahedronGeometry(.052,0):new THREE.SphereGeometry(effect==="fireflies"?.027:.035,12,10);
+      const scale=effect==="petals"?[.8,1.15,.35]:effect==="butterflies"?[1.15,1,.3]:effect==="hearts"?[1.05,1.05,.35]:effect==="crystals"?[.8,1.35,.8]:effect==="stars"?[.9,.9,.4]:[1,1,.65];
       const particle=addMesh(avatarRoot,geo,glowMats[i%glowMats.length],[Math.cos(angle)*radius,y,Math.sin(angle)*.20+.23],scale);
       particle.userData={angle,baseY:y,radius,phase:i*.71,kind:effect,baseScale:particle.scale.clone()};
       magicParticles.push(particle);
@@ -685,6 +691,7 @@ function animate(){
     const shield=powerActive&&state.magicPower==="heartShield"?1+powerPulse*.45:1;
     p.position.set(Math.cos(a)*d.radius*burst*shield,d.baseY+Math.sin(t*(motion==="swirl"?2.6:1.7)+d.phase)*bob+(powerActive&&state.magicPower==="petalBurst"?powerPulse*.22:0),Math.sin(a)*.20+.23);
     p.rotation.z=Math.sin(t*(motion==="swirl"?3:2)+d.phase)*wobble+(powerActive&&state.magicPower==="crystalWave"?powerPulse*1.7:0);
+    p.rotation.y=d.kind==="butterflies"?Math.sin(t*5+d.phase)*.52:d.kind==="petals"?Math.sin(t*1.8+d.phase)*.2:0;
     const pulse=.82+.24*(.5+.5*Math.sin(t*2.5+d.phase));
     const powerScale=powerActive&&state.magicPower==="starPulse"?1+powerPulse*1.8:powerActive&&state.magicPower==="crystalWave"?1+powerPulse*.8:1;
     p.scale.copy(d.baseScale).multiplyScalar(pulse*powerScale);
@@ -806,12 +813,14 @@ $("powerBtn").addEventListener("click",()=>{
     shape=new THREE.Shape();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2===0?.12:.052,x=Math.cos(a)*r,y=Math.sin(a)*r;i===0?shape.moveTo(x,y):shape.lineTo(x,y);}shape.closePath();
   }else if(power==="heartShield"){
     shape=new THREE.Shape();shape.moveTo(0,-.12);shape.bezierCurveTo(-.22,.02,-.16,.2,0,.1);shape.bezierCurveTo(.16,.2,.22,.02,0,-.12);
+  }else if(power==="petalBurst"){
+    shape=new THREE.Shape();shape.moveTo(0,-.13);shape.bezierCurveTo(-.13,-.04,-.105,.12,0,.17);shape.bezierCurveTo(.105,.12,.13,-.04,0,-.13);
   }
   const count=power==="heartShield"?12:22;
   for(let i=0;i<count;i++){
     const angle=i*Math.PI*2/count+(Math.random()-.5)*.12;
     let geometry,scale;
-    if(power==="petalBurst"){geometry=new THREE.SphereGeometry(1,12,10);scale=[.045,.105,.025];}
+    if(power==="petalBurst"){geometry=new THREE.ShapeGeometry(shape);scale=[1,1,1];}
     else if(power==="starPulse"){geometry=new THREE.ShapeGeometry(shape);scale=[1,1,1];}
     else if(power==="heartShield"){geometry=new THREE.ShapeGeometry(shape);scale=[.72,.72,.72];}
     else if(power==="crystalWave"){geometry=new THREE.OctahedronGeometry(.095,0);scale=[1,1.35,.8];}
