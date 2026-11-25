@@ -586,15 +586,14 @@ function animate(){
       leftArm.rotation.z=Math.sin(t*10)*.42-.28;rightArm.rotation.z=-Math.sin(t*10)*.42+.28;
     } else if(Date.now()<poseUntil){
       const p=Math.min(1,(poseUntil-Date.now())/450), wave=Math.sin(t*9)*.20;
-      if(poseMode==="wave"){rightArm.rotation.z=-2.18+wave;leftArm.rotation.z=.08;avatarRoot.rotation.y=Math.sin(t*2)*.045;}
-      else if(poseMode==="princess"){rightArm.rotation.z=-.82;leftArm.rotation.z=.82;avatarRoot.rotation.y=Math.sin(t*1.5)*.035;}
+      if(poseMode==="wave"){rightArm.rotation.z=-2.18+wave;leftArm.rotation.z=.08; }
+      else if(poseMode==="princess"){rightArm.rotation.z=-.82;leftArm.rotation.z=.82; }
       else if(poseMode==="curtsy"){rightArm.rotation.z=-.55;leftArm.rotation.z=.55;avatarRoot.rotation.z=-.045*p;avatarRoot.position.y-=.09*p;}
-      else if(poseMode==="blowkiss"){rightArm.rotation.z=-1.65+Math.sin(t*5)*.06;leftArm.rotation.z=.12;avatarRoot.rotation.y=-.10;}
+      else if(poseMode==="blowkiss"){rightArm.rotation.z=-1.65+Math.sin(t*5)*.06;leftArm.rotation.z=.12; }
     } else {
       leftArm.rotation.z=THREE.MathUtils.lerp(leftArm.rotation.z,0,.09);
       rightArm.rotation.z=THREE.MathUtils.lerp(rightArm.rotation.z,0,.09);
-      avatarRoot.rotation.y=THREE.MathUtils.lerp(avatarRoot.rotation.y,0,.025);
-    }
+     }
   }
   renderer.render(scene,camera);
 }
