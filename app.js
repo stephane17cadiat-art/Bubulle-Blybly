@@ -337,16 +337,17 @@ function showMemoryCelebration(item){
   $("memoryCelebrationMessage").textContent=item.message;
   const fireworks=overlay.querySelector(".memory-fireworks");
   fireworks.innerHTML="";
-  [[12,24],[32,15],[68,18],[89,28],[20,70],[78,72],[49,82]].forEach(([x,y],burstIndex)=>{
+  [[8,18],[25,12],[48,20],[72,13],[93,22],[15,43],[85,48],[5,72],[28,78],[52,67],[76,82],[96,72],[37,36],[64,42],[18,90],[88,91]].forEach(([x,y],burstIndex)=>{
     const burst=document.createElement("div");burst.className="memory-firework burst-"+burstIndex;burst.style.left=x+"%";burst.style.top=y+"%";
-    const ring=document.createElement("b");ring.className="memory-firework-ring";burst.appendChild(ring);
-    const flash=document.createElement("em");flash.className="memory-firework-flash";burst.appendChild(flash);
-    for(let i=0;i<32;i++){
+    const delay=burstIndex*190+Math.random()*160;
+    const ring=document.createElement("b");ring.className="memory-firework-ring";ring.style.setProperty("--delay",delay+"ms");burst.appendChild(ring);
+    const flash=document.createElement("em");flash.className="memory-firework-flash";flash.style.setProperty("--delay",delay+"ms");burst.appendChild(flash);
+    for(let i=0;i<64;i++){
       const spark=document.createElement("i");
-      spark.style.setProperty("--angle",(i*360/32+Math.random()*4)+"deg");
-      spark.style.setProperty("--delay",(burstIndex*145+Math.random()*180)+"ms");
-      spark.style.setProperty("--distance",(105+Math.random()*105)+"px");
-      spark.style.setProperty("--spark-size",(2+Math.random()*2.4)+"px");
+      spark.style.setProperty("--angle",(i*360/64+(Math.random()-.5)*5)+"deg");
+      spark.style.setProperty("--delay",(delay+Math.random()*100)+"ms");
+      spark.style.setProperty("--distance",(135+Math.random()*145)+"px");
+      spark.style.setProperty("--spark-size",(2+Math.random()*3.2)+"px");
       burst.appendChild(spark);
     }
     fireworks.appendChild(burst);
