@@ -634,7 +634,7 @@ function initScene(){
   clock=new THREE.Clock();buildAvatar();resize();loadRealisticCharacter();
   const observer=new ResizeObserver(resize);observer.observe(host);
   renderer.domElement.addEventListener("pointerdown",e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
-  renderer.domElement.addEventListener("pointermove",e=>{if(!dragging)return;avatarRoot.rotation.y+=(e.clientX-lastX)*.012;lastX=e.clientX;lastY=e.clientY});
+  renderer.domElement.addEventListener("pointermove",e=>{if(!dragging)return;const turn=(e.clientX-lastX)*.012;if(avatarRoot)avatarRoot.rotation.y+=turn;if(realisticRoot&&realisticVisible)realisticRoot.rotation.y+=turn;lastX=e.clientX;lastY=e.clientY});
   renderer.domElement.addEventListener("pointerup",()=>dragging=false);
   renderer.domElement.addEventListener("pointercancel",()=>dragging=false);
   renderer.domElement.addEventListener("wheel",e=>{e.preventDefault();camera.position.z=THREE.MathUtils.clamp(camera.position.z+e.deltaY*.008,4.8,9.5)},{passive:false});
@@ -646,7 +646,7 @@ function resize(){
 }
 function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
-  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
+  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);\n  if(realisticRoot&&realisticVisible){realisticRoot.position.y=Math.sin(t*1.35)*.018;realisticRoot.rotation.z=Math.sin(t*.82)*.008;}
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
