@@ -448,10 +448,10 @@
 
 /* Transition magique entre l'accueil et le portail de connexion */
 .portal-transition{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:12px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#765080ee 0%,#332449f5 42%,#17152bf9 100%);opacity:0;pointer-events:none}
-.portal-transition:not(.hidden){animation:portalCurtain .72s ease both}
+.portal-transition:not(.hidden){animation:portalCurtain 1.5s ease both}
 .portal-transition p{margin:0;color:#fff0fa;font:700 14px 'Playfair Display',serif;letter-spacing:1.2px;text-shadow:0 0 16px #f5a9d2}
-.portal-heart{font-size:clamp(66px,15vw,104px);filter:drop-shadow(0 0 20px #ffb5df) drop-shadow(0 0 48px #f5a9d2);animation:portalHeartBloom .72s cubic-bezier(.18,.9,.25,1.25) both}
-.portal-spark{position:absolute;color:#fff0c9;font-size:clamp(19px,4vw,32px);text-shadow:0 0 12px #fff,0 0 28px #f5a9d2;opacity:0;animation:portalSparkFly .8s ease-out both}
+.portal-heart{font-size:clamp(66px,15vw,104px);filter:drop-shadow(0 0 20px #ffb5df) drop-shadow(0 0 48px #f5a9d2);animation:portalHeartBloom 1.35s cubic-bezier(.18,.9,.25,1.25) both}
+.portal-spark{position:absolute;color:#fff0c9;font-size:clamp(19px,4vw,32px);text-shadow:0 0 12px #fff,0 0 28px #f5a9d2;opacity:0;animation:portalSparkFly 1.35s ease-out both}
 .portal-spark.spark-a{left:17%;top:22%;--dx:-35px;--dy:-28px;animation-delay:.04s}
 .portal-spark.spark-b{left:29%;top:68%;--dx:-24px;--dy:35px;animation-delay:.12s}
 .portal-spark.spark-c{right:18%;top:24%;--dx:38px;--dy:-25px;animation-delay:.08s}
@@ -461,9 +461,9 @@
 body.portal-leaving #welcome{animation:homePortalExit .58s ease both}
 body.portal-leaving .shell>.topbar,body.portal-leaving .site-footer{transition:opacity .35s ease;opacity:0}
 .connection-screen.portal-entering{animation:connectionPortalEnter .48s cubic-bezier(.2,.8,.2,1) both}
-@keyframes portalCurtain{0%{opacity:0}18%{opacity:1}82%{opacity:1}100%{opacity:0}}
+@keyframes portalCurtain{0%{opacity:0}12%{opacity:1}78%{opacity:1}100%{opacity:0}}
 @keyframes portalHeartBloom{0%{transform:scale(.18) rotate(-20deg);opacity:0}65%{transform:scale(1.16) rotate(7deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes portalSparkFly{0%{opacity:0;transform:translate(0,0) scale(.2) rotate(0)}35%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.35) rotate(55deg)}}
 @keyframes homePortalExit{to{opacity:0;transform:translateY(-9px) scale(.985)}}
 @keyframes connectionPortalEnter{0%{opacity:0;transform:translateY(17px) scale(.975);filter:blur(5px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-@media(prefers-reduced-motion:reduce){.portal-transition,.portal-heart,.portal-spark,body.portal-leaving #welcome,.connection-screen.portal-entering{animation:none!important}.portal-transition:not(.hidden){opacity:0}}
+@media(prefers-reduced-motion:reduce){.portal-transition:not(.hidden){animation:none!important;opacity:1}.portal-heart,.portal-spark{animation:none!important;opacity:1;transform:none}body.portal-leaving #welcome,.connection-screen.portal-entering{animation:none!important;filter:none;transform:none;opacity:1}}
