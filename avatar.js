@@ -18,6 +18,7 @@ const $ = id => document.getElementById(id);
 const status = message => $("saveStatus").textContent = message;
 const defaults = {
   hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",accessoryStyle:"none",skinColor:"#f3c6a5",
+  eyeColor:"#8b6049",eyeShape:"almond",lipColor:"#b96e78",makeup:"soft",freckles:"none",
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
@@ -50,7 +51,7 @@ function buildAvatar() {
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
-  const lip=material("#b96e78",.48), blush=material("#d88c91",.72);
+  const lip=material(state.lipColor||"#b96e78",.48), blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72);
   const smooth=(g)=>{g.computeVertexNormals();return g;};
   const curveTube=(points,mat,r=.025)=>{
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
@@ -179,13 +180,14 @@ function buildAvatar() {
     sphere(avatarRoot,material("#c88978",.78),[side*.292,2.1,.043],[.018,.038,.012]);
   }
   // Yeux brillants en plusieurs couches : iris, anneau, pupille et reflets.
-  const irisMat=material("#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
+  const irisMat=material(state.eyeColor||"#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
+  const eyeY=state.eyeShape==="round"?1.14:state.eyeShape==="soft"?0.92:1;
   for(const side of [-1,1]){
-    const eyeWhite=sphere(avatarRoot,white,[side*.105,2.15,.245],[.073,.076,.031]);
+    const eyeWhite=sphere(avatarRoot,white,[side*.105,2.15,.245],[.073,.076*eyeY,.031]);
     faceBlinkMeshes.push(eyeWhite);
-    sphere(avatarRoot,irisRing,[side*.105,2.15,.271],[.041,.052,.015]);
-    sphere(avatarRoot,irisMat,[side*.105,2.15,.281],[.034,.045,.012]);
-    sphere(avatarRoot,pupilMat,[side*.105,2.15,.291],[.018,.031,.008]);
+    sphere(avatarRoot,irisRing,[side*.105,2.15,.271],[.041,.052*eyeY,.015]);
+    sphere(avatarRoot,irisMat,[side*.105,2.15,.281],[.034,.045*eyeY,.012]);
+    sphere(avatarRoot,pupilMat,[side*.105,2.15,.291],[.018,.031*eyeY,.008]);
     sphere(avatarRoot,white,[side*.105-.012,2.17,.299],[.011,.014,.006]);
     sphere(avatarRoot,white,[side*.105+.014,2.135,.299],[.005,.007,.004]);
     // Paupière supérieure et cils fins.
@@ -206,8 +208,23 @@ function buildAvatar() {
   faceSmileMesh=curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
   kissPucker=sphere(avatarRoot,lip,[0,1.985,.278],[.001,.001,.001]);
   curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
-  sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
-  sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
+  if(state.makeup!=="none"){
+    const blushSize=state.makeup==="fairy"?1.35:1;
+    sphere(avatarRoot,blush,[-.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
+    sphere(avatarRoot,blush,[.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
+  }
+  if(state.makeup==="fairy"){
+    const shimmer=material("#d8a9e8",.3,{metalness:.18,emissive:"#8e5ca8",emissiveIntensity:.12});
+    for(const side of [-1,1])sphere(avatarRoot,shimmer,[side*.105,2.225,.249],[.061,.012,.009]);
+  }
+  if(state.freckles==="light"||state.freckles==="many"){
+    const freckle=material("#a86f58",.9);
+    const dots=state.freckles==="many"?5:3;
+    for(const side of [-1,1])for(let i=0;i<dots;i++){
+      const x=side*(.145+(i%3)*.025),y=2.045-Math.floor(i/3)*.018;
+      sphere(avatarRoot,freckle,[x,y,.224],[.005,.005,.003]);
+    }
+  }
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
   hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); avatarRoot.add(hairMotionMesh);
   const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.305,.205,.285]);
