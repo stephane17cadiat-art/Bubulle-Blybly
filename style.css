@@ -497,6 +497,6 @@ body.portal-leaving .shell>.topbar,body.portal-leaving .site-footer{transition:o
 @keyframes answerWrongShake{0%,100%{transform:translateX(0)}18%,54%{transform:translateX(-5px)}36%,72%{transform:translateX(5px)}}
 @keyframes answerMessageShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
 @keyframes answerCorrectPop{0%{transform:scale(1)}38%{transform:scale(1.025)}100%{transform:scale(1)}}
-@keyframes answerSparkBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(0) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + cos(var(--spark-angle))*var(--spark-distance)),calc(-50% + sin(var(--spark-angle))*var(--spark-distance))) rotate(70deg) scale(1.25)}}
+@keyframes answerSparkBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--spark-angle)) translateY(0) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--spark-angle)) translateY(calc(-1 * var(--spark-distance))) rotate(70deg) scale(1.25)}}
 @keyframes challengeMagicFlash{0%{box-shadow:0 18px 50px #09081755}35%{box-shadow:0 0 0 2px #f7d58b88,0 0 34px #f5b8e855,0 18px 50px #09081755}100%{box-shadow:0 18px 50px #09081755}}
 @media(prefers-reduced-motion:reduce){.answer-wrong,.answer-correct-burst,.answer-feedback-wrong,.challenge.answer-success-flash{animation:none!important}.answer-spark{display:none}}
