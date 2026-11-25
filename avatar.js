@@ -22,7 +22,7 @@ const defaults = {
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
 let companionMotion = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
-let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
+let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
   return new THREE.MeshStandardMaterial({color,roughness,...extra});
@@ -581,8 +581,20 @@ function animate(){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
     if(faceAction==="laugh"&&Date.now()<faceActionUntil){avatarRoot.position.y+=Math.abs(Math.sin(t*13))*.035;avatarRoot.rotation.z=Math.sin(t*12)*.018;}
     else avatarRoot.rotation.z=THREE.MathUtils.lerp(avatarRoot.rotation.z,0,.12);
-    if(Date.now()<danceUntil){avatarRoot.rotation.y+=.035;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.1;leftArm.rotation.z=Math.sin(t*12)*.45-.35;rightArm.rotation.z=-Math.sin(t*12)*.45+.35;}
-    else {leftArm.rotation.z=THREE.MathUtils.lerp(leftArm.rotation.z,0,.08);rightArm.rotation.z=THREE.MathUtils.lerp(rightArm.rotation.z,0,.08);}
+    if(Date.now()<danceUntil){
+      avatarRoot.rotation.y+=.025;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.075;
+      leftArm.rotation.z=Math.sin(t*10)*.42-.28;rightArm.rotation.z=-Math.sin(t*10)*.42+.28;
+    } else if(Date.now()<poseUntil){
+      const p=Math.min(1,(poseUntil-Date.now())/450), wave=Math.sin(t*9)*.20;
+      if(poseMode==="wave"){rightArm.rotation.z=-2.18+wave;leftArm.rotation.z=.08;avatarRoot.rotation.y=Math.sin(t*2)*.045;}
+      else if(poseMode==="princess"){rightArm.rotation.z=-.82;leftArm.rotation.z=.82;avatarRoot.rotation.y=Math.sin(t*1.5)*.035;}
+      else if(poseMode==="curtsy"){rightArm.rotation.z=-.55;leftArm.rotation.z=.55;avatarRoot.rotation.z=-.045*p;avatarRoot.position.y-=.09*p;}
+      else if(poseMode==="blowkiss"){rightArm.rotation.z=-1.65+Math.sin(t*5)*.06;leftArm.rotation.z=.12;avatarRoot.rotation.y=-.10;}
+    } else {
+      leftArm.rotation.z=THREE.MathUtils.lerp(leftArm.rotation.z,0,.09);
+      rightArm.rotation.z=THREE.MathUtils.lerp(rightArm.rotation.z,0,.09);
+      avatarRoot.rotation.y=THREE.MathUtils.lerp(avatarRoot.rotation.y,0,.025);
+    }
   }
   renderer.render(scene,camera);
 }
@@ -633,7 +645,15 @@ async function start(){
 }
 for(const key of Object.keys(defaults)) $(key).addEventListener("change",changed);
 $("saveBtn").addEventListener("click",saveAvatar);
+function playPose(mode){
+  poseMode=mode;poseUntil=Date.now()+(mode==="wave"?2600:mode==="curtsy"?2100:2400);
+  if(realisticVisible&&realisticAction)realisticAction.reset().fadeIn(.2).play();
+}
 $("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;if(realisticVisible&&realisticAction){realisticAction.reset().fadeIn(.2).play();}});
+$("waveBtn").addEventListener("click",()=>playPose("wave"));
+$("princessBtn").addEventListener("click",()=>playPose("princess"));
+$("curtsyBtn").addEventListener("click",()=>playPose("curtsy"));
+$("blowkissBtn").addEventListener("click",()=>{playPose("blowkiss");playFace("kiss");});
 function playFace(action){
   faceAction=action;faceActionUntil=Date.now()+(action==="smile"?2200:action==="wink"?950:action==="laugh"?1900:1400);
   if(action==="kiss"&&avatarRoot)avatarRoot.rotation.y+=.08;
