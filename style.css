@@ -425,3 +425,22 @@
 @keyframes homeStarTurn{to{transform:rotate(360deg)}}
 @media(max-width:520px){.enchanted-home{padding-bottom:21px}.home-scene{height:205px}.home-castle{width:66%;height:88%}.home-tree{font-size:76px}.home-copy{padding:19px 14px 0}.home-copy .eyebrow{font-size:8px;letter-spacing:1.35px}.enchanted-home h2{font-size:34px}.enchanted-home .intro{font-size:12px}.home-chapter-tease{gap:7px;font-size:9px}.home-actions{padding:0 13px}.home-footnote{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.home-moon,.home-star,.home-castle,.home-fireflies i,.home-create span{animation:none}}
+
+
+/* Écran de connexion séparé du portail d’accueil */
+.connection-screen{position:relative;max-width:520px;margin:34px auto;padding:28px 22px 25px;text-align:center;border-color:#f2c4e477;background:radial-gradient(ellipse at 50% 0%,#59416f,#302347 58%,#211b36);animation:connectionArrive .45s ease both}
+.connection-back{display:block;margin:-6px 0 14px;text-align:left;color:#e5c6e5;font-size:12px}
+.connection-emblem{font-size:48px;line-height:1.2;margin:4px auto 10px;filter:drop-shadow(0 5px 13px #f5a9d288);animation:connectionHeart 2.4s ease-in-out infinite}
+.connection-screen>.eyebrow{color:#f2c5e6}
+.connection-screen h2{margin:4px 0 9px;color:#fff0fa;font:800 clamp(29px,6vw,38px) "Playfair Display",serif}
+.connection-intro{max-width:350px;margin:0 auto 22px;color:#d6c8e0;font-size:13px;line-height:1.6}
+.connection-actions{max-width:410px;margin:auto;display:grid;gap:13px}
+.connection-actions .home-create{width:100%;font-size:14px}
+.connection-actions .join-row input{background:#17142caa;border-color:#e7c1e855}
+.connection-actions .secondary{border-color:#e7c1e866;background:#ffffff12}
+.connection-screen .message{margin-top:14px}
+.connection-footnote{margin-top:17px;color:#bbaacb}
+@keyframes connectionArrive{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes connectionHeart{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+@media(max-width:520px){.connection-screen{margin:18px auto;padding:23px 15px 20px}.connection-intro{font-size:12px}.connection-actions{gap:11px}}
+@media(prefers-reduced-motion:reduce){.connection-emblem{animation:none}}
