@@ -227,3 +227,41 @@
   .floating-crown{width:116px;height:87px}
   .floating-heart{width:49px;height:49px;right:0;top:20px}
 }
+
+
+/* Révélation en vrai temps : rien ne dépasse du coffre avant son ouverture */
+.treasure-pop{
+  opacity:0;
+  visibility:hidden;
+  transform:translate(-50%,58px) scale(.38);
+  filter:drop-shadow(0 0 0 #ffe8ad);
+}
+.finale-chest.opening .treasure-pop{
+  visibility:visible;
+  animation:treasureRiseFromInside 1.65s .62s cubic-bezier(.16,.82,.22,1.12) forwards;
+}
+.floating-crown{opacity:0}
+.finale-chest.opening .floating-crown{
+  animation:crownRevealFromChest 1.35s .72s cubic-bezier(.16,.82,.22,1.15) forwards,
+            crownHover 2.4s 2.35s ease-in-out infinite;
+}
+.finale-chest.opening .floating-heart{
+  animation:heartJoin .8s 1.85s cubic-bezier(.2,.9,.3,1.3) forwards,
+            heartHover 2s 2.7s ease-in-out infinite;
+}
+.finale-chest.opening .treasure-lid{
+  animation:lidReveal 1.05s .08s cubic-bezier(.18,.86,.25,1.18) both;
+}
+@keyframes treasureRiseFromInside{
+  0%{opacity:0;transform:translate(-50%,58px) scale(.38);filter:drop-shadow(0 0 0 #ffe8ad)}
+  28%{opacity:1}
+  58%{transform:translate(-50%,-25px) scale(1.08);filter:drop-shadow(0 0 18px #ffe8ad)}
+  78%{transform:translate(-50%,-14px) scale(.97)}
+  100%{opacity:1;transform:translate(-50%,-20px) scale(1);filter:drop-shadow(0 0 19px #ffe8ad)}
+}
+@keyframes crownRevealFromChest{
+  0%{opacity:0;transform:translateY(62px) scale(.35) rotate(-12deg)}
+  35%{opacity:1}
+  72%{opacity:1;transform:translateY(-25px) scale(1.12) rotate(5deg)}
+  100%{opacity:1;transform:translateY(-18px) scale(1) rotate(0)}
+}
