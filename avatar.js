@@ -17,7 +17,7 @@ const roomId = params.get("room");
 const $ = id => document.getElementById(id);
 const status = message => $("saveStatus").textContent = message;
 const defaults = {
-  hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",skinColor:"#f3c6a5",
+  hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",accessoryStyle:"none",skinColor:"#f3c6a5",
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
@@ -249,13 +249,60 @@ function buildAvatar() {
   // Corsage et détails précieux
   sphere(avatarRoot,trim,[0,1.52,.17],[.035,.16,.018]);
   for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
-  // Ailes translucides aux formes plus fines
+  // Ailes féeriques sculptées, avec contours et nervures visibles.
   if(state.wings!=="none"){
-    const wingMat=material(state.wings==="crystal"?"#c7e5ff":state.wings==="butterfly"?"#e9a6d1":"#c6f1df",.22,{transparent:true,opacity:.62,metalness:.12,side:THREE.DoubleSide});
+    const wingColor=state.wings==="crystal"?"#c7e5ff":state.wings==="butterfly"?"#e9a6d1":"#c6f1df";
+    const wingMat=material(wingColor,.2,{transparent:true,opacity:.76,metalness:state.wings==="crystal"?.32:.12,side:THREE.DoubleSide});
+    const veinMat=material(state.wings==="crystal"?"#f5fbff":state.wings==="butterfly"?"#fff0f8":"#f1fff7",.3,{metalness:.18});
     for(const side of [-1,1]){
-      const upper=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),wingMat,[side*.39,1.92,-.16],[.22,.43,.045],[0,0,side*-.35]);
-      const lower=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),wingMat,[side*.47,1.62,-.17],[.16,.29,.04],[0,0,side*.25]);
-      curveTube([[side*.28,1.5,-.1],[side*.48,1.85,-.1],[side*.46,2.25,-.1]],gold,.009);
+      const shape=new THREE.Shape();
+      if(state.wings==="fairy"){
+        shape.moveTo(0,0);shape.bezierCurveTo(.03,.22,.12,.49,.28,.57);
+        shape.bezierCurveTo(.36,.60,.37,.48,.31,.37);
+        shape.bezierCurveTo(.25,.23,.15,.10,0,0);
+      }else if(state.wings==="butterfly"){
+        shape.moveTo(0,0);shape.bezierCurveTo(.02,.25,.10,.53,.30,.55);
+        shape.bezierCurveTo(.43,.55,.39,.34,.29,.25);
+        shape.bezierCurveTo(.40,.20,.39,.02,.23,-.04);
+        shape.bezierCurveTo(.13,-.07,.07,-.01,0,0);
+      }else{
+        shape.moveTo(0,0);shape.lineTo(.12,.25);shape.lineTo(.31,.51);
+        shape.lineTo(.34,.31);shape.lineTo(.24,.08);shape.lineTo(.08,-.08);shape.closePath();
+      }
+      const wing=addMesh(avatarRoot,new THREE.ShapeGeometry(shape,20),wingMat,[side*.29,1.78,-.205],[side,1,1]);
+      wing.rotation.z=side*.08;
+      const root=[side*.29,1.78,-.185];
+      if(state.wings==="butterfly"){
+        curveTube([root,[side*.40,2.00,-.17],[side*.58,2.28,-.17],[side*.63,2.32,-.17]],veinMat,.012);
+        curveTube([root,[side*.43,1.88,-.17],[side*.57,1.79,-.17],[side*.52,1.72,-.17]],veinMat,.01);
+      }else if(state.wings==="crystal"){
+        curveTube([root,[side*.41,2.02,-.17],[side*.60,2.29,-.17],[side*.63,2.09,-.17]],veinMat,.014);
+        curveTube([root,[side*.43,1.83,-.17],[side*.52,1.72,-.17]],veinMat,.012);
+        for(const [x,y] of [[.41,2.02],[.60,2.29],[.63,2.09]]) sphere(avatarRoot,veinMat,[side*x,y,-.17],[.022,.022,.022]);
+      }else{
+        curveTube([root,[side*.38,1.99,-.17],[side*.53,2.22,-.17],[side*.57,2.30,-.17]],veinMat,.012);
+        curveTube([root,[side*.39,1.91,-.17],[side*.48,2.02,-.17]],veinMat,.009);
+      }
+      sphere(avatarRoot,gold,[side*.30,1.78,-.16],[.035,.035,.025]);
+    }
+  }
+  // Bijoux et ornements au choix.
+  if(state.accessoryStyle!=="none"){
+    const jewel=material("#f3d58d",.2,{metalness:.62});
+    const gem=material("#e9a6d1",.18,{metalness:.25});
+    if(["tiara","set"].includes(state.accessoryStyle)){
+      curveTube([[-.25,2.39,.17],[-.18,2.49,.19],[0,2.55,.21],[.18,2.49,.19],[.25,2.39,.17]],jewel,.025);
+      for(const x of [-.18,0,.18]) sphere(avatarRoot,gem,[x,2.51+(.18-Math.abs(x))*.18,.21],[.027,.04,.02]);
+    }
+    if(["earrings","set"].includes(state.accessoryStyle)){
+      for(const side of [-1,1]){
+        sphere(avatarRoot,jewel,[side*.285,2.12,.16],[.025,.035,.022]);
+        sphere(avatarRoot,gem,[side*.285,2.06,.17],[.025,.035,.02]);
+      }
+    }
+    if(["necklace","set"].includes(state.accessoryStyle)){
+      curveTube([[-.16,1.93,.14],[-.10,1.87,.19],[0,1.84,.205],[.10,1.87,.19],[.16,1.93,.14]],jewel,.018);
+      sphere(avatarRoot,gem,[0,1.82,.21],[.035,.045,.022]);
     }
   }
   // Compagnon miniature assorti
