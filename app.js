@@ -129,6 +129,7 @@ async function answer(choice,stageIndex){
     });
   }catch(e){say("gameMessage","Impossible d'enregistrer : "+friendlyError(e));}
 }
+$("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
 $("createBtn").addEventListener("click",createRoom);
 $("joinBtn").addEventListener("click",()=>joinRoom($("inviteInput").value));
 $("inviteInput").addEventListener("keydown",e=>{if(e.key==="Enter")joinRoom($("inviteInput").value)});
