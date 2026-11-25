@@ -314,21 +314,56 @@ function showReward(stageIndex){
   playRewardAnimation();
 }
 $("replayReward").addEventListener("click",playRewardAnimation);
-$("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";});
-$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";}});
+$("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";launchNextMemoryCelebration();});
+$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";launchNextMemoryCelebration();}});
 
+function getUnlockedMemories(players){
+  const bubulle=new Set(players.BUBULLE?.completed||[]);
+  const blybly=new Set(players.BLYBLY?.completed||[]);
+  const unlocked=[];
+  albumGroups.slice(1).forEach((group,index)=>{
+    const complete=Array.from({length:group.end-group.start+1},(_,offset)=>group.start+offset).every(stageIndex=>bubulle.has(stageIndex)&&blybly.has(stageIndex));
+    if(complete) unlocked.push({id:"flower-"+index,title:"Une fleur vient d’éclore !",message:"Vous avez terminé "+group.title.replace(/^Chapitre \\d+ · /,"")+" toutes les deux. Un nouveau souvenir fleurit dans votre album. 🌸"});
+  });
+  const shared=[...bubulle].filter(index=>blybly.has(index)).length;
+  if(shared>0) unlocked.push({id:"heart",title:"Le cœur des Besties s’illumine !",message:"Une nouvelle énigme réussie ensemble… Votre complicité fait battre le cœur enchanté. 💗"});
+  if(stages.every((stage,index)=>bubulle.has(index)&&blybly.has(index))) unlocked.push({id:"crown",title:"Votre légende est complète !",message:"Les 21 énigmes sont terminées par vous deux. La couronne légendaire vous appartient ! 👑"});
+  return unlocked;
+}
+let pendingMemoryCelebrations=[];
+function showMemoryCelebration(item){
+  const overlay=$("memoryCelebration");
+  $("memoryCelebrationTitle").textContent=item.title;
+  $("memoryCelebrationMessage").textContent=item.message;
+  const fireworks=overlay.querySelector(".memory-fireworks");
+  fireworks.innerHTML="";
+  [[18,28],[50,18],[82,30],[35,55],[70,58]].forEach(([x,y],burstIndex)=>{
+    const burst=document.createElement("div");burst.className="memory-firework burst-"+burstIndex;burst.style.left=x+"%";burst.style.top=y+"%";
+    for(let i=0;i<14;i++){const spark=document.createElement("i");spark.style.setProperty("--angle",(i*360/14)+"deg");spark.style.setProperty("--delay",(burstIndex*90+i*9)+"ms");burst.appendChild(spark);}
+    fireworks.appendChild(burst);
+  });
+  overlay.classList.remove("hidden");
+}
+function launchNextMemoryCelebration(){if(!pendingMemoryCelebrations.length)return;showMemoryCelebration(pendingMemoryCelebrations.shift());}
+function closeMemoryCelebration(){$("memoryCelebration").classList.add("hidden");if(pendingMemoryCelebrations.length)launchNextMemoryCelebration();}
+$("memoryCelebrationContinue").addEventListener("click",closeMemoryCelebration);
 async function answer(choice,stageIndex){
   const s=stages[stageIndex];
   if(choice!==s.correct){say("gameMessage","Pas tout à fait ! Essaie encore 😊");return;}
   try{
+    let newlyUnlocked=[];
     await runTransaction(db,async tx=>{
       const snap=await tx.get(roomRef);const data=snap.data();const player={...data.players[myRole]};
-      if(player.completed.includes(stageIndex)) return;
+      if(player.completed.includes(stageIndex))return;
+      const before=getUnlockedMemories(data.players);
       player.completed=[...player.completed,stageIndex];player.score+=10;player.stage=Math.max(player.stage,stageIndex+1);
+      const updatedPlayers={...data.players,[myRole]:player};
+      const after=getUnlockedMemories(updatedPlayers);
+      newlyUnlocked=after.filter(item=>!before.some(old=>old.id===item.id));
       tx.update(roomRef,{[`players.${myRole}`]:player});
     });
-    showReward(stageIndex);
-  }catch(e){say("gameMessage","Impossible d'enregistrer : "+friendlyError(e));}
+    pendingMemoryCelebrations.push(...newlyUnlocked);showReward(stageIndex);
+  }catch(e){say("gameMessage","Impossible d’enregistrer : "+friendlyError(e));}
 }
 async function resetGame(){
   const confirmed=window.confirm("Réinitialiser toute l’aventure ? Les scores de Bubulle et Blybly, les énigmes validées et la progression seront remis à zéro sur les deux appareils. Cette action est définitive.");
