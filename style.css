@@ -50,5 +50,5 @@
 @keyframes bowAppear{0%{transform:scale(.2) rotate(-25deg);opacity:0}75%{transform:scale(1.15) rotate(15deg);opacity:1}100%{transform:scale(1) rotate(12deg);opacity:1}}
 
 
-/* Lecteur intégré de la chanson des besties */
-.song-player{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px;padding:12px 15px;border:1px solid #f5a9d255;border-radius:18px;background:#f5a9d20d}.song-player span{font-weight:700;color:#ffd5ea}.song-player iframe{width:300px;max-width:100%;height:56px;border:0;border-radius:12px;background:#17152b}@media(max-width:650px){.song-player{align-items:stretch}.song-player iframe{width:100%;height:56px}}
+/* Lecteur local discret de la chanson des besties */
+.song-player{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:10px 13px;border:1px solid #f5a9d255;border-radius:16px;background:#f5a9d20d}.song-toggle{border:1px solid #f5a9d277;border-radius:12px;padding:11px 15px;background:#f5a9d21c;color:#ffd5ea;font:700 13px "DM Sans";cursor:pointer}.song-toggle:disabled{opacity:.75;cursor:default}.song-status{font-size:11px;color:var(--muted)}.song-player audio{display:none}
