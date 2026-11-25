@@ -19,10 +19,10 @@ const status = message => $("saveStatus").textContent = message;
 const defaults = {
   hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",accessoryStyle:"none",skinColor:"#f3c6a5",
   eyeColor:"#8b6049",eyeShape:"almond",lipColor:"#b96e78",makeup:"soft",freckles:"none",
-  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
+  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
+let companionMotion = null, magicParticles = [], magicAura = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -475,6 +475,23 @@ function buildAvatar() {
     }
     companionMotion={head,ears,wings,tailParts,petRoot,kind:state.companion};
   }
+  // Petits effets magiques personnalisables, attachés au personnage.
+  magicParticles=[];
+  if(state.magicEffect && state.magicEffect!=="none"){
+    const effect=state.magicEffect;
+    const palette=effect==="stars"?["#fff1a8","#d9c8ff","#b9e7ff"]:effect==="butterflies"?["#f7a9d2","#b9a7f5","#ffe3a3"]:effect==="aura"?["#a8f0df","#d8b7ff","#fff0c2"]:["#f6b5d1","#f4d89a","#d8c5ff"];
+    const glowMats=palette.map(c=>material(c,.28,{emissive:c,emissiveIntensity:.7,transparent:true,opacity:.92}));
+    for(let i=0;i<24;i++){
+      const angle=i*2.399, y=.48+(i%8)*.255, radius=.38+(i%3)*.055;
+      const geo=effect==="stars"?new THREE.OctahedronGeometry(.038,0):new THREE.SphereGeometry(.035,12,10);
+      const particle=addMesh(avatarRoot,geo,glowMats[i%glowMats.length],[Math.cos(angle)*radius,y,Math.sin(angle)*.20+.23],effect==="petals"?[.48,1.25,.42]:effect==="butterflies"?[1.25,.72,.35]:[1,1,.65]);
+      particle.userData={angle,baseY:y,radius,phase:i*.71,kind:effect,baseScale:particle.scale.clone()};
+      magicParticles.push(particle);
+    }
+    if(effect==="aura"){
+      magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(.43,.012,8,72),material("#b8f0e1",.24,{emissive:"#83d9c9",emissiveIntensity:.85,transparent:true,opacity:.7}),[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
+    }else magicAura=null;
+  }else magicAura=null;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
 async function loadRealisticCharacter(){
@@ -586,6 +603,14 @@ function animate(){
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
+  for(const p of magicParticles){
+    const d=p.userData, a=d.angle+t*(d.kind==="butterflies"?.62:.34);
+    p.position.set(Math.cos(a)*d.radius,d.baseY+Math.sin(t*1.7+d.phase)*.075,Math.sin(a)*.20+.23);
+    p.rotation.z=Math.sin(t*2+d.phase)*.45;
+    const pulse=.82+.24*(.5+.5*Math.sin(t*2.5+d.phase));
+    p.scale.copy(d.baseScale).multiplyScalar(pulse);
+  }
+  if(magicAura){magicAura.rotation.z=t*.22;magicAura.material.opacity=.48+.22*(.5+.5*Math.sin(t*2));}
   if(faceBlinkMeshes.length){
     const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;
     for(let i=0;i<faceBlinkMeshes.length;i++){
