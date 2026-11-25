@@ -136,6 +136,42 @@ function render(){
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
   if(mine.stage>=stages.length) $("modal").classList.remove("hidden");
 }
+
+let activeReward = null;
+let rewardStyle = localStorage.getItem("bubulleRewardStyle") || "chest";
+function playRewardAnimation(){
+  if(!activeReward) return;
+  const visual=$("rewardVisual");
+  visual.className="reward-visual "+rewardStyle;
+  // Relance les animations à chaque aperçu.
+  const symbol=$("rewardSymbol");
+  if(symbol) symbol.remove();
+  const span=document.createElement("span");
+  span.id="rewardSymbol";span.className="reward-symbol";
+  span.textContent=activeReward.reward.split(" ")[0] || "🎁";
+  visual.appendChild(span);
+  document.querySelectorAll(".reward-style").forEach(b=>b.classList.toggle("active",b.dataset.style===rewardStyle));
+}
+function showReward(stageIndex){
+  const s=stages[stageIndex];
+  activeReward={reward:s.reward,owner:myRole==="BUBULLE"?"Bubulle":"Blybly"};
+  $("rewardTitle").textContent="Bravo, trésor découvert !";
+  $("rewardOwner").textContent=activeReward.owner+" vient de réussir l’épreuve.";
+  $("rewardName").textContent=s.reward;
+  show("rewardModal");
+  playRewardAnimation();
+}
+document.querySelectorAll(".reward-style").forEach(button=>{
+  button.addEventListener("click",()=>{
+    rewardStyle=button.dataset.style;
+    localStorage.setItem("bubulleRewardStyle",rewardStyle);
+    playRewardAnimation();
+  });
+});
+$("replayReward").addEventListener("click",playRewardAnimation);
+$("closeReward").addEventListener("click",()=>hide("rewardModal"));
+$("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal")hide("rewardModal");});
+
 async function answer(choice,stageIndex){
   const s=stages[stageIndex];
   if(choice!==s.correct){say("gameMessage","Pas tout à fait ! Essaie encore 😊");return;}
@@ -146,6 +182,7 @@ async function answer(choice,stageIndex){
       player.completed=[...player.completed,stageIndex];player.score+=10;player.stage=Math.max(player.stage,stageIndex+1);
       tx.update(roomRef,{[`players.${myRole}`]:player});
     });
+    showReward(stageIndex);
   }catch(e){say("gameMessage","Impossible d'enregistrer : "+friendlyError(e));}
 }
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
