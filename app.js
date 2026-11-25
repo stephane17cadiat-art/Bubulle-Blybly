@@ -167,9 +167,22 @@ function render(){
   $("nextBtn").classList.toggle("hidden",!mine.completed.includes(stage)||stage===stages.length-1);
   $("hintBtn").classList.toggle("hidden",mine.completed.includes(stage));
   $("map").innerHTML="";
+  $("map").setAttribute("aria-label","Chemin du royaume : "+mine.completed.length+" énigmes validées sur "+stages.length);
+  const mapStatus=$("mapJourneyStatus");
+  if(mapStatus) mapStatus.textContent=mine.completed.length+" / "+stages.length+" trésors";
   stages.forEach((x,i)=>{
-    const el=document.createElement("div");el.className="map-stop"+(mine.completed.includes(i)?" done":"")+(i===stage?" current":"");
-    el.innerHTML=`<span class="emoji">${mine.completed.includes(i)?"✅":x.emoji}</span><small>${x.place}</small>`;
+    const done=mine.completed.includes(i), current=i===stage, locked=!done&&!current;
+    const el=document.createElement("div");
+    el.className="map-stop"+(done?" done":"")+(current?" current":"")+(locked?" locked":"");
+    const row=Math.floor(i/5), position=i%5;
+    el.style.gridRow=String(row+1);
+    el.style.gridColumn=String(row%2===0?position+1:5-position);
+    el.setAttribute("aria-label",done?"Énigme "+(i+1)+" validée : "+x.place:current?"Prochaine étape : "+x.place:"Énigme "+(i+1)+", secret à découvrir");
+    el.innerHTML=done
+      ? `<span class="map-number">${i+1}</span><span class="emoji">${x.emoji}</span><small>${x.place}</small><span class="map-state">✓ Trésor trouvé</span>`
+      : current
+        ? `<span class="map-number">${i+1}</span><span class="emoji">${x.emoji}</span><small>${x.place}</small><span class="map-state">✦ À toi !</span>`
+        : `<span class="map-number">${i+1}</span><span class="emoji">✧</span><small>Secret à découvrir</small><span class="map-state">🔒</span>`;
     $("map").appendChild(el);
   });
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
