@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#211b3d">
+  <title>Atelier féerique — Bubulle & Blybly</title>
+  <link rel="stylesheet" href="./avatar.css">
+</head>
+<body>
+  <main class="workshop">
+    <header class="workshop-head">
+      <a class="back-link" id="backLink" href="./">← Retour à l’aventure</a>
+      <p class="eyebrow">MIROIR MAGIQUE & GARDE-ROBE ENCHANTÉE</p>
+      <h1>Mon atelier féerique <span>✧</span></h1>
+      <p class="subtitle" id="playerName">Créons ton personnage magique</p>
+    </header>
+    <section class="workshop-layout">
+      <div class="mirror-panel">
+        <div class="mirror-title">✦ Le miroir enchanté ✦</div>
+        <div id="avatarView" class="avatar-view" aria-label="Aperçu 3D du personnage">
+          <div class="loading">✨ Le miroir s’éveille…</div>
+        </div>
+        <p class="rotate-help">☝️ Fais glisser pour tourner · Pince ou utilise la molette pour zoomer</p>
+        <div class="quick-actions">
+          <button id="poseBtn" class="soft-button">💃 Petite danse</button>
+          <button id="resetViewBtn" class="soft-button">↻ Recentrer</button>
+        </div>
+      </div>
+      <section class="wardrobe">
+        <div class="wardrobe-heading"><span>🪄</span><div><p class="eyebrow">TA GARDE-ROBE</p><h2>À toi de choisir !</h2></div></div>
+        <div class="control-grid">
+          <label>Coiffure
+            <select id="hairStyle"><option value="long">Longue et ondulée</option><option value="braid">Tresses fleuries</option><option value="bun">Chignon de princesse</option><option value="bob">Carré magique</option></select>
+          </label>
+          <label>Couleur des cheveux
+            <select id="hairColor"><option value="#5b352d">Brun chocolat</option><option value="#d69a42">Blond doré</option><option value="#bd536f">Rose poudré</option><option value="#6d64b8">Violet féerique</option><option value="#25243b">Noir nuit</option><option value="#a85b37">Cuivré</option><option value="#e8d5b2">Blond nacré</option></select>
+          </label>
+          <label>Teint
+            <select id="skinColor"><option value="#f3c6a5">Pêche clair</option><option value="#d99b72">Miel</option><option value="#a9684c">Caramel</option><option value="#704532">Ébène chaud</option><option value="#f0d6c7">Porcelaine rosée</option></select>
+          </label>
+          <label>Tenue
+            <select id="outfit"><option value="princess">Robe de princesse</option><option value="forest">Gardienne de la forêt</option><option value="boho">Bohème fleurie</option><option value="magic">Enchanteresse</option><option value="modern">Aventurière moderne</option></select>
+          </label>
+          <label>Couleur de la tenue
+            <select id="outfitColor"><option value="#d98ab9">Rose tulipe</option><option value="#9a86d8">Lavande magique</option><option value="#72a98a">Vert forêt</option><option value="#6b8fc8">Bleu étoilé</option><option value="#e5b85e">Or féerique</option><option value="#f0e5d8">Ivoire nacré</option><option value="#c96e70">Rouge cerise</option></select>
+          </label>
+          <label>Ailes
+            <select id="wings"><option value="fairy">Ailes de fée</option><option value="butterfly">Ailes de papillon</option><option value="crystal">Ailes de cristal</option><option value="none">Sans ailes</option></select>
+          </label>
+          <label>Compagnon
+            <select id="companion"><option value="none">Aucun pour le moment</option><option value="rabbit">Petit lapin 🐰</option><option value="cat">Chat enchanté 🐱</option><option value="fox">Renardeau 🦊</option><option value="fawn">Faon magique 🦌</option><option value="dragon">Mini-dragon 🐉</option><option value="unicorn">Bébé licorne 🦄</option></select>
+          </label>
+          <label>Ambiance de l’atelier
+            <select id="theme"><option value="forest">Forêt lumineuse</option><option value="rose">Jardin rose</option><option value="night">Nuit étoilée</option><option value="lavender">Brume violette</option></select>
+          </label>
+        </div>
+        <div class="save-row"><span id="saveStatus">☁️ Préparation de ta sauvegarde…</span><button id="saveBtn" class="save-button">✨ Enregistrer mon look</button></div>
+        <p class="save-note">Tes choix sont sauvegardés dans ta partie. Tu pourras revenir les modifier quand tu le souhaites.</p>
+      </section>
+    </section>
+    <footer>Un personnage unique, une magie qui t’appartient 🌷</footer>
+  </main>
+  <script type="module" src="./avatar.js"></script>
+</body>
+</html>
