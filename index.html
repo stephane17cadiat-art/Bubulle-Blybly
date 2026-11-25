@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261125-crown-gem-alignment">
+  <link rel="stylesheet" href="./style.css?v=20261125-album-secret-book">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -35,7 +35,7 @@
     <section id="game" class="hidden">
       <div class="game-heading">
         <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
-        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="finaleTestBtn" class="secondary finale-test-btn">✨ Tester le grand final</button></div>
+        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="finaleTestBtn" class="secondary finale-test-btn">✨ Tester le grand final</button><button id="albumOpenBtn" class="secondary album-open-btn">📖 Album secret</button></div>
       </div>
       <div class="song-player"><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Notre chanson — bientôt</button><span id="songStatus" class="song-status" role="status">Le fichier audio sera ajouté dès que tu pourras nous l’envoyer.</span><audio id="bestiesSong" preload="none" src="./assets/notre-chanson.mp3"></audio></div>
       <div class="player-strip">
@@ -151,7 +151,35 @@
       <button id="finaleCelebrateBtn" class="primary">Hourra, vive les Besties !</button>
     </div>
   </div>
-  <div id="rewardModal" class="reward-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
+
+  <div id="albumModal" class="album-modal hidden" role="dialog" aria-modal="true" aria-labelledby="albumTitle">
+    <section class="album-book">
+      <button id="albumCloseBtn" class="album-close" aria-label="Fermer l’album">×</button>
+      <div class="album-cover">
+        <span class="album-flower album-flower-left">✿</span>
+        <p class="album-kicker">LE GRIMOIRE DE NOTRE AVENTURE</p>
+        <div class="album-emblem">♡</div>
+        <h2 id="albumTitle">L’Album secret<br>des Besties</h2>
+        <p class="album-subtitle">Bubulle & Blybly · Un duo, mille souvenirs</p>
+        <div class="album-ribbon">Édition précieuse</div>
+        <span class="album-flower album-flower-right">✿</span>
+      </div>
+      <div class="album-inner">
+        <p class="album-intro">Chaque énigme, chaque éclat de rire et chaque petit trésor racontent un morceau de votre histoire.</p>
+        <div id="albumProgress" class="album-progress"></div>
+        <div class="album-section-heading"><span>✦</span><div><p>LE CHEMIN PARCOURU</p><h3>Les pages de l’aventure</h3></div><span>✦</span></div>
+        <div id="albumChapters" class="album-chapters"></div>
+        <div class="album-dedication">
+          <span class="dedication-flower">🌷</span>
+          <p class="album-kicker">UN PETIT MOT DE BUBULLE</p>
+          <blockquote>Blybly, cette aventure a été imaginée pour te rappeler combien tu es précieuse. Merci pour les fous rires, la douceur et tous ces petits moments qui rendent notre duo unique. Que notre complicité continue de fleurir, énigme après énigme.</blockquote>
+          <p class="dedication-signature">Avec toute mon affection, Bubulle 💗</p>
+        </div>
+        <p class="album-footer">À conserver tout près du cœur · Bubulle & Blybly</p>
+      </div>
+    </section>
+  </div>
+\n  <div id="rewardModal" class="reward-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
     <section class="reward-card">
       <button id="closeReward" class="reward-close" aria-label="Fermer">×</button>
       <p class="reward-kicker">✨ TRÉSOR DÉCOUVERT ✨</p>
@@ -164,6 +192,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261125-finale-layer-fix"></script>
+  <script type="module" src="./app.js?v=20261125-album-secret-book"></script>
 </body>
 </html>
