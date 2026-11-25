@@ -169,6 +169,14 @@ document.querySelectorAll(".reward-style").forEach(button=>{
   });
 });
 $("replayReward").addEventListener("click",playRewardAnimation);
+$("rewardTestBtn").addEventListener("click",()=>{
+  activeReward={reward:"💎 Diamant de la forêt",owner:"Aperçu de démonstration — aucun point ne sera ajouté."};
+  $("rewardTitle").textContent="Choisis ton effet préféré !";
+  $("rewardOwner").textContent=activeReward.owner;
+  $("rewardName").textContent=activeReward.reward;
+  show("rewardModal");
+  playRewardAnimation();
+});
 $("closeReward").addEventListener("click",()=>hide("rewardModal"));
 $("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal")hide("rewardModal");});
 
