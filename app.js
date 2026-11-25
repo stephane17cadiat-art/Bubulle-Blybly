@@ -175,8 +175,8 @@ function render(){
     const el=document.createElement("div");
     el.className="map-stop"+(done?" done":"")+(current?" current":"")+(locked?" locked":"");
     const row=Math.floor(i/5), position=i%5;
-    el.style.gridRow=String(row+1);
-    el.style.gridColumn=String(row%2===0?position+1:5-position);
+    el.style.setProperty("--map-row",String(row+1));
+    el.style.setProperty("--map-column",String(row%2===0?position+1:5-position));
     el.setAttribute("aria-label",done?"Énigme "+(i+1)+" validée : "+x.place:current?"Prochaine étape : "+x.place:"Énigme "+(i+1)+", secret à découvrir");
     el.innerHTML=done
       ? `<span class="map-number">${i+1}</span><span class="emoji">${x.emoji}</span><small>${x.place}</small><span class="map-state">✓ Trésor trouvé</span>`
