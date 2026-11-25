@@ -87,11 +87,28 @@ function buildAvatar() {
   cylinderBetween(rightArm,skin,[.12,-.43,.02],[.16,-.69,.07],.06,.045);
   sphere(rightArm,skin,[.16,-.72,.08],[.055,.09,.045]);
   // Visage plus fin : yeux détaillés, nez, bouche, sourcils et oreilles
-  sphere(avatarRoot,skin,[0,2.12,.015],[.285,.355,.255]);
+  // Visage sculpté : mâchoire plus fine et pommettes douces
+  const faceGeometry = new THREE.SphereGeometry(1,48,40);
+  const facePositions = faceGeometry.attributes.position;
+  for(let i=0;i<facePositions.count;i++){
+    const y=facePositions.getY(i);
+    const taper=0.82+0.18*THREE.MathUtils.smoothstep(y,-.75,.35);
+    facePositions.setX(i,facePositions.getX(i)*taper);
+  }
+  faceGeometry.computeVertexNormals();
+  addMesh(avatarRoot,faceGeometry,skin,[0,2.12,.015],[.285,.355,.255]);
+
   sphere(avatarRoot,skin,[-.285,2.1,0],[.055,.09,.065]);
   sphere(avatarRoot,skin,[.285,2.1,0],[.055,.09,.065]);
-  sphere(avatarRoot,white,[-.105,2.15,.245],[.067,.078,.027]);
-  sphere(avatarRoot,white,[.105,2.15,.245],[.067,.078,.027]);
+  sphere(avatarRoot,white,[-.105,2.15,.245],[.071,.073,.029]);
+  sphere(avatarRoot,white,[.105,2.15,.245],[.071,.073,.029]);
+  // Cils et paupières pour un regard plus fin
+  curveTube([[-.18,2.18,.256],[-.12,2.225,.27],[-.055,2.18,.256]],dark,.009);
+  curveTube([[.055,2.18,.256],[.12,2.225,.27],[.18,2.18,.256]],dark,.009);
+  for(const side of [-1,1]){
+    curveTube([[side*.16,2.18,.26],[side*.20,2.205,.25]],dark,.006);
+    curveTube([[side*.14,2.18,.265],[side*.18,2.21,.255]],dark,.006);
+  }
   sphere(avatarRoot,material("#7a594b",.22),[-.105,2.15,.269],[.036,.052,.018]);
   sphere(avatarRoot,material("#7a594b",.22),[.105,2.15,.269],[.036,.052,.018]);
   sphere(avatarRoot,material("#17131a",.18),[-.105,2.15,.284],[.018,.033,.01]);
@@ -105,7 +122,13 @@ function buildAvatar() {
   sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
   sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
   // Chevelure volumineuse avec mèches individuelles
-  sphere(avatarRoot,hair,[0,2.38,-.005],[.30,.20,.28]);
+  sphere(avatarRoot,hair,[0,2.38,-.005],[.305,.205,.285]);
+  // Frange souple et mèches qui encadrent le visage
+  for(let i=0;i<7;i++){
+    const x=-.19+i*.063;
+    const y=2.40-Math.abs(x)*.20;
+    curveTube([[x*.72,2.49,.18],[x,2.43,.255],[x*1.08,y,.275]],hair,.027);
+  }
   const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:18;
   for(let i=0;i<hairStrands;i++){
     const a=(i/hairStrands)*Math.PI*2;
