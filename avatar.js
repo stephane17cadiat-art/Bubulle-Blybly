@@ -560,7 +560,7 @@ async function loadRealisticCharacter(){
     $("realisticBtn").disabled=false;
   }catch(error){
     console.warn("Le modèle 3D détaillé n’a pas pu être chargé :",error);
-    status("Le modèle humain n’est pas disponible ici ; ton avatar actuel reste intact.");
+    status("Échec du chargement 3D : "+(error?.message||error?.target?.statusText||"erreur réseau ou CORS")+". Ton avatar actuel reste intact.");
     $("realisticBtn").disabled=true;
   }
 }
