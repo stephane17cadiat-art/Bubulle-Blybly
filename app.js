@@ -162,16 +162,6 @@ function showReward(stageIndex){
   playRewardAnimation();
 }
 $("replayReward").addEventListener("click",playRewardAnimation);
-$("rewardTestBtn").addEventListener("click",()=>{
-  activeReward={reward:"💗 Cœur enchanté au nœud rose",owner:"Aperçu de démonstration — aucun point ne sera ajouté."};
-  $("rewardTitle").textContent="Un cœur rien que pour vous !";
-  $("rewardOwner").textContent=activeReward.owner;
-  $("rewardName").textContent=activeReward.reward;
-  $("rewardModal").style.display="grid";
-  show("rewardModal");
-  playRewardAnimation();
-});
-
 $("closeReward").addEventListener("click",()=>{hide("rewardModal");$("rewardModal").style.display="none";});
 $("rewardModal").addEventListener("click",e=>{if(e.target.id==="rewardModal"){hide("rewardModal");$("rewardModal").style.display="none";}});
 
@@ -188,6 +178,31 @@ async function answer(choice,stageIndex){
     showReward(stageIndex);
   }catch(e){say("gameMessage","Impossible d'enregistrer : "+friendlyError(e));}
 }
+async function resetGame(){
+  const confirmed=window.confirm("Réinitialiser toute l’aventure ? Les scores de Bubulle et Blybly, les énigmes validées et la progression seront remis à zéro sur les deux appareils. Cette action est définitive.");
+  if(!confirmed) return;
+  try{
+    await runTransaction(db,async tx=>{
+      const snap=await tx.get(roomRef);
+      if(!snap.exists()) throw new Error("La partie est introuvable.");
+      const data=snap.data();
+      const players={};
+      for(const role of ["BUBULLE","BLYBLY"]){
+        const player=data.players[role]||{};
+        players[role]={...player,score:0,stage:0,completed:[]};
+      }
+      tx.update(roomRef,{players});
+    });
+    hide("modal");
+    hide("rewardModal");
+    $("rewardModal").style.display="none";
+    say("syncStatus","● Aventure réinitialisée sur les deux appareils");
+  }catch(e){
+    say("syncStatus","Réinitialisation impossible : "+friendlyError(e));
+  }
+}
+$("resetGameBtn").addEventListener("click",resetGame);
+
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
 $("createBtn").addEventListener("click",createRoom);
 $("joinBtn").addEventListener("click",()=>joinRoom($("inviteInput").value));
