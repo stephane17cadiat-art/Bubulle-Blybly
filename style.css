@@ -40,3 +40,11 @@
 
 .reward-test{width:100%;padding:10px 12px;border:1px solid #f5a9d277;border-radius:12px;background:#f5a9d218;color:#ffd5ea;font:700 12px 'DM Sans';cursor:pointer;transition:transform .15s,background .15s}
 .reward-test:hover{transform:translateY(-1px);background:#f5a9d22b}
+
+
+/* Emblème cœur rose et nœud — Bubulle & Blybly */
+.heart-bow-mark{position:relative;display:inline-block;line-height:1;filter:drop-shadow(0 0 10px #f5a9d288)}
+.heart-bow-mark i{position:absolute;font-style:normal;font-size:.48em;right:-.22em;top:-.16em;transform:rotate(12deg);filter:drop-shadow(0 2px 3px #0006)}
+.reward-symbol.heart-bow{position:relative;filter:drop-shadow(0 10px 18px #f5a9d288)}
+.reward-symbol.heart-bow::after{content:"🎀";position:absolute;right:-.18em;top:-.16em;font-size:.43em;transform:rotate(12deg);filter:drop-shadow(0 3px 4px #0008);animation:bowAppear .65s .25s both}
+@keyframes bowAppear{0%{transform:scale(.2) rotate(-25deg);opacity:0}75%{transform:scale(1.15) rotate(15deg);opacity:1}100%{transform:scale(1) rotate(12deg);opacity:1}}
