@@ -152,62 +152,78 @@ function buildAvatar() {
   sphere(avatarRoot,lip,[0,1.99,.25],[.052,.018,.018]);
   sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
   sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
-  // Chevelure volumineuse avec mèches individuelles
+  // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
   sphere(avatarRoot,hair,[0,2.38,-.005],[.305,.205,.285]);
-  // Frange souple et mèches qui encadrent le visage
-  for(let i=0;i<7;i++){
-    const x=-.19+i*.063;
-    const y=2.40-Math.abs(x)*.20;
-    curveTube([[x*.72,2.49,.18],[x,2.43,.255],[x*1.08,y,.275]],hair,.027);
+  // Frange en mèches souples qui encadrent le front.
+  for(let i=0;i<9;i++){
+    const x=-.205+i*.051;
+    const y=2.405-Math.abs(x)*.19;
+    curveTube([[x*.72,2.49,.17],[x*.94,2.445,.245],[x*1.04,y,.275],[x*1.02,y-.045,.255]],hair,.025);
   }
-  if(state.hairStyle==="bob"){
-    // Carré court arrondi, dégagé au niveau des épaules
-    sphere(avatarRoot,hair,[0,2.23,-.045],[.31,.27,.29]);
-    for(const side of [-1,1]){
-      curveTube([[side*.23,2.36,.12],[side*.30,2.18,.16],[side*.29,1.98,.12],[side*.22,1.91,.08]],hair,.055);
-    }
+  // Masse arrière pour donner une vraie épaisseur aux coiffures longues.
+  if(!["bob","doublebun","curly"].includes(state.hairStyle)){
+    sphere(avatarRoot,hair,[0,2.12,-.205],[.265,.39,.115]);
   }
-  if(state.hairStyle==="ponytail"){
-    sphere(avatarRoot,hair,[0,2.36,-.25],[.16,.16,.16]);
-    curveTube([[0,2.34,-.3],[.04,2.18,-.42],[.08,1.92,-.48],[.02,1.66,-.46],[-.04,1.48,-.4]],hair,.085);
-    sphere(avatarRoot,gold,[0,2.27,-.34],[.09,.045,.045]);
-  }
-  if(state.hairStyle==="doublebun"){
-    for(const side of [-1,1]){
-      sphere(avatarRoot,hair,[side*.22,2.48,-.04],[.14,.14,.14]);
-      curveTube([[side*.18,2.45,.02],[side*.28,2.32,.06],[side*.31,2.16,.02]],hair,.04);
-    }
-  }
-  if(state.hairStyle==="halfup"){
-    sphere(avatarRoot,hair,[0,2.48,-.18],[.16,.12,.12]);
-    sphere(avatarRoot,gold,[0,2.43,-.29],[.07,.045,.035]);
-  }
-  if(state.hairStyle==="curly"){
-    for(const side of [-1,1]){
-      for(let i=0;i<6;i++){
-        sphere(avatarRoot,hair,[side*(.24+(i%2)*.035),2.22-i*.105,-.12+(i%3)*.035],[.09,.12,.09]);
+  if(state.hairStyle==="long"){
+    // Grandes mèches ondulées, de longueurs légèrement différentes.
+    for(let side of [-1,1]){
+      for(let k=0;k<4;k++){
+        const x=side*(.13+k*.045);
+        curveTube([[side*.18,2.30,-.19],[x,2.12,-.27],[x+side*.035,1.91,-.28],[x-side*.015,1.70,-.25],[x+side*.025,1.52+k*.025,-.20]],hair,.038-k*.003);
       }
     }
-  }
-  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:state.hairStyle==="bob"?0:state.hairStyle==="doublebun"||state.hairStyle==="curly"?0:18;
-  for(let i=0;i<hairStrands;i++){
-    const a=(i/hairStrands)*Math.PI*2;
-    const x=Math.cos(a),z=Math.sin(a);
-    if(state.hairStyle==="bun"){
-      const side=i%2===0?-.22:.22;
-      sphere(avatarRoot,hair,[side,2.48,-.025],[.13,.14,.13]);
-      curveTube([[side*.7,2.48,.12],[side,2.35,.14],[side*1.35,2.2,.08]],hair,.035);
-    }else{
-      const side=Math.cos(a);
-      const front=Math.sin(a);
-      // Les longues mèches restent derrière les épaules pour ne pas dessiner de traits sur le visage ou la robe.
-      if(z<-.25){
-        curveTube([[x*.18,2.43,-.16],[x*.24,2.28,-.22],[x*.28,2.02,-.24],[x*.27,1.78,-.22],[x*.22,1.62,-.18]],hair,.025);
+  }else if(state.hairStyle==="braid"){
+    // Tresse épaisse en maillons alternés, posée sur l'épaule.
+    curveTube([[.19,2.28,-.18],[.28,2.12,-.12],[.34,1.98,.015],[.34,1.78,.08]],hair,.055);
+    for(let i=0;i<10;i++){
+      const y=2.12-i*.075, x=.29+Math.sin(i*.9)*.055, z=.105+Math.cos(i*.9)*.018;
+      sphere(avatarRoot,hair,[x,y,z],[.065,.075,.052]);
+    }
+    sphere(avatarRoot,gold,[.34,1.39,.10],[.045,.035,.035]);
+  }else if(state.hairStyle==="bun"){
+    for(const side of [-1,1]){
+      sphere(avatarRoot,hair,[side*.17,2.49,-.04],[.145,.15,.14]);
+      curveTube([[side*.12,2.48,.06],[side*.23,2.39,.12],[side*.26,2.29,.08]],hair,.035);
+    }
+  }else if(state.hairStyle==="bob"){
+    sphere(avatarRoot,hair,[0,2.22,-.035],[.31,.27,.28]);
+    for(const side of [-1,1]){
+      curveTube([[side*.24,2.37,.11],[side*.30,2.20,.15],[side*.29,2.02,.12],[side*.22,1.94,.09]],hair,.062);
+      sphere(avatarRoot,hair,[side*.245,1.98,.09],[.065,.085,.06]);
+    }
+  }else if(state.hairStyle==="ponytail"){
+    sphere(avatarRoot,hair,[0,2.37,-.27],[.16,.14,.13]);
+    sphere(avatarRoot,gold,[0,2.32,-.35],[.085,.045,.045]);
+    for(let k=0;k<4;k++){
+      curveTube([[.02,2.30,-.34],[.07+k*.018,2.12,-.43],[.02+k*.025,1.91,-.48],[.10-k*.025,1.68,-.43],[.04,1.48+k*.025,-.36]],hair,.04);
+    }
+  }else if(state.hairStyle==="doublebun"){
+    for(const side of [-1,1]){
+      sphere(avatarRoot,hair,[side*.235,2.48,-.035],[.145,.15,.14]);
+      for(let k=0;k<3;k++){
+        const a=k*Math.PI*2/3;
+        sphere(avatarRoot,hair,[side*.235+Math.cos(a)*.09,2.48+Math.sin(a)*.075,.045],[.065,.07,.06]);
       }
     }
-  }
-  if(state.hairStyle==="braid"){
-    for(let i=0;i<7;i++) sphere(avatarRoot,hair,[.34,2.02-i*.09,.12],[.065,.09,.07]);
+  }else if(state.hairStyle==="halfup"){
+    sphere(avatarRoot,hair,[0,2.49,-.17],[.17,.13,.13]);
+    sphere(avatarRoot,gold,[0,2.43,-.285],[.075,.045,.035]);
+    for(const side of [-1,1]){
+      curveTube([[side*.19,2.28,-.18],[side*.25,2.05,-.22],[side*.27,1.82,-.20],[side*.22,1.62,-.16]],hair,.042);
+    }
+  }else if(state.hairStyle==="curly"){
+    // Boucles en spirales souples de chaque côté du visage.
+    for(const side of [-1,1]){
+      for(let i=0;i<7;i++){
+        const y=2.28-i*.085, x=side*(.245+(i%2)*.018);
+        const pts=[];
+        for(let k=0;k<9;k++){
+          const a=k*Math.PI/2;
+          pts.push([x+Math.cos(a)*.045,y-k*.012+Math.sin(a)*.045,.12+Math.sin(a)*.018]);
+        }
+        curveTube(pts,hair,.026);
+      }
+    }
   }
   // Accessoire choisi : fleurs, nœud ou couronne.
   if(state.hairAccessory==="flower"){
