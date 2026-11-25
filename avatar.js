@@ -66,6 +66,38 @@ function buildAvatar() {
   ];
   const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,64)),dress,[0,.43,0]);
   gown.scale.z=.78;
+  // Chaque univers possède maintenant sa propre silhouette et ses accessoires.
+  const accent=material(state.outfit==="forest"?"#8dbb83":state.outfit==="boho"?"#e8c69b":state.outfit==="magic"?"#b7a4ed":state.outfit==="modern"?"#6f7892":"#f4d7e8",.42,{metalness:.12});
+  if(state.outfit==="forest"){
+    // Cape courte et feuilles brodées
+    const cape=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),material("#477b62",.7),[0,1.36,-.17],[.31,.43,.10],[.12,0,0]);
+    for(let i=0;i<5;i++){
+      const x=(i-2)*.105;
+      const leaf=addMesh(avatarRoot,new THREE.SphereGeometry(1,16,12),accent,[x,1.08+Math.abs(i-2)*.055,.25],[.045,.12,.018],[0,0,(i-2)*.22]);
+    }
+  }else if(state.outfit==="boho"){
+    // Étole souple et petits motifs floraux
+    curveTube([[-.25,1.66,.08],[-.12,1.78,.18],[0,1.7,.2],[.14,1.78,.16],[.25,1.66,.08]],accent,.035);
+    for(let i=0;i<7;i++){
+      const a=i*Math.PI*2/7;
+      sphere(avatarRoot,accent,[Math.cos(a)*.34,.92+Math.sin(a)*.12,.23],[.035,.045,.018]);
+    }
+  }else if(state.outfit==="magic"){
+    // Col haut, cape d'enchanteresse et gemme centrale
+    cylinderBetween(avatarRoot,accent,[-.18,1.72,-.02],[.18,1.72,-.02],.035,.035);
+    const cape=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),material("#51447e",.55),[0,1.35,-.2],[.34,.5,.08]);
+    sphere(avatarRoot,material("#e9d5ff",.2,{emissive:"#8c69c9",emissiveIntensity:.35}),[0,1.58,.205],[.055,.075,.025]);
+  }else if(state.outfit==="modern"){
+    // Ceinture, petite veste et bottines visibles sous la jupe
+    cylinderBetween(avatarRoot,accent,[-.19,1.28,.02],[.19,1.28,.02],.035,.035);
+    for(const x of [-.14,.14]){
+      sphere(avatarRoot,material("#514d62"),[x,.22,.10],[.105,.13,.13]);
+    }
+    sphere(avatarRoot,accent,[0,1.31,.205],[.045,.035,.018]);
+  }else{
+    // Corsage princesse avec épaules délicates
+    for(const x of [-.22,.22]) sphere(avatarRoot,accent,[x,1.66,0],[.09,.07,.11]);
+  }
   const bodice=sphere(avatarRoot,dress,[0,1.48,0],[.245,.36,.19]);
   sphere(avatarRoot,skin,[0,1.78,0],[.095,.13,.09]);
   // Fine bordure et plis lumineux sur la jupe
@@ -129,7 +161,14 @@ function buildAvatar() {
     const y=2.40-Math.abs(x)*.20;
     curveTube([[x*.72,2.49,.18],[x,2.43,.255],[x*1.08,y,.275]],hair,.027);
   }
-  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:18;
+  if(state.hairStyle==="bob"){
+    // Carré court arrondi, dégagé au niveau des épaules
+    sphere(avatarRoot,hair,[0,2.23,-.045],[.31,.27,.29]);
+    for(const side of [-1,1]){
+      curveTube([[side*.23,2.36,.12],[side*.30,2.18,.16],[side*.29,1.98,.12],[side*.22,1.91,.08]],hair,.055);
+    }
+  }
+  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:state.hairStyle==="bob"?0:18;
   for(let i=0;i<hairStrands;i++){
     const a=(i/hairStrands)*Math.PI*2;
     const x=Math.cos(a),z=Math.sin(a);
@@ -175,6 +214,16 @@ function buildAvatar() {
     }else if(state.companion==="cat"||state.companion==="fox"){
       for(const side of [-1,1])addMesh(avatarRoot,new THREE.ConeGeometry(.065,.15,16),pet,[x+side*.1,.98,.12]);
     }else if(state.companion==="unicorn")addMesh(avatarRoot,new THREE.ConeGeometry(.035,.18,16),gold,[x,1.02,.13]);
+    else if(state.companion==="fawn"){
+      for(const side of [-1,1]){
+        cylinderBetween(avatarRoot,pet,[x+side*.07,.93,.1],[x+side*.14,1.12,.08],.018,.012);
+        sphere(avatarRoot,material("#f5e1bd"),[x+side*.14,1.13,.08],[.035,.045,.03]);
+      }
+      sphere(avatarRoot,material("#f2d5b5"),[x,.78,.25],[.035,.045,.018]);
+    }else if(state.companion==="dragon"){
+      for(const side of [-1,1]) addMesh(avatarRoot,new THREE.ConeGeometry(.07,.18,12),material("#5f9e85"),[x+side*.11,1.0,-.02],[1,1,1],[0,0,side*.55]);
+      sphere(avatarRoot,material("#e6c47c"),[x,.58,.25],[.035,.025,.018]);
+    }
   }
   const ring=material("#e5c47b",.28,{metalness:.45});
   addMesh(avatarRoot,new THREE.TorusGeometry(.59,.014,8,64),ring,[0,.12,0],[1,.45,1]);
