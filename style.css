@@ -53,3 +53,5 @@
 .music-toggle{border-color:#f5a9d277!important;background:#f5a9d218!important;color:#ffd5ea!important}
 .music-toggle[aria-pressed="true"]{background:#a8e6cf20!important;border-color:#a8e6cf88!important;color:#d7ffed!important}
 @media(max-width:650px){.game-tools .music-toggle{flex-basis:100%}}
+
+.song-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
