@@ -604,7 +604,7 @@ function animate(){
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   for(const p of magicParticles){
-    const d=p.userData, a=d.angle+t*(d.kind==="butterflies"?.62:.34);
+    const d=p.userData, a=d.angle+t*(d.kind==="butterflies" ? .62 : .34);
     p.position.set(Math.cos(a)*d.radius,d.baseY+Math.sin(t*1.7+d.phase)*.075,Math.sin(a)*.20+.23);
     p.rotation.z=Math.sin(t*2+d.phase)*.45;
     const pulse=.82+.24*(.5+.5*Math.sin(t*2.5+d.phase));
