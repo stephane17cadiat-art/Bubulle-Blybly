@@ -377,4 +377,4 @@
 @keyframes memoryFireworkFlash{0%{opacity:1;transform:scale(.3)}35%{opacity:1;transform:scale(1.8)}100%{opacity:0;transform:scale(.2)}}
 @keyframes memoryCardPop{0%{opacity:0;transform:translateY(18px) scale(.82)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes memoryHeartBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.07)}}
-@media(prefers-reduced-motion:reduce){.memory-celebration-card,.memory-celebration-heart,.memory-firework i,.memory-firework-ring,.memory-firework-flash{animation:none}}
+@media(prefers-reduced-motion:reduce){.memory-celebration-card,.memory-celebration-heart,.memory-firework i,.memory-firework-flash{animation:none}}
