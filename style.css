@@ -353,3 +353,24 @@
 @keyframes memoryUnlock{0%{opacity:.4;transform:scale(.92)}65%{opacity:1;transform:scale(1.035)}100%{transform:scale(1)}}
 @keyframes crownMemoryGlow{0%,100%{filter:drop-shadow(0 0 2px #e7b66c)}50%{filter:drop-shadow(0 0 9px #e7b66c)}}
 @media(max-width:430px){.album-memory-section{padding:13px 8px}.album-memories{gap:6px}.album-memory{gap:6px;padding:8px 6px;min-height:82px}.album-memory-icon{width:29px;height:29px;font-size:18px}.album-memory-copy b{font-size:10px}.album-memory-copy small{font-size:8px}.album-memory-state{font-size:6px}}
+
+
+/* Célébrations cœur enchanté et feux d’artifice rose, violet et blanc */
+.memory-celebration{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;overflow:hidden;padding:20px;background:radial-gradient(ellipse at center,#26142e99,#120d1dbd);backdrop-filter:blur(3px)}
+.memory-celebration.hidden{display:none}
+.memory-celebration-card{position:relative;z-index:2;width:min(420px,92vw);padding:27px 23px 22px;border:1px solid #f1c5df;border-radius:24px;background:linear-gradient(145deg,#fffaff,#fce9f4 58%,#f2e8ff);box-shadow:0 0 0 5px #ffffff24,0 18px 65px #10091c88;text-align:center;animation:memoryCardPop .65s cubic-bezier(.2,.85,.3,1.2) both}
+.memory-celebration-heart{font-size:66px;line-height:1.2;filter:drop-shadow(0 5px 12px #dc79b7aa);animation:memoryHeartBeat 1.1s ease-in-out infinite}
+.memory-celebration-kicker{margin:9px 0 5px;color:#a66b9e;font-size:9px;font-weight:900;letter-spacing:2px}
+.memory-celebration-card h2{margin:0;color:#74436f;font:700 24px/1.2 Georgia,serif}
+.memory-celebration-card>p:not(.memory-celebration-kicker){margin:10px 0 18px;color:#8c6887;font:italic 14px/1.55 Georgia,serif}
+.memory-celebration-card button{border:0;border-radius:999px;padding:11px 19px;background:linear-gradient(100deg,#d77eaf,#a982cf);color:#fff;font-weight:800;box-shadow:0 5px 15px #b36b9c55}
+.memory-fireworks{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.memory-firework{position:absolute;width:1px;height:1px}
+.memory-firework i{position:absolute;left:0;top:0;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#ff9bd2;box-shadow:0 0 9px currentColor;opacity:0;animation:memoryFirework 1.35s cubic-bezier(.12,.62,.24,1) var(--delay) both}
+.memory-firework i:nth-child(3n){background:#c9a1ff;color:#c9a1ff}
+.memory-firework i:nth-child(3n + 1){background:#fff;color:#fff}
+.memory-firework i:nth-child(3n + 2){background:#ff8ecb;color:#ff8ecb}
+@keyframes memoryFirework{0%{opacity:0;transform:rotate(var(--angle)) translateY(0) scale(.2)}15%{opacity:1}78%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(-78px) scale(.65)}}
+@keyframes memoryCardPop{0%{opacity:0;transform:translateY(18px) scale(.82)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes memoryHeartBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.07)}}
+@media(prefers-reduced-motion:reduce){.memory-celebration-card,.memory-celebration-heart,.memory-firework i{animation:none}}
