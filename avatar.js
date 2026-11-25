@@ -48,7 +48,7 @@ function buildAvatar() {
   faceBlinkMeshes = []; hairMotionMesh = null;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
-  const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.48), dark=material("#342536");
+  const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
   const lip=material("#b96e78",.48), blush=material("#d88c91",.72);
   const smooth=(g)=>{g.computeVertexNormals();return g;};
@@ -107,7 +107,46 @@ function buildAvatar() {
   sphere(avatarRoot,skin,[0,1.78,0],[.095,.13,.09]);
   // Fine bordure et plis lumineux sur la jupe
   const trim=material("#f3dcae",.38,{metalness:.18});
-  // Aucun trait tubulaire sur la jupe : la robe reste lisse et nette.
+  // Finitions textiles délicates : coutures satinées, plis fins et broderies.
+  const satin=material("#fff0df",.3,{metalness:.12});
+  const thread=material(state.outfit==="forest"?"#d7e8b9":state.outfit==="boho"?"#f4d7b1":state.outfit==="magic"?"#e6dcff":"#f8e8d5",.34,{metalness:.18});
+  // Ceinture brodée qui souligne la taille sans épaissir la silhouette.
+  curveTube([[-.17,1.30,.105],[-.10,1.27,.145],[0,1.26,.155],[.10,1.27,.145],[.17,1.30,.105]],thread,.012);
+  sphere(avatarRoot,gold,[0,1.275,.158],[.025,.027,.012]);
+  // Plis verticaux suivant la forme réelle de la jupe.
+  const radiusAt=(height)=>{
+    for(let j=0;j<profile.length-1;j++){
+      const a=profile[j],b=profile[j+1];
+      if(height>=a.y&&height<=b.y){const q=(height-a.y)/(b.y-a.y);return a.x+(b.x-a.x)*q;}
+    }
+    return profile[0].x;
+  };
+  for(let k=-3;k<=3;k++){
+    const angle=k*.19, pts=[];
+    for(const h of [.12,.25,.42,.60,.76]){
+      const r=radiusAt(h)+.004, theta=angle*(.72+h*.35);
+      pts.push([Math.sin(theta)*r,.43+h,Math.cos(theta)*r*.785]);
+    }
+    curveTube(pts,k%2===0?satin:thread,.0048);
+  }
+  // Petit galon nacré autour de l'ourlet, discret et régulier.
+  for(let i=0;i<32;i++){
+    const a=i*Math.PI*2/32;
+    sphere(avatarRoot,thread,[Math.sin(a)*.392,.49,Math.cos(a)*.392*.78],[.009,.012,.008]);
+  }
+  // Broderies florales sur le devant de la jupe et du corsage.
+  const flowerMat=material(state.outfit==="forest"?"#d8e8b6":state.outfit==="magic"?"#eadcff":"#f8d9e8",.38,{metalness:.08});
+  for(const [fx,fy,scale] of [[-.15,.88,.72],[.14,.78,.65],[0,.58,.62]]){
+    const z=radiusAt(fy)*.785+.008;
+    for(let p=0;p<5;p++){
+      const a=p*Math.PI*2/5;
+      sphere(avatarRoot,flowerMat,[fx+Math.cos(a)*.018*scale,fy+.43+Math.sin(a)*.018*scale,z],[.012*scale,.018*scale,.006]);
+    }
+    sphere(avatarRoot,gold,[fx,fy+.43,z+.007],[.008,.008,.006]);
+  }
+  // Décolleté et poignets reçoivent une finition fine, façon dentelle.
+  curveTube([[-.19,1.68,.105],[-.13,1.73,.145],[0,1.75,.16],[.13,1.73,.145],[.19,1.68,.105]],thread,.009);
+  // Aucun volume supplémentaire : la robe garde sa coupe élégante.
   // Bras fins, épaules et mains
   leftArm=new THREE.Group();leftArm.position.set(-.25,1.62,0);avatarRoot.add(leftArm);
   sphere(leftArm,skin,[0,-.05,0],[.105,.13,.11]);
