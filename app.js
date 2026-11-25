@@ -23,7 +23,25 @@ const stages = [
   {place:"Village des champignons",emoji:"🍄",question:"Combien font 3 champignons + 2 champignons ?",answers:["4","5","7"],correct:1,hint:"Compte-les sur tes doigts !",reward:"🍄 Champignon magique"},
   {place:"Pont des énigmes",emoji:"🌉",question:"Je suis toujours devant toi, mais tu ne peux jamais me voir. Qui suis-je ?",answers:["Ton ombre","Le futur","Ton reflet"],correct:1,hint:"Je représente ce qui va arriver.",reward:"🔑 Clé enchantée"},
   {place:"Grotte des cristaux",emoji:"🔮",question:"Quelle pierre précieuse est traditionnellement violette ?",answers:["Le rubis","L'émeraude","L'améthyste"],correct:2,hint:"Son nom commence par A.",reward:"🔮 Cristal magique"},
-  {place:"Château des Besties",emoji:"🏰",question:"Quel objet permet d'ouvrir une porte fermée à clé ?",answers:["Une couronne","Une clé","Une plume"],correct:1,hint:"Elle se glisse dans la serrure.",reward:"👑 Fragment de couronne"}
+  {place:"Château des Besties",emoji:"🏰",question:"Quel objet permet d'ouvrir une porte fermée à clé ?",answers:["Une couronne","Une clé","Une plume"],correct:1,hint:"Elle se glisse dans la serrure.",reward:"👑 Fragment de couronne"},
+
+  {place:"Forêt des murmures",emoji:"🌲",chapter:"Chapitre 1 · La forêt des secrets",question:"Trois lanternes sont allumées. Le vent en éteint une. Combien en reste-t-il ?",answers:["Deux","Trois","Une"],correct:0,hint:"Une lanterne éteinte ne brille plus, mais elle est toujours là.",reward:"🕯️ Lanterne ancienne"},
+  {place:"Sentier des empreintes",emoji:"🐾",chapter:"Chapitre 1 · La forêt des secrets",question:"Un animal laisse quatre empreintes à chaque pas. Après deux pas, combien d'empreintes vois-tu ?",answers:["4","6","8"],correct:2,hint:"Quatre empreintes par pas : fais 4 + 4.",reward:"🐾 Trace mystérieuse"},
+  {place:"Arbre aux chiffres",emoji:"🌳",chapter:"Chapitre 1 · La forêt des secrets",question:"Trouve le nombre suivant : 2, 6, 12, 20, ...",answers:["28","30","32"],correct:1,hint:"Les écarts augmentent : +4, +6, +8…",reward:"🍃 Feuille runique"},
+  {place:"Clairière des lucioles",emoji:"✨",chapter:"Chapitre 1 · La forêt des secrets",question:"Une luciole clignote toutes les 3 secondes. Combien de clignotements en 12 secondes, si elle commence tout de suite ?",answers:["3","4","5"],correct:1,hint:"Compte 0, 3, 6, 9 et 12 : le premier est au départ.",reward:"✨ Luciole dorée"},
+  {place:"Bibliothèque secrète",emoji:"📚",chapter:"Chapitre 2 · Le château mystérieux",question:"Un livre est placé entre le tome 4 et le tome 6. Quel est son numéro ?",answers:["5","7","3"],correct:0,hint:"Il s'agit du nombre entier entre 4 et 6.",reward:"📖 Page enchantée"},
+  {place:"Galerie des portraits",emoji:"🖼️",chapter:"Chapitre 2 · Le château mystérieux",question:"Léa est plus grande que Mia. Mia est plus grande que Zoé. Qui est la plus petite ?",answers:["Léa","Mia","Zoé"],correct:2,hint:"Range-les de la plus grande à la plus petite.",reward:"🪞 Éclat de miroir"},
+  {place:"Escalier secret",emoji:"🗝️",chapter:"Chapitre 2 · Le château mystérieux",question:"Un code est formé de deux chiffres. Le premier est 3, le second vaut le double du premier. Quel est le code ?",answers:["36","33","39"],correct:0,hint:"Le double de 3 est 6.",reward:"🗝️ Clé du donjon"},
+  {place:"Salle des horloges",emoji:"⏳",chapter:"Chapitre 2 · Le château mystérieux",question:"Une horloge avance de 15 minutes. Il est 14 h 50. Quelle heure indique-t-elle ?",answers:["15 h 05","14 h 65","15 h 15"],correct:0,hint:"Ajoute 10 minutes pour arriver à 15 h, puis encore 5.",reward:"⏰ Sablier royal"},
+  {place:"Grotte des cristaux",emoji:"🔮",chapter:"Chapitre 3 · Les cristaux enchantés",question:"Quatre cristaux rouges valent chacun 2 points et trois bleus valent chacun 3 points. Quel est le total ?",answers:["14","17","18"],correct:1,hint:"Calcule 4 × 2, puis 3 × 3 et additionne.",reward:"💠 Cristal bicolore"},
+  {place:"Pont de cristal",emoji:"🌉",chapter:"Chapitre 3 · Les cristaux enchantés",question:"Tu dépasses la personne qui est deuxième dans une course. À quelle place es-tu ?",answers:["Première","Deuxième","Troisième"],correct:1,hint:"Tu prends exactement la place de la personne dépassée.",reward:"🌈 Fragment d'arc-en-ciel"},
+  {place:"Labyrinthe miroir",emoji:"🪞",chapter:"Chapitre 3 · Les cristaux enchantés",question:"Dans un miroir, ta main droite semble être de quel côté pour ton reflet ?",answers:["À sa droite","À sa gauche","En haut"],correct:1,hint:"Le miroir inverse l'impression de gauche et de droite.",reward:"🪞 Miroir magique"},
+  {place:"Salle des potions",emoji:"🧪",chapter:"Chapitre 3 · Les cristaux enchantés",question:"Une potion nécessite 2 gouttes de lune pour 1 goutte d'étoile. Pour 3 gouttes d'étoile, combien faut-il de gouttes de lune ?",answers:["5","6","9"],correct:1,hint:"Double la quantité de gouttes d'étoile.",reward:"🧪 Potion scintillante"},
+  {place:"Antichambre du trésor",emoji:"🚪",chapter:"Chapitre 4 · Le trésor des besties",question:"Le coffre est dans une pièce. La porte porte le symbole du soleil. Le soleil est associé à l'est. Quelle direction faut-il chercher ?",answers:["Est","Ouest","Nord"],correct:0,hint:"Le soleil se lève à l'est.",reward:"☀️ Sceau solaire"},
+  {place:"Énigme des gardiennes",emoji:"🛡️",chapter:"Chapitre 4 · Le trésor des besties",question:"Deux gardiennes disent : « Le trésor n'est pas sous la table » et « Le trésor est dans le coffre ». Si la première phrase est vraie et la seconde aussi, où est le trésor ?",answers:["Sous la table","Dans le coffre","Dans la porte"],correct:1,hint:"Les deux affirmations sont vraies : suis la deuxième.",reward:"🛡️ Bouclier des besties"},
+  {place:"Cadran des étoiles",emoji:"🌟",chapter:"Chapitre 4 · Le trésor des besties",question:"Le code suit cette règle : 1 → 3, 2 → 6, 3 → 9. Que vaut 5 ?",answers:["12","15","18"],correct:1,hint:"Chaque nombre est multiplié par 3.",reward:"🌟 Étoile de victoire"},
+  {place:"Coffre des besties",emoji:"🎁",chapter:"Chapitre 4 · Le trésor des besties",question:"Pour ouvrir le coffre, il faut le plus petit nombre à trois chiffres dont la somme des chiffres vaut 3. Quel est-il ?",answers:["102","111","300"],correct:0,hint:"Commence par 1 aux centaines, puis cherche la plus petite dizaine possible.",reward:"💖 Cadeau secret pour Blybly"}
+
 ];
 const $ = id => document.getElementById(id);
 const app = initializeApp(firebaseConfig);
@@ -95,7 +113,7 @@ function render(){
   $("bubulleCard").classList.toggle("active",myRole==="BUBULLE");
   $("blyblyCard").classList.toggle("active",myRole==="BLYBLY");
   const mine=p[myRole], stage=Math.min(mine.stage,stages.length-1), s=stages[stage];
-  $("stageLabel").textContent=`ÉPREUVE ${stage+1} / 5`;
+  $("stageLabel").textContent=`${s.chapter || "Premiers pas"} · ÉPREUVE ${stage+1} / ${stages.length}`;
   $("stagePlace").textContent=s.emoji+" "+s.place.toUpperCase();
   $("question").textContent=s.question;
   $("answers").innerHTML="";
@@ -106,7 +124,7 @@ function render(){
     b.addEventListener("click",()=>answer(i,stage));$("answers").appendChild(b);
   });
   $("hint").classList.add("hidden"); $("gameMessage").textContent=mine.completed.includes(stage)?"Épreuve validée ! Ton trésor est dans ta collection.":"À toi de jouer !";
-  $("nextBtn").classList.toggle("hidden",!mine.completed.includes(stage)||stage===4);
+  $("nextBtn").classList.toggle("hidden",!mine.completed.includes(stage)||stage===stages.length-1);
   $("hintBtn").classList.toggle("hidden",mine.completed.includes(stage));
   $("map").innerHTML="";
   stages.forEach((x,i)=>{
@@ -116,7 +134,7 @@ function render(){
   });
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
-  if(mine.stage>=5) $("modal").classList.remove("hidden");
+  if(mine.stage>=stages.length) $("modal").classList.remove("hidden");
 }
 async function answer(choice,stageIndex){
   const s=stages[stageIndex];
