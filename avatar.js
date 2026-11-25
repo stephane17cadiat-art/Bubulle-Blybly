@@ -184,6 +184,7 @@ function buildAvatar() {
   const eyeY=state.eyeShape==="round"?1.14:state.eyeShape==="soft"?0.92:1;
   for(const side of [-1,1]){
     const eyeWhite=sphere(avatarRoot,white,[side*.105,2.15,.245],[.073,.076*eyeY,.031]);
+    eyeWhite.userData.baseScaleY=.076*eyeY;
     faceBlinkMeshes.push(eyeWhite);
     sphere(avatarRoot,irisRing,[side*.105,2.15,.271],[.041,.052*eyeY,.015]);
     sphere(avatarRoot,irisMat,[side*.105,2.15,.281],[.034,.045*eyeY,.012]);
@@ -589,7 +590,7 @@ function animate(){
     const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;
     for(let i=0;i<faceBlinkMeshes.length;i++){
       const wink=faceAction==="wink"&&Date.now()<faceActionUntil&&i===1?1:0;
-      faceBlinkMeshes[i].scale.y=.076*(1-.88*Math.max(blink,wink));
+      faceBlinkMeshes[i].scale.y=(faceBlinkMeshes[i].userData.baseScaleY||.076)*(1-.88*Math.max(blink,wink));
     }
   }
   const expressionActive=Date.now()<faceActionUntil;
