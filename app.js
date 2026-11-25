@@ -323,7 +323,7 @@ function getUnlockedMemories(players){
   const unlocked=[];
   albumGroups.slice(1).forEach((group,index)=>{
     const complete=Array.from({length:group.end-group.start+1},(_,offset)=>group.start+offset).every(stageIndex=>bubulle.has(stageIndex)&&blybly.has(stageIndex));
-    if(complete) unlocked.push({id:"flower-"+index,title:"Une fleur vient d’éclore !",message:"Vous avez terminé "+group.title.replace(/^Chapitre \\d+ · /,"")+" toutes les deux. Un nouveau souvenir fleurit dans votre album. 🌸"});
+    if(complete) unlocked.push({id:"flower-"+index,title:"Une fleur vient d’éclore !",message:"Vous avez terminé "+group.title.replace(/^Chapitre \d+ · /,"")+" toutes les deux. Un nouveau souvenir fleurit dans votre album. 🌸"});
   });
   const shared=[...bubulle].filter(index=>blybly.has(index)).length;
   if(shared>0) unlocked.push({id:"heart",title:"Le cœur des Besties s’illumine !",message:"Une nouvelle énigme réussie ensemble… Votre complicité fait battre le cœur enchanté. 💗"});
