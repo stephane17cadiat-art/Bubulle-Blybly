@@ -157,7 +157,7 @@ function render(){
     const b=document.createElement("button");b.className="answer";b.textContent=a;
     b.disabled=mine.completed.includes(stage);
     if(mine.completed.includes(stage) && i===s.correct)b.classList.add("correct");
-    b.addEventListener("click",()=>answer(i,stage));$("answers").appendChild(b);
+    b.addEventListener("click",()=>answer(i,stage,b));$("answers").appendChild(b);
   });
   $("hint").classList.add("hidden"); $("gameMessage").textContent=mine.completed.includes(stage)?"Épreuve validée ! Ton trésor est dans ta collection.":"À toi de jouer !";
   $("nextBtn").classList.toggle("hidden",!mine.completed.includes(stage)||stage===stages.length-1);
@@ -359,9 +359,41 @@ function showMemoryCelebration(item){
 function launchNextMemoryCelebration(){if(!pendingMemoryCelebrations.length)return;showMemoryCelebration(pendingMemoryCelebrations.shift());}
 function closeMemoryCelebration(){$("memoryCelebration").classList.add("hidden");if(pendingMemoryCelebrations.length)launchNextMemoryCelebration();}
 $("memoryCelebrationContinue").addEventListener("click",closeMemoryCelebration);
-async function answer(choice,stageIndex){
+async function answer(choice,stageIndex,button){
   const s=stages[stageIndex];
-  if(choice!==s.correct){say("gameMessage","Pas tout à fait ! Essaie encore 😊");return;}
+  const feedback=$("gameMessage");
+  if(choice!==s.correct){
+    if(button){
+      button.classList.remove("answer-wrong");
+      void button.offsetWidth;
+      button.classList.add("answer-wrong");
+      window.setTimeout(()=>button.classList.remove("answer-wrong"),650);
+    }
+    feedback.classList.remove("answer-feedback-success");
+    feedback.classList.add("answer-feedback-wrong");
+    say("gameMessage","Pas tout à fait ! Essaie encore 😊");
+    window.setTimeout(()=>feedback.classList.remove("answer-feedback-wrong"),1150);
+    return;
+  }
+  const challenge=document.querySelector(".challenge");
+  challenge.classList.remove("answer-success-flash");
+  void challenge.offsetWidth;
+  challenge.classList.add("answer-success-flash");
+  if(button){
+    button.disabled=true;
+    button.classList.add("answer-correct-burst");
+    for(let i=0;i<10;i++){
+      const spark=document.createElement("span");
+      spark.className="answer-spark";
+      spark.textContent=i%3===0?"✦":i%3===1?"✧":"·";
+      spark.style.setProperty("--spark-angle",(i*36)+"deg");
+      spark.style.setProperty("--spark-distance",(34+(i%3)*13)+"px");
+      button.appendChild(spark);
+    }
+  }
+  feedback.classList.remove("answer-feedback-wrong");
+  feedback.classList.add("answer-feedback-success");
+  say("gameMessage","✨ Bonne réponse ! La magie s’éveille…");
   try{
     let newlyUnlocked=[];
     await runTransaction(db,async tx=>{
@@ -375,7 +407,11 @@ async function answer(choice,stageIndex){
       tx.update(roomRef,{[`players.${myRole}`]:player});
     });
     pendingMemoryCelebrations.push(...newlyUnlocked);showReward(stageIndex);
-  }catch(e){say("gameMessage","Impossible d’enregistrer : "+friendlyError(e));}
+  }catch(e){
+    if(button)button.disabled=false;
+    feedback.classList.remove("answer-feedback-success");
+    say("gameMessage","Impossible d’enregistrer : "+friendlyError(e));
+  }
 }
 async function resetGame(){
   const confirmed=window.confirm("Réinitialiser toute l’aventure ? Les scores de Bubulle et Blybly, les énigmes validées et la progression seront remis à zéro sur les deux appareils. Cette action est définitive.");
