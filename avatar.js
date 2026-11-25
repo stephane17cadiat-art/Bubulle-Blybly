@@ -537,7 +537,7 @@ async function loadRealisticCharacter(){
   status("✨ Chargement du modèle humain réaliste…");
   const loader=new GLTFLoader();
   try{
-    const gltf=await loader.loadAsync("https://grab3d.com/dl/woman-base-character-rigged/woman-base-character-rigged.glb");
+    const gltf=await loader.loadAsync("https://grab3d.com/dl/elf-rigged/elf-rigged.glb");
     realisticRoot=gltf.scene;
     const bounds=new THREE.Box3().setFromObject(realisticRoot);
     const size=bounds.getSize(new THREE.Vector3());
