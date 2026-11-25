@@ -49,9 +49,6 @@
 .reward-symbol.heart-bow::after{content:"🎀";position:absolute;right:-.18em;top:-.16em;font-size:.43em;transform:rotate(12deg);filter:drop-shadow(0 3px 4px #0008);animation:bowAppear .65s .25s both}
 @keyframes bowAppear{0%{transform:scale(.2) rotate(-25deg);opacity:0}75%{transform:scale(1.15) rotate(15deg);opacity:1}100%{transform:scale(1) rotate(12deg);opacity:1}}
 
-/* Commande de musique d'ambiance */
-.music-toggle{border-color:#f5a9d277!important;background:#f5a9d218!important;color:#ffd5ea!important}
-.music-toggle[aria-pressed="true"]{background:#a8e6cf20!important;border-color:#a8e6cf88!important;color:#d7ffed!important}
-@media(max-width:650px){.game-tools .music-toggle{flex-basis:100%}}
 
-.song-link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+/* Lecteur intégré de la chanson des besties */
+.song-player{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px;padding:12px 15px;border:1px solid #f5a9d255;border-radius:18px;background:#f5a9d20d}.song-player span{font-weight:700;color:#ffd5ea}.song-player iframe{width:300px;max-width:100%;height:56px;border:0;border-radius:12px;background:#17152b}@media(max-width:650px){.song-player{align-items:stretch}.song-player iframe{width:100%;height:56px}}
