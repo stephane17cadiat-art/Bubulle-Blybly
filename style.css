@@ -567,7 +567,7 @@ body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphe
 .map-journey-status{display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;color:#f6d994;font-size:10px}
 .map-journey-status .map-sparkle{font-size:24px;line-height:1}
 .living-map{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:minmax(92px,auto);gap:9px;margin-top:20px;isolation:isolate}
-.map-stop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:88px;padding:9px 4px 8px;border:1px solid #d7c2e22c;border-radius:17px;background:linear-gradient(155deg,#ffffff10,#ffffff05);text-align:center;transition:transform .35s,border-color .35s,background .35s,box-shadow .35s;overflow:visible}
+.map-stop{grid-column:var(--map-column);grid-row:var(--map-row);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:88px;padding:9px 4px 8px;border:1px solid #d7c2e22c;border-radius:17px;background:linear-gradient(155deg,#ffffff10,#ffffff05);text-align:center;transition:transform .35s,border-color .35s,background .35s,box-shadow .35s;overflow:visible}
 .map-stop:before{content:"";position:absolute;inset:4px;border:1px solid #ffffff0b;border-radius:12px;pointer-events:none}
 .map-stop .map-number{position:absolute;top:5px;left:7px;color:#c8b8d6;font-size:8px;font-weight:800;opacity:.8}
 .map-stop .emoji{font-size:24px;line-height:1.1;margin:3px 0 2px;filter:drop-shadow(0 3px 7px #09081788)}
@@ -593,7 +593,7 @@ body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphe
 @media(max-width:600px){
  .map-panel{padding:15px 12px}
  .living-map{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(86px,auto);gap:7px}
- .map-stop{min-height:82px;border-radius:14px;padding:8px 3px}
+ .map-stop{grid-column:auto;grid-row:auto;min-height:82px;border-radius:14px;padding:8px 3px}
  .map-stop .emoji{font-size:22px}
  .map-stop small{font-size:8px}
  .map-legend{gap:9px;font-size:8px}
