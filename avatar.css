@@ -22,3 +22,13 @@ body.theme-lavender .avatar-view{background:radial-gradient(ellipse at 8% 78%,#b
 .quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:5px}
 .quick-actions .soft-button{min-width:0;padding:7px 5px;border-radius:10px;font-size:10px;line-height:1.2;white-space:normal}
 @media(max-width:390px){.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.quick-actions .soft-button{padding:7px 3px;font-size:9px}}
+
+
+/* Finition visuelle : profondeur, lumière douce et rendu plus cinématographique */
+.avatar-view{background-color:#1b2a32;box-shadow:inset 0 0 70px #080d18a8,inset 0 -35px 55px #183c3155,0 16px 42px #080b1680;border-color:#e9d8ff48}
+.avatar-view canvas{filter:saturate(1.08) contrast(1.035);}
+.mirror-panel,.wardrobe{background:linear-gradient(145deg,#332b50f2 0%,#211d39f5 58%,#1c2934f2 100%);border-color:#eadbff2b}
+.mirror-title{text-shadow:0 0 14px #f6d99555;letter-spacing:.35px}
+.soft-button{transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+.soft-button:active{transform:scale(.97);background:#f5b4d626;border-color:#f5b4d688}
+.control-grid select{box-shadow:inset 0 1px 0 #ffffff08}
