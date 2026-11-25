@@ -163,7 +163,7 @@ function buildAvatar() {
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
   hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); avatarRoot.add(hairMotionMesh);
   const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.305,.205,.285]);
-  crownCap.position.y+=2.2; // Keep the original sculpted placement while giving the crown a gentle pivot.
+  // The crown pivots at the top of the head for a very subtle sway.
   // Reflets fins qui donnent du relief aux mèches sans changer les coiffures choisies.
   const hairShine=material("#f0c99b",.42,{metalness:.08});
   const hairShade=material("#2d1c25",.55);
