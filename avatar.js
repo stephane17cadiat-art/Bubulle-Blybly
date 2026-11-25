@@ -19,10 +19,10 @@ const status = message => $("saveStatus").textContent = message;
 const defaults = {
   hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",accessoryStyle:"none",skinColor:"#f3c6a5",
   eyeColor:"#8b6049",eyeShape:"almond",lipColor:"#b96e78",makeup:"soft",freckles:"none",
-  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",magicColor:"rose",magicMotion:"orbit",companion:"none",theme:"forest"
+  outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",magicEffect:"petals",magicColor:"rose",magicMotion:"orbit",magicPower:"petalBurst",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null, magicParticles = [], magicAura = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
+let companionMotion = null, magicParticles = [], magicAura = null, powerFlash = null, powerStarted = 0, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -46,7 +46,7 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   return mesh;
 }
 function buildAvatar() {
-  faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null;
+  faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null; powerFlash = null; powerStarted = 0;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
@@ -499,6 +499,11 @@ function buildAvatar() {
       magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(effect==="aurora"?.52:.43,.014,8,72),auraMat,[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
     }else magicAura=null;
   }else magicAura=null;
+  const powerColors={rose:"#ff9fc8",violet:"#b9a7f5",turquoise:"#8debdc",gold:"#ffe28a",blue:"#9bcfff"};
+  const powerColor=powerColors[state.magicColor]||"#f6c5ed";
+  const powerMaterial=material(powerColor,.2,{emissive:powerColor,emissiveIntensity:1.8,transparent:true,opacity:0});
+  powerFlash=addMesh(avatarRoot,new THREE.TorusGeometry(.48,.025,10,72),powerMaterial,[0,1.34,.16],[.001,.001,.001]);
+  powerFlash.visible=false;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
 async function loadRealisticCharacter(){
@@ -610,16 +615,28 @@ function animate(){
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
+  const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
+  const powerActive=powerElapsed>=0&&powerElapsed<1800;
+  const powerPulse=powerActive?Math.sin(Math.PI*powerElapsed/1800):0;
+  if(powerFlash){
+    powerFlash.visible=powerActive;
+    if(powerActive){powerFlash.scale.setScalar(.7+powerPulse*.85);powerFlash.material.opacity=powerPulse*.88;powerFlash.rotation.z=t*(state.magicPower==="crystalWave"?1.8:state.magicPower==="fireflyDance"?-1.4:.55);}
+    else powerFlash.scale.setScalar(.001);
+  }
   for(const p of magicParticles){
     const d=p.userData, motion=state.magicMotion||"orbit";
-    const speed=motion==="swirl"?.82:motion==="gentle"?.2:(d.kind==="butterflies"?.62:.34);
+    const baseSpeed=motion==="swirl"?.82:motion==="gentle"?.2:(d.kind==="butterflies"?.62:.34);
+    const speed=baseSpeed*(powerActive&&state.magicPower==="fireflyDance"?2.8:1);
     const bob=motion==="swirl"?.12:motion==="gentle"?.045:.075;
     const wobble=motion==="swirl"?.75:motion==="gentle"?.18:.45;
     const a=d.angle+t*speed;
-    p.position.set(Math.cos(a)*d.radius,d.baseY+Math.sin(t*(motion==="swirl"?2.6:1.7)+d.phase)*bob,Math.sin(a)*.20+.23);
-    p.rotation.z=Math.sin(t*(motion==="swirl"?3:2)+d.phase)*wobble;
+    const burst=powerActive&&state.magicPower==="petalBurst"?1+powerPulse*1.35:1;
+    const shield=powerActive&&state.magicPower==="heartShield"?1+powerPulse*.45:1;
+    p.position.set(Math.cos(a)*d.radius*burst*shield,d.baseY+Math.sin(t*(motion==="swirl"?2.6:1.7)+d.phase)*bob+(powerActive&&state.magicPower==="petalBurst"?powerPulse*.22:0),Math.sin(a)*.20+.23);
+    p.rotation.z=Math.sin(t*(motion==="swirl"?3:2)+d.phase)*wobble+(powerActive&&state.magicPower==="crystalWave"?powerPulse*1.7:0);
     const pulse=.82+.24*(.5+.5*Math.sin(t*2.5+d.phase));
-    p.scale.copy(d.baseScale).multiplyScalar(pulse);
+    const powerScale=powerActive&&state.magicPower==="starPulse"?1+powerPulse*1.8:powerActive&&state.magicPower==="crystalWave"?1+powerPulse*.8:1;
+    p.scale.copy(d.baseScale).multiplyScalar(pulse*powerScale);
   }
   if(magicAura){magicAura.rotation.z=t*(state.magicMotion==="swirl"?.55:state.magicMotion==="gentle"?.12:.22);magicAura.material.opacity=.48+.22*(.5+.5*Math.sin(t*(state.magicMotion==="swirl"?3:2)));}
   if(faceBlinkMeshes.length){
@@ -715,6 +732,7 @@ $("waveBtn").addEventListener("click",()=>playPose("wave"));
 $("princessBtn").addEventListener("click",()=>playPose("princess"));
 $("curtsyBtn").addEventListener("click",()=>playPose("curtsy"));
 $("blowkissBtn").addEventListener("click",()=>{playPose("blowkiss");playFace("kiss");});
+$("powerBtn").addEventListener("click",()=>{powerStarted=Date.now();});
 function playFace(action){
   faceAction=action;faceActionUntil=Date.now()+(action==="smile"?2200:action==="wink"?950:action==="laugh"?1900:1400);
   if(action==="kiss"&&avatarRoot)avatarRoot.rotation.y+=.08;
