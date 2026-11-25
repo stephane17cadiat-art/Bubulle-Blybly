@@ -479,17 +479,21 @@ function buildAvatar() {
   magicParticles=[];
   if(state.magicEffect && state.magicEffect!=="none"){
     const effect=state.magicEffect;
-    const palette=effect==="stars"?["#fff1a8","#d9c8ff","#b9e7ff"]:effect==="butterflies"?["#f7a9d2","#b9a7f5","#ffe3a3"]:effect==="aura"?["#a8f0df","#d8b7ff","#fff0c2"]:["#f6b5d1","#f4d89a","#d8c5ff"];
-    const glowMats=palette.map(c=>material(c,.28,{emissive:c,emissiveIntensity:.7,transparent:true,opacity:.92}));
+    const palette=effect==="stars"?["#fff1a8","#d9c8ff","#b9e7ff"]:effect==="butterflies"?["#f7a9d2","#b9a7f5","#ffe3a3"]:effect==="aura"||effect==="aurora"?["#a8f0df","#d8b7ff","#fff0c2"]:effect==="fireflies"?["#fff0a6","#f7d77b","#d5f4b2"]:effect==="hearts"?["#ff9fc8","#f7c4df","#e8a9e8"]:effect==="crystals"?["#b9e7ff","#d9c8ff","#fff1d1"]:["#f6b5d1","#f4d89a","#d8c5ff"];
+    const glowMats=palette.map(c=>material(c,.28,{emissive:c,emissiveIntensity:effect==="fireflies"?1.35:.7,transparent:true,opacity:.92}));
+    const heartShape=new THREE.Shape();
+    heartShape.moveTo(0,-.035);heartShape.bezierCurveTo(-.075,.02,-.075,.075,-.025,.075);heartShape.bezierCurveTo(0,.075,.018,.045,0,.025);heartShape.bezierCurveTo(.035,.09,.09,.065,.075,.015);heartShape.bezierCurveTo(.065,-.005,.025,-.03,0,-.035);
     for(let i=0;i<24;i++){
       const angle=i*2.399, y=.48+(i%8)*.255, radius=.38+(i%3)*.055;
-      const geo=effect==="stars"?new THREE.OctahedronGeometry(.038,0):new THREE.SphereGeometry(.035,12,10);
-      const particle=addMesh(avatarRoot,geo,glowMats[i%glowMats.length],[Math.cos(angle)*radius,y,Math.sin(angle)*.20+.23],effect==="petals"?[.48,1.25,.42]:effect==="butterflies"?[1.25,.72,.35]:[1,1,.65]);
+      const geo=effect==="stars"||effect==="crystals"?new THREE.OctahedronGeometry(effect==="crystals"?.052:.038,0):effect==="hearts"?new THREE.ShapeGeometry(heartShape):new THREE.SphereGeometry(effect==="fireflies"?.027:.035,12,10);
+      const scale=effect==="petals"?[.48,1.25,.42]:effect==="butterflies"?[1.25,.72,.35]:effect==="hearts"?[1.25,1.25,.35]:effect==="crystals"?[.8,1.35,.8]:[1,1,.65];
+      const particle=addMesh(avatarRoot,geo,glowMats[i%glowMats.length],[Math.cos(angle)*radius,y,Math.sin(angle)*.20+.23],scale);
       particle.userData={angle,baseY:y,radius,phase:i*.71,kind:effect,baseScale:particle.scale.clone()};
       magicParticles.push(particle);
     }
-    if(effect==="aura"){
-      magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(.43,.012,8,72),material("#b8f0e1",.24,{emissive:"#83d9c9",emissiveIntensity:.85,transparent:true,opacity:.7}),[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
+    if(effect==="aura"||effect==="aurora"){
+      const auraMat=material(effect==="aurora"?"#b7a2f4":"#b8f0e1",.24,{emissive:effect==="aurora"?"#8e72d0":"#83d9c9",emissiveIntensity:1.05,transparent:true,opacity:.7});
+      magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(effect==="aurora"?.52:.43,.014,8,72),auraMat,[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
     }else magicAura=null;
   }else magicAura=null;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
