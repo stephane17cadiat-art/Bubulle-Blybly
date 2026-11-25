@@ -121,7 +121,10 @@ async function joinRoom(code){
       const data=snap.data();
       if(data.players.BUBULLE.uid===user.uid){myRole="BUBULLE";return;}
       if(data.players.BLYBLY.uid===user.uid){myRole="BLYBLY";return;}
-      if(data.players.BLYBLY.joined) throw new Error("Cette partie a déjà ses deux joueuses.");
+      if(data.players.BLYBLY.joined && data.players.BLYBLY.uid!==user.uid) {
+        const takeover = window.confirm("Le profil Blybly est déjà associé à un autre appareil. Pour les tests, veux-tu connecter cette tablette au profil Blybly ?\n\nSes points et sa progression seront conservés. L'autre appareil ne doit pas jouer en même temps.");
+        if(!takeover) throw new Error("Connexion annulée. Le profil Blybly reste sur son appareil actuel.");
+      }
       myRole="BLYBLY";
       tx.update(roomRef,{"players.BLYBLY.uid":user.uid,"players.BLYBLY.joined":true});
     });
