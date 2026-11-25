@@ -52,3 +52,10 @@
 
 /* Lecteur local discret de la chanson des besties */
 .song-player{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:10px 13px;border:1px solid #f5a9d255;border-radius:16px;background:#f5a9d20d}.song-toggle{border:1px solid #f5a9d277;border-radius:12px;padding:11px 15px;background:#f5a9d21c;color:#ffd5ea;font:700 13px "DM Sans";cursor:pointer}.song-toggle:disabled{opacity:.75;cursor:default}.song-status{font-size:11px;color:var(--muted)}.song-player audio{display:none}
+
+/* Messages secrets et pluie d'étincelles des récompenses surprises */
+.reward-message{max-width:340px;margin:14px auto 4px;padding:12px 14px;border:1px solid #f5a9d255;border-radius:15px;background:linear-gradient(120deg,#f5a9d21a,#c7b2ff18);color:#ffe4f2;font:500 13px/1.55 "DM Sans";animation:messageReveal .75s .25s both}
+.reward-spark{position:absolute;z-index:2;pointer-events:none;color:#ffe7a8;font-size:19px;text-shadow:0 0 12px #f7d58b;animation:sparkDrift 1.8s ease-out both}
+.spark-0{left:13%;top:27%;animation-delay:.05s}.spark-1{left:25%;top:8%;animation-delay:.18s}.spark-2{right:17%;top:20%;animation-delay:.1s}.spark-3{right:25%;bottom:9%;animation-delay:.24s}.spark-4{left:17%;bottom:12%;animation-delay:.32s}.spark-5{right:12%;top:48%;animation-delay:.15s}
+@keyframes sparkDrift{0%{opacity:0;transform:translateY(22px) scale(.25) rotate(-35deg)}35%{opacity:1;transform:translateY(-5px) scale(1.2) rotate(15deg)}100%{opacity:.25;transform:translateY(-28px) scale(.75) rotate(45deg)}}
+@keyframes messageReveal{0%{opacity:0;transform:translateY(10px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
