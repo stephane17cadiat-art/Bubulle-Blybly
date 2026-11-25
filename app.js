@@ -56,7 +56,41 @@ const show = (id) => $(id).classList.remove("hidden");
 const hide = (id) => $(id).classList.add("hidden");
 
 
-/* Ambiance musicale féerique — générée localement, sans fichier externe */
+/* Lecture de la chanson locale dans le jeu, sans ouvrir de site externe. */
+const songAudio = $("bestiesSong");
+const songButton = $("songToggleBtn");
+const songStatus = $("songStatus");
+if (songAudio && songButton) {
+  songAudio.addEventListener("canplay", () => {
+    songButton.disabled = false;
+    songButton.textContent = "▶️ Écouter notre chanson";
+    songStatus.textContent = "Votre chanson est prête 💗";
+  }, { once: true });
+  songAudio.addEventListener("error", () => {
+    songButton.disabled = true;
+    songButton.textContent = "💗 Notre chanson — bientôt";
+    songStatus.textContent = "Le fichier audio sera ajouté dès que tu pourras nous l’envoyer.";
+  });
+  songButton.addEventListener("click", async () => {
+    if (songAudio.paused) {
+      try {
+        await songAudio.play();
+        songButton.textContent = "⏸ Mettre en pause";
+        songStatus.textContent = "Votre chanson accompagne l’aventure 💗";
+      } catch {
+        songStatus.textContent = "La lecture n’a pas pu démarrer. Réessaie.";
+      }
+    } else {
+      songAudio.pause();
+      songButton.textContent = "▶️ Reprendre la chanson";
+      songStatus.textContent = "Musique en pause";
+    }
+  });
+  songAudio.addEventListener("ended", () => {
+    songButton.textContent = "▶️ Réécouter notre chanson";
+    songStatus.textContent = "À vous de rejouer 💗";
+  });
+}
 async function boot(){
   if(firebaseConfig.apiKey.startsWith("REMPLACER")) {
     say("welcomeMessage","Le site est prêt à configurer : ajoute d'abord les clés Firebase dans app.js (guide fourni).");
