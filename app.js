@@ -128,7 +128,7 @@ async function joinRoom(code){
     history.replaceState({}, "", "?room="+roomId); enterGame(); listen();
   }catch(e){say("welcomeMessage",friendlyError(e));}
 }
-function enterGame(){hide("welcome");show("game");}
+function enterGame(){hide("welcome");hide("connection");show("game");}
 function listen(){
   if(unsubscribe) unsubscribe();
   unsubscribe=onSnapshot(roomRef,snap=>{
@@ -403,6 +403,8 @@ async function resetGame(){
 $("resetGameBtn").addEventListener("click",resetGame);
 
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
+$("goConnectionBtn").addEventListener("click",()=>{hide("welcome");show("connection");});
+$("backHomeBtn").addEventListener("click",()=>{hide("connection");show("welcome");});
 $("createBtn").addEventListener("click",createRoom);
 $("joinBtn").addEventListener("click",()=>joinRoom($("inviteInput").value));
 $("inviteInput").addEventListener("keydown",e=>{if(e.key==="Enter")joinRoom($("inviteInput").value)});
