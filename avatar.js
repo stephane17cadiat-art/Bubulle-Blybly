@@ -234,7 +234,7 @@ async function loadRealisticCharacter(){
   status("✨ Chargement du modèle 3D détaillé…");
   const loader=new GLTFLoader();
   try{
-    const gltf=await loader.loadAsync("https://grab3d.com/dl/elf-rigged/elf-rigged.glb");
+    const gltf=await loader.loadAsync("https://grab3d.com/models/characters/elf/elf-rigged.glb");
     realisticRoot=gltf.scene;
     const bounds=new THREE.Box3().setFromObject(realisticRoot);
     const size=bounds.getSize(new THREE.Vector3());
