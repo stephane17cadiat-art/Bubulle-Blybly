@@ -467,3 +467,20 @@ body.portal-leaving .shell>.topbar,body.portal-leaving .site-footer{transition:o
 @keyframes homePortalExit{to{opacity:0;transform:translateY(-9px) scale(.985)}}
 @keyframes connectionPortalEnter{0%{opacity:0;transform:translateY(17px) scale(.975);filter:blur(5px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){.portal-transition:not(.hidden){animation:none!important;opacity:1}.portal-heart,.portal-spark{animation:none!important;opacity:1;transform:none}body.portal-leaving #welcome,.connection-screen.portal-entering{animation:none!important;filter:none;transform:none;opacity:1}}
+
+
+/* Forêt enchantée vivante — lucioles et pétales, sans ambiance sonore */
+.forest-atmosphere{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:strict}
+.shell{z-index:1}
+.forest-firefly{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff3b8;box-shadow:0 0 7px 3px #f6d98b99,0 0 17px 5px #f4b9e655;opacity:.25;animation:forestFireflyFloat 8s ease-in-out infinite}
+.firefly-1{left:7%;top:23%;animation-delay:-1s}.firefly-2{left:22%;top:72%;animation-delay:-5s}
+.firefly-3{left:39%;top:14%;animation-delay:-3s}.firefly-4{left:57%;top:82%;animation-delay:-6s}
+.firefly-5{left:73%;top:31%;animation-delay:-2s}.firefly-6{left:89%;top:68%;animation-delay:-4s}
+.firefly-7{left:94%;top:17%;animation-delay:-7s}.firefly-8{left:13%;top:88%;animation-delay:-2.5s}
+.forest-petal{position:absolute;font-style:normal;color:#f5b9df;text-shadow:0 0 12px #f5a9d277;font-size:13px;opacity:0;animation:forestPetalDrift 13s linear infinite}
+.petal-1{left:17%;top:100%;animation-delay:-2s}.petal-2{left:46%;top:100%;animation-delay:-8s;font-size:11px}
+.petal-3{left:76%;top:100%;animation-delay:-5s;font-size:15px}.petal-4{left:92%;top:100%;animation-delay:-11s}
+@keyframes forestFireflyFloat{0%,100%{opacity:.12;transform:translate3d(0,8px,0) scale(.65)}35%{opacity:.8}55%{opacity:.35;transform:translate3d(18px,-17px,0) scale(1.25)}}
+@keyframes forestPetalDrift{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:.42}75%{opacity:.28}100%{opacity:0;transform:translate3d(35px,-115vh,0) rotate(230deg)}}
+@media(max-width:600px){.forest-firefly{width:4px;height:4px;box-shadow:0 0 6px 2px #f6d98b88,0 0 12px 3px #f4b9e644}.forest-petal{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.forest-firefly,.forest-petal{animation:none!important;opacity:.35}}
