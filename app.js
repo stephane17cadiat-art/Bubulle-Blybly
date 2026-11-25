@@ -337,17 +337,19 @@ function showMemoryCelebration(item){
   $("memoryCelebrationMessage").textContent=item.message;
   const fireworks=overlay.querySelector(".memory-fireworks");
   fireworks.innerHTML="";
-  [[8,18],[25,12],[48,20],[72,13],[93,22],[15,43],[85,48],[5,72],[28,78],[52,67],[76,82],[96,72],[37,36],[64,42],[18,90],[88,91]].forEach(([x,y],burstIndex)=>{
-    const burst=document.createElement("div");burst.className="memory-firework burst-"+burstIndex;burst.style.left=x+"%";burst.style.top=y+"%";
-    const delay=burstIndex*190+Math.random()*160;
-    const ring=document.createElement("b");ring.className="memory-firework-ring";ring.style.setProperty("--delay",delay+"ms");burst.appendChild(ring);
+  const mobile=window.matchMedia("(max-width: 600px)").matches;
+  const positions=mobile?[[12,22],[42,15],[78,23],[22,58],[68,66],[48,88],[91,48]]:[[8,20],[27,13],[50,19],[76,14],[93,31],[15,48],[84,51],[28,78],[57,69],[76,86]];
+  positions.forEach(([x,y],burstIndex)=>{
+    const burst=document.createElement("div");burst.className="memory-firework";burst.style.left=x+"%";burst.style.top=y+"%";
+    const delay=burstIndex*235+Math.random()*110;
     const flash=document.createElement("em");flash.className="memory-firework-flash";flash.style.setProperty("--delay",delay+"ms");burst.appendChild(flash);
-    for(let i=0;i<64;i++){
+    const count=mobile?30:36;
+    for(let i=0;i<count;i++){
       const spark=document.createElement("i");
-      spark.style.setProperty("--angle",(i*360/64+(Math.random()-.5)*5)+"deg");
-      spark.style.setProperty("--delay",(delay+Math.random()*100)+"ms");
-      spark.style.setProperty("--distance",(135+Math.random()*145)+"px");
-      spark.style.setProperty("--spark-size",(2+Math.random()*3.2)+"px");
+      spark.style.setProperty("--angle",(i*360/count+(Math.random()-.5)*7)+"deg");
+      spark.style.setProperty("--delay",(delay+Math.random()*75)+"ms");
+      spark.style.setProperty("--distance",(mobile?95:125)+Math.random()*(mobile?75:100)+"px");
+      spark.style.setProperty("--spark-size",(2+Math.random()*2.2)+"px");
       burst.appendChild(spark);
     }
     fireworks.appendChild(burst);
