@@ -500,9 +500,15 @@ function buildAvatar() {
       magicParticles.push(particle);
     }
     if(effect==="aura"||effect==="aurora"){
-      const auraColor=(magicPalettes[state.magicColor]||["#b8f0e1"])[0];
-      const auraMat=material(auraColor,.24,{emissive:auraColor,emissiveIntensity:1.05,transparent:true,opacity:.7});
-      magicAura=addMesh(avatarRoot,new THREE.TorusGeometry(effect==="aurora"?.52:.43,.014,8,72),auraMat,[0,1.36,.04],[1,1,1],[Math.PI/2,0,0]);
+      const colors=magicPalettes[state.magicColor]||effectPalette;
+      const auraMat=material(colors[0],.32,{emissive:colors[0],emissiveIntensity:.62,transparent:true,opacity:effect==="aurora"?.12:.16,depthWrite:false,side:THREE.DoubleSide});
+      magicAura=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),auraMat,[0,1.24,-.10],[effect==="aurora"?.72:.58,1.18,.34]);
+      magicAura.renderOrder=1;
+      if(effect==="aurora"){
+        const veilMat=auraMat.clone();veilMat.color.set(colors[1]);veilMat.emissive.set(colors[1]);veilMat.opacity=.075;
+        const veil=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),veilMat,[0,1.28,-.13],[.82,1.28,.39]);
+        veil.renderOrder=1;magicAura.userData.veil=veil;
+      }
     }else magicAura=null;
   }else magicAura=null;
   powerBurstGroup=new THREE.Group();avatarRoot.add(powerBurstGroup);powerBurstGroup.visible=false;
