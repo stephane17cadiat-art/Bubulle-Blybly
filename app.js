@@ -337,9 +337,18 @@ function showMemoryCelebration(item){
   $("memoryCelebrationMessage").textContent=item.message;
   const fireworks=overlay.querySelector(".memory-fireworks");
   fireworks.innerHTML="";
-  [[18,28],[50,18],[82,30],[35,55],[70,58]].forEach(([x,y],burstIndex)=>{
+  [[12,24],[32,15],[68,18],[89,28],[20,70],[78,72],[49,82]].forEach(([x,y],burstIndex)=>{
     const burst=document.createElement("div");burst.className="memory-firework burst-"+burstIndex;burst.style.left=x+"%";burst.style.top=y+"%";
-    for(let i=0;i<14;i++){const spark=document.createElement("i");spark.style.setProperty("--angle",(i*360/14)+"deg");spark.style.setProperty("--delay",(burstIndex*90+i*9)+"ms");burst.appendChild(spark);}
+    const ring=document.createElement("b");ring.className="memory-firework-ring";burst.appendChild(ring);
+    const flash=document.createElement("em");flash.className="memory-firework-flash";burst.appendChild(flash);
+    for(let i=0;i<32;i++){
+      const spark=document.createElement("i");
+      spark.style.setProperty("--angle",(i*360/32+Math.random()*4)+"deg");
+      spark.style.setProperty("--delay",(burstIndex*145+Math.random()*180)+"ms");
+      spark.style.setProperty("--distance",(105+Math.random()*105)+"px");
+      spark.style.setProperty("--spark-size",(2+Math.random()*2.4)+"px");
+      burst.appendChild(spark);
+    }
     fireworks.appendChild(burst);
   });
   overlay.classList.remove("hidden");
