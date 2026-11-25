@@ -19,7 +19,7 @@ const firebaseConfig = {
   };
 
 const stages = [
-  {place:"Forêt des murmures",emoji:"🌲",question:"Quel animal est réputé pour hululer la nuit ?",answers:["Le hibou","Le lapin","Le papillon"],correct:0,hint:"Il possède de grands yeux et vit souvent dans les arbres.",reward:"💎 Diamant de la forêt"},
+  {place:"Forêt des murmures",emoji:"🌲",question:"Quel animal est réputé pour hululer la nuit ?",answers:["Le hibou","Le lapin","Le papillon"],correct:0,hint:"Il possède de grands yeux et vit souvent dans les arbres.",reward:"💗 Cœur enchanté au nœud rose"},
   {place:"Village des champignons",emoji:"🍄",question:"Combien font 3 champignons + 2 champignons ?",answers:["4","5","7"],correct:1,hint:"Compte-les sur tes doigts !",reward:"🍄 Champignon magique"},
   {place:"Pont des énigmes",emoji:"🌉",question:"Je suis toujours devant toi, mais tu ne peux jamais me voir. Qui suis-je ?",answers:["Ton ombre","Le futur","Ton reflet"],correct:1,hint:"Je représente ce qui va arriver.",reward:"🔑 Clé enchantée"},
   {place:"Grotte des cristaux",emoji:"🔮",question:"Quelle pierre précieuse est traditionnellement violette ?",answers:["Le rubis","L'émeraude","L'améthyste"],correct:2,hint:"Son nom commence par A.",reward:"🔮 Cristal magique"},
@@ -147,7 +147,7 @@ function playRewardAnimation(){
   const symbol=$("rewardSymbol");
   if(symbol) symbol.remove();
   const span=document.createElement("span");
-  span.id="rewardSymbol";span.className="reward-symbol";
+  span.id="rewardSymbol";span.className="reward-symbol"+(activeReward.reward.startsWith("💗")?" heart-bow":"");
   span.textContent=activeReward.reward.split(" ")[0] || "🎁";
   visual.appendChild(span);
 }
