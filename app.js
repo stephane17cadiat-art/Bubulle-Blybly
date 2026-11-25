@@ -138,7 +138,7 @@ function render(){
 }
 
 let activeReward = null;
-let rewardStyle = localStorage.getItem("bubulleRewardStyle") || "chest";
+const rewardStyle = "parchment";
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
@@ -150,7 +150,6 @@ function playRewardAnimation(){
   span.id="rewardSymbol";span.className="reward-symbol";
   span.textContent=activeReward.reward.split(" ")[0] || "🎁";
   visual.appendChild(span);
-  document.querySelectorAll(".reward-style").forEach(b=>b.classList.toggle("active",b.dataset.style===rewardStyle));
 }
 function showReward(stageIndex){
   const s=stages[stageIndex];
@@ -162,13 +161,6 @@ function showReward(stageIndex){
   show("rewardModal");
   playRewardAnimation();
 }
-document.querySelectorAll(".reward-style").forEach(button=>{
-  button.addEventListener("click",()=>{
-    rewardStyle=button.dataset.style;
-    localStorage.setItem("bubulleRewardStyle",rewardStyle);
-    playRewardAnimation();
-  });
-});
 $("replayReward").addEventListener("click",playRewardAnimation);
 $("rewardTestBtn").addEventListener("click",()=>{
   activeReward={reward:"💎 Diamant de la forêt",owner:"Aperçu de démonstration — aucun point ne sera ajouté."};
