@@ -220,7 +220,7 @@ function showReward(stageIndex){
   $("rewardTitle").textContent=milestone?"✨ Une surprise spéciale !":"Bravo, trésor découvert !";
   $("rewardOwner").textContent=owner+" vient de réussir l’épreuve.";
   $("rewardName").textContent=s.reward;
-  $("rewardMessage").textContent=milestone || surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)];
+  $("rewardMessage").textContent=myRole==="BUBULLE" ? "🎀 Surprise réservée à Blybly… Le message apparaîtra sur son écran !" : (milestone || surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)]);
   $("rewardModal").style.display="grid";
   show("rewardModal");
   playRewardAnimation();
@@ -266,6 +266,17 @@ async function resetGame(){
   }
 }
 $("resetGameBtn").addEventListener("click",resetGame);
+const previewSurpriseBtn = $("previewSurpriseBtn");
+if (previewSurpriseBtn) previewSurpriseBtn.addEventListener("click", () => {
+  activeReward = { reward: "💗 Cœur enchanté au nœud rose", owner: "Bubulle" };
+  $("rewardTitle").textContent = "✨ Aperçu de la surprise";
+  $("rewardOwner").textContent = "Voici l’animation qui accompagnera les trésors.";
+  $("rewardName").textContent = activeReward.reward;
+  $("rewardMessage").textContent = "🎀 Surprise réservée à Blybly… Le message apparaîtra sur son écran !";
+  $("rewardModal").style.display = "grid";
+  show("rewardModal");
+  playRewardAnimation();
+});
 
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
 $("createBtn").addEventListener("click",createRoom);
