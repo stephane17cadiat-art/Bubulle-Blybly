@@ -21,7 +21,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null, faceBlinkMeshes = [];
+let companionMotion = null, faceBlinkMeshes = [], hairMotionMesh = null;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -45,7 +45,7 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   return mesh;
 }
 function buildAvatar() {
-  faceBlinkMeshes = [];
+  faceBlinkMeshes = []; hairMotionMesh = null;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.48), dark=material("#342536");
@@ -161,8 +161,19 @@ function buildAvatar() {
   sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
   sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
-  sphere(avatarRoot,hair,[0,2.38,-.005],[.305,.205,.285]);
-  // Frange en mèches souples qui encadrent le front.
+  hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); avatarRoot.add(hairMotionMesh);
+  const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.305,.205,.285]);
+  crownCap.position.y+=2.2; // Keep the original sculpted placement while giving the crown a gentle pivot.
+  // Reflets fins qui donnent du relief aux mèches sans changer les coiffures choisies.
+  const hairShine=material("#f0c99b",.42,{metalness:.08});
+  const hairShade=material("#2d1c25",.55);
+  for(let side of [-1,1]){
+    for(let k=0;k<3;k++){
+      const x=side*(.075+k*.045);
+      curveTube([[x*.6,2.49,.19],[x*.85,2.43,.255],[x,2.31,.278],[x+side*.012,2.20,.27]],k===1?hairShine:hair,.009-k*.001);
+    }
+  }
+    // Frange en mèches souples qui encadrent le front.
   for(let i=0;i<9;i++){
     const x=-.205+i*.051;
     const y=2.405-Math.abs(x)*.19;
@@ -508,6 +519,7 @@ function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
+  if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   if(faceBlinkMeshes.length){const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;for(const eyeMesh of faceBlinkMeshes)eyeMesh.scale.y=.076*(1-.88*blink);}
   if(companionMotion){const p=companionMotion; p.head.rotation.z=Math.sin(t*2.1)*.035; for(let i=0;i<p.ears.length;i++){const side=i===0?-1:1;p.ears[i].rotation.z=side*(.10+Math.sin(t*3+i)*.07);} for(let i=0;i<p.wings.length;i++){p.wings[i].rotation.y=Math.sin(t*10+i)*.48;} for(let i=0;i<p.tailParts.length;i++){p.tailParts[i].rotation.x=Math.sin(t*2.4+i)*.13;p.tailParts[i].rotation.z=Math.sin(t*1.8+i)*.12;} p.petRoot.position.y=Math.sin(t*2)*.018;}
   if(avatarRoot){
