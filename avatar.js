@@ -1,7 +1,7 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/GLTFLoader.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, signInAnonymously, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -753,6 +753,7 @@ async function start(){
   if(!roomId){status("⚠️ Reviens dans ta partie pour ouvrir ton atelier.");return;}
   try{
     const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+    await setPersistence(auth,browserLocalPersistence);
     const credential=await signInAnonymously(auth);
     roomRef=doc(db,"rooms",roomId);
     const snapshot=await getDoc(roomRef);
