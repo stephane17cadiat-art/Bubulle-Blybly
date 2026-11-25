@@ -45,100 +45,116 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
 function buildAvatar() {
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
-  const skin=material(state.skinColor), hair=material(state.hairColor), dress=material(state.outfitColor), dark=material("#39243b");
-  const gold=material("#f6d995",.35,{metalness:.45});
-  const eye=material("#34243b",.35), white=material("#fff8f2");
-  // Jambes, chaussures et tenue
-  cylinderBetween(avatarRoot,skin,[-.13,.38,0],[-.15,.83,0],.085,.105);
-  cylinderBetween(avatarRoot,skin,[.13,.38,0],[.15,.83,0],.085,.105);
-  sphere(avatarRoot,dark,[-.17,.28,.08],[.16,.09,.23]);
-  sphere(avatarRoot,dark,[.17,.28,.08],[.16,.09,.23]);
-  sphere(avatarRoot,dress,[0,1.15,0],[.42,.43,.27]);
-  if(state.outfit==="princess" || state.outfit==="boho") {
-    addMesh(avatarRoot,new THREE.ConeGeometry(.57,.72,32),dress,[0,.83,0],null,[0,0,0]);
-    sphere(avatarRoot,material("#ffffff",.6,{transparent:true,opacity:.75}),[0,1.38,.02],[.43,.12,.27]);
-  } else if(state.outfit==="forest") {
-    addMesh(avatarRoot,new THREE.ConeGeometry(.48,.55,24),dress,[0,.84,0]);
-    sphere(avatarRoot,material("#e7c58b"),[0,1.3,.03],[.18,.09,.27]);
-  } else {
-    addMesh(avatarRoot,new THREE.CylinderGeometry(.31,.4,.65,24),dress,[0,.9,0]);
-    sphere(avatarRoot,material("#f4d5b5"),[0,1.38,.02],[.38,.1,.25]);
+  const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.48), dark=material("#342536");
+  const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
+  const lip=material("#b96e78",.48), blush=material("#d88c91",.72);
+  const smooth=(g)=>{g.computeVertexNormals();return g;};
+  const curveTube=(points,mat,r=.025)=>{
+    const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
+    return addMesh(avatarRoot,new THREE.TubeGeometry(curve,32,r,8,false),mat);
+  };
+  // Silhouette plus élancée et proportions proches d'un personnage de jeu vidéo
+  cylinderBetween(avatarRoot,skin,[-.105,.25,.015],[-.13,.91,.015],.075,.095);
+  cylinderBetween(avatarRoot,skin,[.105,.25,.015],[.13,.91,.015],.075,.095);
+  sphere(avatarRoot,dark,[-.14,.17,.11],[.13,.065,.24]);
+  sphere(avatarRoot,dark,[.14,.17,.11],[.13,.065,.24]);
+  // Robe longue avec volume, taille marquée et plis sculptés
+  const profile=[
+    new THREE.Vector2(.13,0),new THREE.Vector2(.17,.18),new THREE.Vector2(.16,.42),
+    new THREE.Vector2(.22,.62),new THREE.Vector2(.31,.83),new THREE.Vector2(.43,1.08),
+    new THREE.Vector2(.53,1.27),new THREE.Vector2(.48,1.34)
+  ];
+  const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,64)),dress,[0,.43,0]);
+  gown.scale.z=.78;
+  const bodice=sphere(avatarRoot,dress,[0,1.48,0],[.245,.36,.19]);
+  sphere(avatarRoot,skin,[0,1.78,0],[.095,.13,.09]);
+  // Fine bordure et plis lumineux sur la jupe
+  const trim=material("#f3dcae",.38,{metalness:.18});
+  const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.49,.018,8,64),trim,[0,.47,0]);hem.scale.z=.78;
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4;
+    curveTube([[Math.sin(a)*.19,.58,Math.cos(a)*.15],[Math.sin(a)*.28,.82,Math.cos(a)*.22],[Math.sin(a)*.39,1.12,Math.cos(a)*.29],[Math.sin(a)*.47,1.48,Math.cos(a)*.35]],material(state.outfitColor,.58));
   }
-  // Bras articulés
-  leftArm=new THREE.Group(); leftArm.position.set(-.34,1.43,0); avatarRoot.add(leftArm);
-  cylinderBetween(leftArm,skin,[0,0,0],[-.1,-.38,.02],.09,.075);
-  sphere(leftArm,skin,[-.1,-.4,.02],[.085,.09,.085]);
-  rightArm=new THREE.Group(); rightArm.position.set(.34,1.43,0); avatarRoot.add(rightArm);
-  cylinderBetween(rightArm,skin,[0,0,0],[.1,-.38,.02],.09,.075);
-  sphere(rightArm,skin,[.1,-.4,.02],[.085,.09,.085]);
-  // Cou et visage
-  cylinderBetween(avatarRoot,skin,[0,1.62,0],[0,1.82,0],.105,.105);
-  sphere(avatarRoot,skin,[0,2.12,.02],[.39,.43,.34]);
-  sphere(avatarRoot,white,[-.14,2.16,.316],[.075,.095,.035]);
-  sphere(avatarRoot,white,[.14,2.16,.316],[.075,.095,.035]);
-  sphere(avatarRoot,eye,[-.13,2.15,.347],[.037,.052,.02]);
-  sphere(avatarRoot,eye,[.13,2.15,.347],[.037,.052,.02]);
-  sphere(avatarRoot,material("#e99cae"),[-.25,2.02,.29],[.07,.035,.025]);
-  sphere(avatarRoot,material("#e99cae"),[.25,2.02,.29],[.07,.035,.025]);
-  // Chevelure, avec silhouettes différentes
-  sphere(avatarRoot,hair,[0,2.43,0],[.43,.25,.38]);
-  if(state.hairStyle==="long") {
-    sphere(avatarRoot,hair,[-.34,1.96,-.01],[.14,.56,.19]);
-    sphere(avatarRoot,hair,[.34,1.96,-.01],[.14,.56,.19]);
-    for(let i=0;i<3;i++){
-      sphere(avatarRoot,hair,[-.37+i*.07,1.62+i*.08,-.015],[.11,.18,.13]);
-      sphere(avatarRoot,hair,[.37-i*.07,1.62+i*.08,-.015],[.11,.18,.13]);
+  // Bras fins, épaules et mains
+  leftArm=new THREE.Group();leftArm.position.set(-.25,1.62,0);avatarRoot.add(leftArm);
+  sphere(leftArm,skin,[0,-.05,0],[.105,.13,.11]);
+  cylinderBetween(leftArm,skin,[0,-.08,0],[-.12,-.43,.02],.075,.06);
+  cylinderBetween(leftArm,skin,[-.12,-.43,.02],[-.16,-.69,.07],.06,.045);
+  sphere(leftArm,skin,[-.16,-.72,.08],[.055,.09,.045]);
+  rightArm=new THREE.Group();rightArm.position.set(.25,1.62,0);avatarRoot.add(rightArm);
+  sphere(rightArm,skin,[0,-.05,0],[.105,.13,.11]);
+  cylinderBetween(rightArm,skin,[0,-.08,0],[.12,-.43,.02],.075,.06);
+  cylinderBetween(rightArm,skin,[.12,-.43,.02],[.16,-.69,.07],.06,.045);
+  sphere(rightArm,skin,[.16,-.72,.08],[.055,.09,.045]);
+  // Visage plus fin : yeux détaillés, nez, bouche, sourcils et oreilles
+  sphere(avatarRoot,skin,[0,2.12,.015],[.285,.355,.255]);
+  sphere(avatarRoot,skin,[-.285,2.1,0],[.055,.09,.065]);
+  sphere(avatarRoot,skin,[.285,2.1,0],[.055,.09,.065]);
+  sphere(avatarRoot,white,[-.105,2.15,.245],[.067,.078,.027]);
+  sphere(avatarRoot,white,[.105,2.15,.245],[.067,.078,.027]);
+  sphere(avatarRoot,material("#7a594b",.22),[-.105,2.15,.269],[.036,.052,.018]);
+  sphere(avatarRoot,material("#7a594b",.22),[.105,2.15,.269],[.036,.052,.018]);
+  sphere(avatarRoot,material("#17131a",.18),[-.105,2.15,.284],[.018,.033,.01]);
+  sphere(avatarRoot,material("#17131a",.18),[.105,2.15,.284],[.018,.033,.01]);
+  sphere(avatarRoot,white,[-.116,2.17,.296],[.012,.014,.008]);
+  sphere(avatarRoot,white,[.094,2.17,.296],[.012,.014,.008]);
+  curveTube([[-.17,2.255,.245],[-.11,2.275,.26],[-.055,2.255,.245]],hair,.012);
+  curveTube([[.055,2.255,.245],[.11,2.275,.26],[.17,2.255,.245]],hair,.012);
+  sphere(avatarRoot,skin,[0,2.08,.272],[.027,.052,.035]);
+  sphere(avatarRoot,lip,[0,1.99,.25],[.052,.018,.018]);
+  sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
+  sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
+  // Chevelure volumineuse avec mèches individuelles
+  sphere(avatarRoot,hair,[0,2.38,-.005],[.30,.20,.28]);
+  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:18;
+  for(let i=0;i<hairStrands;i++){
+    const a=(i/hairStrands)*Math.PI*2;
+    const x=Math.cos(a),z=Math.sin(a);
+    if(state.hairStyle==="bun"){
+      const side=i%2===0?-.22:.22;
+      sphere(avatarRoot,hair,[side,2.48,-.025],[.13,.14,.13]);
+      curveTube([[side*.7,2.48,.12],[side,2.35,.14],[side*1.35,2.2,.08]],hair,.035);
+    }else{
+      const side=Math.cos(a);
+      const front=Math.sin(a);
+      curveTube([[x*.22,2.48,z*.20],[x*.29,2.35,z*.24],[x*.32,2.12,z*.24],[x*.34,1.8,z*.18],[x*.3,1.58,z*.12]],hair,state.hairStyle==="braid"?.035:.045);
     }
-  } else if(state.hairStyle==="braid") {
-    sphere(avatarRoot,hair,[-.34,2.0,.04],[.13,.38,.17]);
-    sphere(avatarRoot,hair,[.34,2.0,.04],[.13,.38,.17]);
-    for(let i=0;i<5;i++) sphere(avatarRoot,hair,[.37,1.82-i*.13,.11],[.105,.13,.11]);
-    for(let i=0;i<3;i++) sphere(avatarRoot,material("#e6a7c9"),[-.22+i*.12,2.48,.28],[.045,.07,.04]);
-  } else if(state.hairStyle==="bun") {
-    sphere(avatarRoot,hair,[-.28,2.47,-.02],[.2,.2,.2]);
-    sphere(avatarRoot,hair,[.28,2.47,-.02],[.2,.2,.2]);
-    sphere(avatarRoot,hair,[-.35,2.05,0],[.13,.28,.16]);
-    sphere(avatarRoot,hair,[.35,2.05,0],[.13,.28,.16]);
-  } else {
-    sphere(avatarRoot,hair,[-.34,2.14,.02],[.13,.28,.16]);
-    sphere(avatarRoot,hair,[.34,2.14,.02],[.13,.28,.16]);
-    sphere(avatarRoot,hair,[0,2.48,.02],[.4,.13,.34]);
   }
-  // Petit diadème
-  addMesh(avatarRoot,new THREE.TorusGeometry(.25,.025,8,28),gold,[0,2.48,.12],[1,1,.6]);
-  sphere(avatarRoot,material("#f4a9d0"),[0,2.62,.28],[.07,.09,.05]);
-  // Ailes féeriques
-  if(state.wings!=="none") {
-    const wingMat=material(state.wings==="crystal"?"#b9d9ff":state.wings==="butterfly"?"#e9a6d1":"#b9f0e1",.25,{transparent:true,opacity:.72,metalness:.12});
+  if(state.hairStyle==="braid"){
+    for(let i=0;i<7;i++) sphere(avatarRoot,hair,[.34,2.02-i*.09,.12],[.065,.09,.07]);
+  }
+  // Diadème délicat
+  curveTube([[-.23,2.43,.13],[0,2.51,.22],[.23,2.43,.13]],gold,.018);
+  sphere(avatarRoot,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
+  // Corsage et détails précieux
+  sphere(avatarRoot,trim,[0,1.52,.17],[.035,.16,.018]);
+  for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
+  // Ailes translucides aux formes plus fines
+  if(state.wings!=="none"){
+    const wingMat=material(state.wings==="crystal"?"#c7e5ff":state.wings==="butterfly"?"#e9a6d1":"#c6f1df",.22,{transparent:true,opacity:.62,metalness:.12,side:THREE.DoubleSide});
     for(const side of [-1,1]){
-      sphere(avatarRoot,wingMat,[side*.43,1.82,-.17],[state.wings==="butterfly"?.34:.27,.48,.07]);
-      sphere(avatarRoot,wingMat,[side*.52,2.08,-.18],[.22,.3,.06]);
-      if(state.wings==="crystal") cylinderBetween(avatarRoot,gold,[side*.42,1.48,-.1],[side*.52,2.4,-.1],.012,.012);
+      const upper=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),wingMat,[side*.39,1.92,-.16],[.22,.43,.045],[0,0,side*-.35]);
+      const lower=addMesh(avatarRoot,new THREE.SphereGeometry(1,32,24),wingMat,[side*.47,1.62,-.17],[.16,.29,.04],[0,0,side*.25]);
+      curveTube([[side*.28,1.5,-.1],[side*.48,1.85,-.1],[side*.46,2.25,-.1]],gold,.009);
     }
   }
-  // Compagnon miniature à côté de l'aventurière
-  if(state.companion!=="none") {
+  // Compagnon miniature assorti
+  if(state.companion!=="none"){
     const colors={rabbit:"#eee5df",cat:"#8e879d",fox:"#d98443",fawn:"#c99b70",dragon:"#79b99c",unicorn:"#eee0f5"};
-    const pet=material(colors[state.companion]||"#eee5df");
-    const x=.82;
-    sphere(avatarRoot,pet,[x,.56,.12],[.24,.28,.2]);
-    sphere(avatarRoot,pet,[x,.87,.13],[.22,.21,.2]);
-    sphere(avatarRoot,eye,[x-.08,.9,.31],[.025,.035,.02]);
-    sphere(avatarRoot,eye,[x+.08,.9,.31],[.025,.035,.02]);
+    const pet=material(colors[state.companion]||"#eee5df",.55),x=.78;
+    sphere(avatarRoot,pet,[x,.55,.1],[.17,.23,.16]);
+    sphere(avatarRoot,pet,[x,.82,.12],[.16,.16,.15]);
+    sphere(avatarRoot,eye,[x-.055,.84,.25],[.018,.025,.012]);
+    sphere(avatarRoot,eye,[x+.055,.84,.25],[.018,.025,.012]);
     if(state.companion==="rabbit"){
-      sphere(avatarRoot,pet,[x-.1,1.15,.1],[.07,.23,.07]);
-      sphere(avatarRoot,pet,[x+.1,1.15,.1],[.07,.23,.07]);
-    } else if(state.companion==="cat" || state.companion==="fox"){
-      for(const side of [-1,1]) addMesh(avatarRoot,new THREE.ConeGeometry(.09,.22,12),pet,[x+side*.13,1.08,.12]);
-    } else if(state.companion==="unicorn"){
-      addMesh(avatarRoot,new THREE.ConeGeometry(.055,.25,12),gold,[x,1.14,.14]);
-    } else if(state.companion==="dragon"){
-      sphere(avatarRoot,material("#e7a3bb"),[x,.82,-.05],[.3,.1,.07]);
-    }
+      sphere(avatarRoot,pet,[x-.07,1.08,.1],[.045,.19,.045]);
+      sphere(avatarRoot,pet,[x+.07,1.08,.1],[.045,.19,.045]);
+    }else if(state.companion==="cat"||state.companion==="fox"){
+      for(const side of [-1,1])addMesh(avatarRoot,new THREE.ConeGeometry(.065,.15,16),pet,[x+side*.1,.98,.12]);
+    }else if(state.companion==="unicorn")addMesh(avatarRoot,new THREE.ConeGeometry(.035,.18,16),gold,[x,1.02,.13]);
   }
-  // Socle magique
-  const ring=material("#e5c47b",.3,{metalness:.35});
-  addMesh(avatarRoot,new THREE.TorusGeometry(.65,.018,8,48),ring,[0,.12,0],[1,.48,1]);
+  const ring=material("#e5c47b",.28,{metalness:.45});
+  addMesh(avatarRoot,new THREE.TorusGeometry(.59,.014,8,64),ring,[0,.12,0],[1,.45,1]);
 }
 function initScene(){
   const host=$("avatarView");
