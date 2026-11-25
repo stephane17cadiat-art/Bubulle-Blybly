@@ -316,7 +316,7 @@ function buildAvatar() {
     const darkEye=material("#302637",.18), nose=material(state.companion==="fox"?"#3a2830":"#9d6878",.28);
     const inner=material("#d99eae",.65), goldPet=material("#f0d58d",.25,{metalness:.35});
     const petBall=(mat,pos,scale)=>sphere(petRoot,mat,pos,scale);
-    const petTube=(points,mat,r)=>{const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return addMesh(petRoot,new THREE.TubeGeometry(c,24,r,8,false),mat);};
+    const petTube=(points,mat,r,parent=petRoot)=>{const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return addMesh(parent,new THREE.TubeGeometry(c,24,r,8,false),mat);};
     // Corps, poitrail et tête avec proportions de petit animal.
     petBall(coat,[0,.52,0],[.17,.22,.15]);
     petBall(lightCoat,[0,.49,.128],[.105,.15,.045]);
@@ -359,7 +359,7 @@ function buildAvatar() {
       // Museau allongé et masque clair caractéristique du renard.
       sphere(head,lightCoat,[0,-.065,.14],[.085,.055,.09]);
       const tail=new THREE.Group();tail.position.set(0,.43,-.10);petRoot.add(tail);tailParts.push(tail);
-      petTube([[0,0,0],[.12,.08,-.08],[.20,.23,-.12],[.12,.34,-.12]],coat,.075);
+      petTube([[0,0,0],[.12,.08,-.08],[.20,.23,-.12],[.12,.34,-.12]],coat,.075,tail);
       sphere(tail,lightCoat,[.12,.34,-.12],[.065,.07,.07]);
     }else if(state.companion==="fawn"){
       for(const side of [-1,1]){
@@ -380,7 +380,7 @@ function buildAvatar() {
       }
       for(const side of [-1,1])addMesh(head,new THREE.ConeGeometry(.035,.11,12),goldPet,[side*.09,.12,-.015],[1,1,1],[0,0,side*.5]);
       const tail=new THREE.Group();tail.position.set(0,.44,-.1);petRoot.add(tail);tailParts.push(tail);
-      petTube([[0,0,0],[.10,-.05,-.10],[.18,.03,-.15],[.22,.15,-.15]],coat,.035);
+      petTube([[0,0,0],[.10,-.05,-.10],[.18,.03,-.15],[.22,.15,-.15]],coat,.035,tail);
       addMesh(tail,new THREE.ConeGeometry(.045,.13,12),goldPet,[.22,.19,-.15],[1,1,1],[0,0,-.7]);
     }else if(state.companion==="unicorn"){
       const horn=addMesh(head,new THREE.ConeGeometry(.027,.19,20),goldPet,[0,.19,.015],[1,1,1],[0,0,0]);
