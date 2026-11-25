@@ -189,6 +189,37 @@ function drawLivingMapRoute(){
 }
 window.addEventListener("resize",()=>drawLivingMapRoute());
 
+
+const gardenBeds = [
+  {title:"Les premiers pas",subtitle:"La graine de votre complicité",start:0,end:4,flower:"🌷",name:"Tulipe de l’amitié"},
+  {title:"La forêt des secrets",subtitle:"La douceur prend racine",start:5,end:8,flower:"🌻",name:"Tournesol de lumière"},
+  {title:"Le château mystérieux",subtitle:"Les souvenirs s’épanouissent",start:9,end:12,flower:"🌹",name:"Rose des souvenirs"},
+  {title:"Les cristaux enchantés",subtitle:"La magie fleurit",start:13,end:16,flower:"🌼",name:"Marguerite enchantée"},
+  {title:"Le trésor des Besties",subtitle:"Votre belle légende",start:17,end:20,flower:"🌸",name:"Fleur du cœur"}
+];
+function renderBestiesGarden(players){
+  const garden=$("bestiesGarden");
+  if(!garden||!players)return;
+  const bubulle=new Set(players.BUBULLE.completed||[]);
+  const blybly=new Set(players.BLYBLY.completed||[]);
+  let bloomed=0;
+  garden.innerHTML=gardenBeds.map((bed,index)=>{
+    const shared=Array.from({length:bed.end-bed.start+1},(_,n)=>bed.start+n)
+      .every(stageIndex=>bubulle.has(stageIndex)&&blybly.has(stageIndex));
+    if(shared)bloomed++;
+    return `<article class="garden-flowerbed ${shared?"bloomed":"waiting"}" aria-label="${bed.title} : ${shared?"fleur éclose":"fleur en bouton, à débloquer"}">
+      <div class="garden-plant" aria-hidden="true"><span class="garden-stem"></span><span class="garden-leaves">❧</span><span class="garden-blossom">${shared?bed.flower:"✿"}</span><span class="garden-glow"></span></div>
+      <div class="garden-bed-copy"><b>${bed.title}</b><small>${shared?bed.name:bed.subtitle}</small><em>${shared?"✦ Fleur éclose":"🔒 À faire éclore à deux"}</em></div>
+    </article>`;
+  }).join("");
+  $("gardenProgress").textContent=bloomed+" / "+gardenBeds.length;
+  $("gardenMessage").textContent=bloomed===5
+    ?"Votre jardin est en pleine floraison… tout comme votre belle complicité. 👑💗"
+    :bloomed===0
+      ?"Votre jardin attend vos premières victoires partagées… 💗"
+      :bloomed+" jolie"+(bloomed>1?"s fleurs":" fleur")+" a"+(bloomed>1?"nt":"")+" déjà éclos grâce à vous deux. Continuez à faire grandir votre jardin ! ✨";
+}
+
 function render(){
   const p=roomData.players;
   // Chaque appareil affiche uniquement le profil de la joueuse connectée.
@@ -238,6 +269,7 @@ function render(){
     $("map").appendChild(el);
   });
   drawLivingMapRoute();
+  renderBestiesGarden(p);
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
   if(mine.stage>=stages.length) openFinale(false);
