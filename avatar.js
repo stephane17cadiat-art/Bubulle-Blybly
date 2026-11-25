@@ -153,11 +153,15 @@ function buildAvatar() {
   cylinderBetween(leftArm,skin,[0,-.08,0],[-.12,-.43,.02],.075,.06);
   cylinderBetween(leftArm,skin,[-.12,-.43,.02],[-.16,-.69,.07],.06,.045);
   sphere(leftArm,skin,[-.16,-.72,.08],[.055,.09,.045]);
+  for(let finger=0;finger<3;finger++)cylinderBetween(leftArm,skin,[-.18+finger*.018,-.75,.105],[-.19+finger*.018,-.79,.105],.009,.007);
   rightArm=new THREE.Group();rightArm.position.set(.25,1.62,0);avatarRoot.add(rightArm);
   sphere(rightArm,skin,[0,-.05,0],[.105,.13,.11]);
   cylinderBetween(rightArm,skin,[0,-.08,0],[.12,-.43,.02],.075,.06);
   cylinderBetween(rightArm,skin,[.12,-.43,.02],[.16,-.69,.07],.06,.045);
   sphere(rightArm,skin,[.16,-.72,.08],[.055,.09,.045]);
+  for(let finger=0;finger<3;finger++)cylinderBetween(rightArm,skin,[.14+finger*.018,-.75,.105],[.13+finger*.018,-.79,.105],.009,.007);
+  // Cou délicat pour une transition plus naturelle entre la tête et le buste.
+  cylinderBetween(avatarRoot,skin,[0,1.68,.005],[0,1.91,.005],.075,.082);
   // Visage plus fin : yeux détaillés, nez, bouche, sourcils et oreilles
   // Visage sculpté : mâchoire plus fine et pommettes douces
   const faceGeometry = new THREE.SphereGeometry(1,48,40);
@@ -170,8 +174,10 @@ function buildAvatar() {
   faceGeometry.computeVertexNormals();
   addMesh(avatarRoot,faceGeometry,skin,[0,2.12,.015],[.285,.355,.255]);
 
-  sphere(avatarRoot,skin,[-.285,2.1,0],[.055,.09,.065]);
-  sphere(avatarRoot,skin,[.285,2.1,0],[.055,.09,.065]);
+  for(const side of [-1,1]){
+    sphere(avatarRoot,skin,[side*.275,2.1,.005],[.045,.075,.052]);
+    sphere(avatarRoot,material("#c88978",.78),[side*.292,2.1,.043],[.018,.038,.012]);
+  }
   // Yeux brillants en plusieurs couches : iris, anneau, pupille et reflets.
   const irisMat=material("#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
   for(const side of [-1,1]){
@@ -189,12 +195,14 @@ function buildAvatar() {
       curveTube([[ex,2.196,.269],[ex+side*.018,2.215,.264]],dark,.0045);
     }
     curveTube([[side*.17,2.255,.245],[side*.11,2.275,.26],[side*.055,2.255,.245]],hair,.012);
+    curveTube([[side*.17,2.105,.257],[side*.135,2.085,.27],[side*.105,2.081,.274],[side*.075,2.085,.27],[side*.04,2.105,.257]],material("#b98578",.72),.0045);
     // Reflet doux sur la pommette.
     sphere(avatarRoot,material("#f7d8c9",.7),[side*.19,2.075,.218],[.035,.012,.009]);
   }
   // Nez délicat et sourire discret, plutôt qu'une simple pastille.
-  sphere(avatarRoot,skin,[0,2.085,.273],[.025,.043,.032]);
-  sphere(avatarRoot,material("#d99a91",.65),[0,2.055,.297],[.012,.008,.006]);
+  sphere(avatarRoot,skin,[0,2.09,.268],[.018,.052,.028]);
+  sphere(avatarRoot,material("#d99a91",.65),[-.014,2.055,.294],[.008,.006,.005]);
+  sphere(avatarRoot,material("#d99a91",.65),[.014,2.055,.294],[.008,.006,.005]);
   faceSmileMesh=curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
   kissPucker=sphere(avatarRoot,lip,[0,1.985,.278],[.001,.001,.001]);
   curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
