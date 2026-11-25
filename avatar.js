@@ -373,6 +373,45 @@ function toggleRealisticCharacter(){
   if(realisticVisible && realisticAction)realisticAction.reset().fadeIn(.25).play();
   else if(realisticAction)realisticAction.fadeOut(.2);
 }
+
+// Petit décor 3D : arbres féeriques, champignons et fleurs lumineuses.
+let forestFireflies=[];
+function buildForestDecor(){
+  const decor=new THREE.Group();scene.add(decor);forestFireflies=[];
+  const bark=material("#765344",.9),leafA=material("#477d62",.78),leafB=material("#6e9c70",.75);
+  const glow=material("#f8e6a4",.22,{emissive:"#f4c95d",emissiveIntensity:1.5});
+  const cap=material("#d879a9",.38),cap2=material("#b89ae8",.35),stem=material("#f4e8d4",.8);
+  for(const side of [-1,1]){
+    const x=side*1.42;
+    cylinderBetween(decor,bark,[x,.12,-.72],[x,1.18,-.72],.075,.11);
+    sphere(decor,leafA,[x,1.34,-.72],[.39,.48,.31]);
+    sphere(decor,leafB,[x-side*.18,1.55,-.68],[.28,.34,.27]);
+    sphere(decor,leafA,[x+side*.18,1.12,-.66],[.29,.35,.25]);
+    // Champignons au pied des arbres
+    for(let i=0;i<2;i++){
+      const mx=x+side*(.20+i*.12), my=.18+i*.035, mz=-.18;
+      cylinderBetween(decor,stem,[mx,my,mz],[mx,my+.18,mz],.045,.055);
+      sphere(decor,i?cap2:cap,[mx,my+.21,mz],[.14,.075,.14]);
+      for(let d=0;d<3;d++)sphere(decor,glow,[mx+(d-1)*.065,my+.245,mz+.105],[.014,.014,.012]);
+    }
+    // Petites fleurs au premier plan
+    for(let i=0;i<3;i++){
+      const fx=x+side*(i*.12-.12), fy=.16, fz=.18+i*.06;
+      cylinderBetween(decor,leafB,[fx,fy,fz],[fx,fy+.27,fz],.012,.018);
+      sphere(decor,glow,[fx,fy+.29,fz],[.045,.045,.035]);
+      const petal=material(i===1?"#f4c8df":"#d9c8ff",.4,{emissive:"#8c6aab",emissiveIntensity:.22});
+      for(let k=0;k<5;k++){const a=k*Math.PI*2/5;sphere(decor,petal,[fx+Math.cos(a)*.065,fy+.29+Math.sin(a)*.055,fz],[.038,.035,.025]);}
+    }
+  }
+  // Lucioles en suspension, animées doucement autour du miroir.
+  for(let i=0;i<12;i++){
+    const x=(Math.sin(i*2.4)*1.55),y=.65+(i%4)*.43,z=.15-(i%3)*.18;
+    const dot=sphere(decor,glow,[x,y,z],[.025,.025,.025]);
+    forestFireflies.push({mesh:dot,baseY:y,phase:i*.83,baseX:x});
+  }
+  return decor;
+}
+
 function initScene(){
   const host=$("avatarView");
   scene=new THREE.Scene();
@@ -382,6 +421,7 @@ function initScene(){
   scene.add(new THREE.HemisphereLight(0xffeaff,0x34445a,2.1));
   const key=new THREE.DirectionalLight(0xffe4f3,2.4);key.position.set(-3,5,5);key.castShadow=true;scene.add(key);
   const fill=new THREE.PointLight(0x9edfd0,35,9);fill.position.set(3,2,2);scene.add(fill);
+  buildForestDecor();
   const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,48),material("#b6a0ca",.9,{transparent:true,opacity:.15}));
   floor.rotation.x=-Math.PI/2;floor.position.y=.08;scene.add(floor);
   clock=new THREE.Clock();buildAvatar();resize();loadRealisticCharacter();
@@ -400,6 +440,7 @@ function resize(){
 function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
+  for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse/.025);}
   if(avatarRoot){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
     if(Date.now()<danceUntil){avatarRoot.rotation.y+=.035;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.1;leftArm.rotation.z=Math.sin(t*12)*.45-.35;rightArm.rotation.z=-Math.sin(t*12)*.45+.35;}
