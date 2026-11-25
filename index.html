@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261125-home-enchanted">
+  <link rel="stylesheet" href="./style.css?v=20261125-connection-screen">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -40,7 +40,19 @@
         <div class="home-chapter-tease"><span>🌲 La forêt</span><i>✦</i><span>🏰 Le château</span><i>✦</i><span>👑 Le trésor</span></div>
       </div>
       <div class="welcome-actions home-actions">
-        <button id="createBtn" class="primary home-create">Ouvrir le grimoire <span>✦</span></button>
+        <button id="goConnectionBtn" class="primary home-create">Entrer dans le royaume <span>✦</span></button>
+      </div>
+      <p class="fineprint home-footnote"><span>✧</span> Une aventure à deux · Vos progrès sont sauvegardés <span>✧</span></p>
+    </section>
+
+    <section id="connection" class="panel connection-screen hidden">
+      <button id="backHomeBtn" class="text-button connection-back">← Retour à l’accueil</button>
+      <div class="connection-emblem">💗</div>
+      <p class="eyebrow">LE PORTAIL DES BESTIES</p>
+      <h2>Prête à entrer ?</h2>
+      <p class="connection-intro">Crée ton aventure ou retrouve Blybly grâce à son code secret.</p>
+      <div class="welcome-actions connection-actions">
+        <button id="createBtn" class="primary home-create">Créer une nouvelle aventure <span>✦</span></button>
         <div class="home-divider"><span>OU REJOINDRE UNE AVENTURE</span></div>
         <div class="join-row">
           <input id="inviteInput" type="text" placeholder="Votre code secret…" autocomplete="off" aria-label="Code d’invitation">
@@ -48,7 +60,7 @@
         </div>
       </div>
       <p id="welcomeMessage" class="message" role="status"></p>
-      <p class="fineprint home-footnote"><span>✧</span> Une aventure à deux · Vos progrès sont sauvegardés <span>✧</span></p>
+      <p class="fineprint connection-footnote">✨ Votre progression sera sauvegardée automatiquement.</p>
     </section>
 
     <section id="game" class="hidden">
@@ -224,6 +236,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261125-fireworks-final"></script>
+  <script type="module" src="./app.js?v=20261125-connection-screen"></script>
 </body>
 </html>
