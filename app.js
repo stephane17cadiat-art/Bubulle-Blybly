@@ -244,6 +244,21 @@ function openAlbum(){
     :sharedCount>0
       ? "Chaque énigme partagée ajoute une nouvelle page à votre belle histoire."
       : "Votre album attend ses premiers souvenirs : l’aventure ne fait que commencer.";
+  const officialChapters=albumGroups.slice(1);
+  const memoryCards=officialChapters.map((group,index)=>{
+    const complete=Array.from({length:group.end-group.start+1},(_,offset)=>group.start+offset)
+      .every(stageIndex=>bubulleDone.has(stageIndex)&&blyblyDone.has(stageIndex));
+    const flowers=["🌸","🌷","🌼","🌺"];
+    return {icon:flowers[index],title:group.title.replace(/^Chapitre \\d+ · /,""),detail:complete?"Souvenir révélé à deux":"À révéler en terminant ce chapitre ensemble",unlocked:complete,kind:"flower"};
+  });
+  memoryCards.push({icon:"💗",title:"Le cœur des Besties",detail:sharedCount>0?sharedCount+" énigme(s) réussie(s) ensemble":"À débloquer avec votre première énigme commune",unlocked:sharedCount>0,kind:"heart",count:sharedCount});
+  const crownUnlocked=stages.every((stage,index)=>bubulleDone.has(index)&&blyblyDone.has(index));
+  memoryCards.push({icon:"👑",title:"La couronne légendaire",detail:crownUnlocked?"Les 21 énigmes terminées par vous deux !":"Le trésor ultime : les 21 énigmes terminées à deux",unlocked:crownUnlocked,kind:"crown"});
+  $("albumMemories").innerHTML=memoryCards.map(memory=>`<article class="album-memory ${memory.unlocked?"unlocked":"locked"} ${memory.kind}">
+    <div class="album-memory-icon">${memory.icon}</div><div class="album-memory-copy"><b>${memory.title}</b><small>${memory.detail}</small></div>
+    <span class="album-memory-state">${memory.unlocked?"Souvenir débloqué":"À découvrir"}</span>
+    ${memory.kind==="heart"&&memory.unlocked?`<span class="album-heart-count">${memory.count} ♥</span>`:""}
+  </article>`).join("");
   $("albumChapters").innerHTML=albumGroups.map(group=>{
     const groupStages=stages.slice(group.start,group.end+1);
     const doneCount=groupStages.filter((stage,offset)=>bubulleDone.has(group.start+offset)||blyblyDone.has(group.start+offset)).length;
