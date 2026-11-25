@@ -26,7 +26,10 @@ let companionMotion = null, magicParticles = [], magicAura = null, powerBurstGro
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
-  return new THREE.MeshStandardMaterial({color,roughness,...extra});
+  return new THREE.MeshPhysicalMaterial({
+    color,roughness,clearcoat:.12,clearcoatRoughness:.5,
+    sheen:.12,sheenRoughness:.72,...extra
+  });
 }
 function addMesh(parent, geometry, mat, position, scale, rotation) {
   const mesh = new THREE.Mesh(geometry,mat);
@@ -49,7 +52,10 @@ function buildAvatar() {
   faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null; powerBurstGroup = null; powerStarted = 0;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
-  const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
+  const skin=material(state.skinColor,.68,{sheen:.28,sheenColor:"#f6cbb9",sheenRoughness:.82});
+  const hair=material(state.hairColor,.38,{metalness:.025,clearcoat:.32,clearcoatRoughness:.36});
+  const dress=material(state.outfitColor,.42,{metalness:.035,sheen:.32,sheenColor:"#fff0f5",sheenRoughness:.58});
+  const dark=material("#342536");
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
   const lip=material(state.lipColor||"#b96e78",.48), blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72);
   const smooth=(g)=>{g.computeVertexNormals();return g;};
@@ -502,7 +508,32 @@ function buildAvatar() {
   powerBurstGroup=new THREE.Group();avatarRoot.add(powerBurstGroup);powerBurstGroup.visible=false;
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
-async function loadRealisticCharacter(){
+async function applyRealisticStyle(){
+  if(!realisticRoot)return;
+  const colors={
+    skin:(state.skinColor||defaults.skinColor),
+    hair:(state.hairColor||defaults.hairColor),
+    cloth:(state.outfitColor||defaults.outfitColor)
+  };
+  realisticRoot.traverse(obj=>{
+    if(!obj.isMesh)return;
+    const label=((obj.name||"")+" "+(Array.isArray(obj.material)?obj.material: [obj.material]).map(m=>m?.name||"").join(" ")).toLowerCase();
+    const target=/hair|braid|ponytail|beard/.test(label)?"hair":
+      /skin|face|body|hand|arm|leg|head|ear/.test(label)?"skin":
+      /cloth|fabric|tunic|dress|shirt|skirt|sleeve|cape|衣/.test(label)?"cloth":null;
+    if(!target)return;
+    const mats=Array.isArray(obj.material)?obj.material:[obj.material];
+    mats.forEach(m=>{
+      if(!m)return;
+      if(m.color)m.color.set(colors[target]);
+      if("roughness" in m)m.roughness=target==="hair"?.42:target==="skin"?.72:.48;
+      if("metalness" in m)m.metalness=target==="cloth"?.04:.015;
+      if("clearcoat" in m)m.clearcoat=target==="hair"?.28:target==="skin"?.04:.14;
+      m.needsUpdate=true;
+    });
+  });
+}
+function loadRealisticCharacter(){
   if(realisticReady || !scene) return;
   status("✨ Chargement du modèle 3D détaillé…");
   const loader=new GLTFLoader();
@@ -519,10 +550,11 @@ async function loadRealisticCharacter(){
     realisticRoot.traverse(obj=>{
       if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;
         const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-        mats.forEach(m=>{if(m && m.name && /tunic|cloth|fabric|shirt|linen/i.test(m.name)){m.color?.set(state.outfitColor);m.needsUpdate=true;}});
+        mats.forEach(m=>{if(m){m.roughness=Math.max(m.roughness??.45,.38);m.needsUpdate=true;}});
       }
     });
     scene.add(realisticRoot);
+    applyRealisticStyle();
     if(gltf.animations?.length){realisticMixer=new THREE.AnimationMixer(realisticRoot);realisticAction=realisticMixer.clipAction(gltf.animations[0]);}
     realisticReady=true;
     status("✓ Modèle 3D détaillé chargé — tu peux l’essayer dans le miroir.");
@@ -585,11 +617,17 @@ function initScene(){
   const host=$("avatarView");
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(35,1,.1,100);camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);
-  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
   host.innerHTML="";host.appendChild(renderer.domElement);
   scene.add(new THREE.HemisphereLight(0xffeaff,0x34445a,2.1));
-  const key=new THREE.DirectionalLight(0xffe4f3,2.4);key.position.set(-3,5,5);key.castShadow=true;scene.add(key);
-  const fill=new THREE.PointLight(0x9edfd0,35,9);fill.position.set(3,2,2);scene.add(fill);
+  const key=new THREE.DirectionalLight(0xffe8dc,3.1);key.position.set(-3.5,5.5,4.5);key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024);key.shadow.camera.near=.5;key.shadow.camera.far=12;key.shadow.bias=-.00018;scene.add(key);
+  const fill=new THREE.PointLight(0xa9e8df,22,8);fill.position.set(3,2.3,2.4);scene.add(fill);
+  const rim=new THREE.PointLight(0xd4b7ff,18,7);rim.position.set(-2.5,2.7,-2.5);scene.add(rim);
   buildForestDecor();
   const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,48),material("#b6a0ca",.9,{transparent:true,opacity:.15}));
   floor.rotation.x=-Math.PI/2;floor.position.y=.08;scene.add(floor);
@@ -697,7 +735,7 @@ function fillControls(){
   document.body.className="theme-"+state.theme;
 }
 function changed(){
-  readControls();document.body.className="theme-"+state.theme;buildAvatar();scheduleSave();
+  readControls();document.body.className="theme-"+state.theme;buildAvatar();applyRealisticStyle();scheduleSave();
 }
 function scheduleSave(){
   status("☁️ Sauvegarde de tes choix…");clearTimeout(saveTimer);
