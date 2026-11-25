@@ -273,6 +273,8 @@ function render(){
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
   if(mine.stage>=stages.length) openFinale(false);
+  // Si l’album est ouvert, actualiser ses deux profils à chaque nouvelle synchro Firebase.
+  if(!$("albumModal").classList.contains("hidden")) openAlbum();
 }
 
 let activeReward = null;
