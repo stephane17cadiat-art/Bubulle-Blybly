@@ -17,7 +17,7 @@ const roomId = params.get("room");
 const $ = id => document.getElementById(id);
 const status = message => $("saveStatus").textContent = message;
 const defaults = {
-  hairStyle:"long",hairColor:"#5b352d",skinColor:"#f3c6a5",
+  hairStyle:"long",hairColor:"#5b352d",hairAccessory:"none",skinColor:"#f3c6a5",
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
@@ -165,7 +165,29 @@ function buildAvatar() {
       curveTube([[side*.23,2.36,.12],[side*.30,2.18,.16],[side*.29,1.98,.12],[side*.22,1.91,.08]],hair,.055);
     }
   }
-  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:state.hairStyle==="bob"?0:18;
+  if(state.hairStyle==="ponytail"){
+    sphere(avatarRoot,hair,[0,2.36,-.25],[.16,.16,.16]);
+    curveTube([[0,2.34,-.3],[.04,2.18,-.42],[.08,1.92,-.48],[.02,1.66,-.46],[-.04,1.48,-.4]],hair,.085);
+    sphere(avatarRoot,gold,[0,2.27,-.34],[.09,.045,.045]);
+  }
+  if(state.hairStyle==="doublebun"){
+    for(const side of [-1,1]){
+      sphere(avatarRoot,hair,[side*.22,2.48,-.04],[.14,.14,.14]);
+      curveTube([[side*.18,2.45,.02],[side*.28,2.32,.06],[side*.31,2.16,.02]],hair,.04);
+    }
+  }
+  if(state.hairStyle==="halfup"){
+    sphere(avatarRoot,hair,[0,2.48,-.18],[.16,.12,.12]);
+    sphere(avatarRoot,gold,[0,2.43,-.29],[.07,.045,.035]);
+  }
+  if(state.hairStyle==="curly"){
+    for(const side of [-1,1]){
+      for(let i=0;i<6;i++){
+        sphere(avatarRoot,hair,[side*(.24+(i%2)*.035),2.22-i*.105,-.12+(i%3)*.035],[.09,.12,.09]);
+      }
+    }
+  }
+  const hairStrands=state.hairStyle==="braid"?12:state.hairStyle==="bun"?8:state.hairStyle==="bob"?0:state.hairStyle==="doublebun"||state.hairStyle==="curly"?0:18;
   for(let i=0;i<hairStrands;i++){
     const a=(i/hairStrands)*Math.PI*2;
     const x=Math.cos(a),z=Math.sin(a);
@@ -185,9 +207,27 @@ function buildAvatar() {
   if(state.hairStyle==="braid"){
     for(let i=0;i<7;i++) sphere(avatarRoot,hair,[.34,2.02-i*.09,.12],[.065,.09,.07]);
   }
-  // Diadème délicat
-  curveTube([[-.23,2.43,.13],[0,2.51,.22],[.23,2.43,.13]],gold,.018);
-  sphere(avatarRoot,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
+  // Accessoire choisi : fleurs, nœud ou couronne.
+  if(state.hairAccessory==="flower"){
+    for(const x of [-.19,0,.19]){
+      const center=[x,2.47,.205];
+      sphere(avatarRoot,material("#e6a2c5",.3),center,[.035,.035,.025]);
+      for(let k=0;k<5;k++){
+        const a=k*Math.PI*2/5;
+        sphere(avatarRoot,material("#f7dce8",.35),[x+Math.cos(a)*.045,2.47+Math.sin(a)*.045,.205],[.028,.035,.018]);
+      }
+    }
+  }else if(state.hairAccessory==="bow"){
+    sphere(avatarRoot,material("#d879a9",.35),[-.2,2.44,.19],[.075,.045,.025]);
+    sphere(avatarRoot,material("#d879a9",.35),[-.29,2.47,.19],[.065,.045,.025],[0,0,-.45]);
+    sphere(avatarRoot,material("#d879a9",.35),[-.11,2.47,.19],[.065,.045,.025],[0,0,.45]);
+  }else if(state.hairAccessory==="crown"){
+    curveTube([[-.25,2.42,.13],[-.18,2.52,.17],[0,2.57,.2],[.18,2.52,.17],[.25,2.42,.13]],gold,.025);
+    for(const x of [-.18,0,.18])sphere(avatarRoot,material("#e6a2c5",.25),[x,2.54+(.18-Math.abs(x))*.15,.2],[.025,.04,.02]);
+  }else{
+    curveTube([[-.23,2.43,.13],[0,2.51,.22],[.23,2.43,.13]],gold,.018);
+    sphere(avatarRoot,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
+  }
   // Corsage et détails précieux
   sphere(avatarRoot,trim,[0,1.52,.17],[.035,.16,.018]);
   for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
