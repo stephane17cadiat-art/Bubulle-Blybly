@@ -366,14 +366,14 @@
 .memory-celebration-card button{border:0;border-radius:999px;padding:11px 19px;background:linear-gradient(100deg,#d77eaf,#a982cf);color:#fff;font-weight:800;box-shadow:0 5px 15px #b36b9c55}
 .memory-fireworks{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .memory-firework{position:absolute;width:1px;height:1px}
-.memory-firework i{position:absolute;left:0;top:0;width:var(--spark-size);height:22px;margin:-11px 0 0 -1px;border-radius:100%;transform-origin:50% 50%;background:linear-gradient(to top,transparent 0%,currentColor 45%,#fff 100%);box-shadow:0 0 7px currentColor,0 0 15px currentColor;opacity:0;animation:memoryFirework 1.9s cubic-bezier(.12,.62,.24,1) var(--delay) both}
+.memory-firework i{position:absolute;left:0;top:0;width:var(--spark-size);height:34px;margin:-17px 0 0 -1px;border-radius:100%;transform-origin:50% 50%;background:linear-gradient(to top,transparent 0%,currentColor 42%,#fff 100%);box-shadow:0 0 9px currentColor,0 0 19px currentColor,0 0 30px currentColor;opacity:0;animation:memoryFirework 2.7s cubic-bezier(.12,.62,.24,1) var(--delay) both}
 .memory-firework i:nth-of-type(3n){color:#c9a1ff}
 .memory-firework i:nth-of-type(3n + 1){color:#fff}
 .memory-firework i:nth-of-type(3n + 2){color:#ff8ecb}
-.memory-firework-ring{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border:2px solid #fff;border-radius:50%;opacity:0;box-shadow:0 0 12px #fff,0 0 22px #ff9bd2;animation:memoryFireworkRing 1.25s ease-out var(--delay) both}
-.memory-firework-flash{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 12px 5px #fff,0 0 28px 12px #ff9bd2;animation:memoryFireworkFlash .65s ease-out var(--delay) both}
-@keyframes memoryFirework{0%{opacity:0;transform:rotate(var(--angle)) translateY(0) scale(.25)}9%{opacity:1}24%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.12)}}
-@keyframes memoryFireworkRing{0%{opacity:.95;transform:scale(.2)}100%{opacity:0;transform:scale(22)}}
+.memory-firework-ring{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border:2px solid #fff;border-radius:50%;opacity:0;box-shadow:0 0 12px #fff,0 0 22px #ff9bd2;animation:memoryFireworkRing 2s ease-out var(--delay) both}
+.memory-firework-flash{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 12px 5px #fff,0 0 28px 12px #ff9bd2;animation:memoryFireworkFlash .9s ease-out var(--delay) both}
+@keyframes memoryFirework{0%{opacity:0;transform:rotate(var(--angle)) translateY(0) scale(.25)}9%{opacity:1}24%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.08)}}
+@keyframes memoryFireworkRing{0%{opacity:.95;transform:scale(.2)}100%{opacity:0;transform:scale(30)}}
 @keyframes memoryFireworkFlash{0%{opacity:1;transform:scale(.3)}35%{opacity:1;transform:scale(1.8)}100%{opacity:0;transform:scale(.2)}}
 @keyframes memoryCardPop{0%{opacity:0;transform:translateY(18px) scale(.82)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes memoryHeartBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.07)}}
