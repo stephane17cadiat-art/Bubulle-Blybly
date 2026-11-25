@@ -137,6 +137,58 @@ function listen(){
     say("syncStatus","● Partie synchronisée");
   },e=>say("syncStatus","● Erreur de synchronisation"));
 }
+
+function drawLivingMapRoute(){
+  const map=$("map");
+  if(!map)return;
+  map.querySelector(".map-route-svg")?.remove();
+  const stops=[...map.querySelectorAll(".map-stop")];
+  if(stops.length<2)return;
+  const bounds=map.getBoundingClientRect();
+  const width=map.clientWidth,height=map.clientHeight;
+  if(!width||!height)return;
+  const points=stops.map(stop=>{
+    const r=stop.getBoundingClientRect();
+    return {x:r.left-bounds.left+r.width/2,y:r.top-bounds.top+r.height/2};
+  });
+  let d="M "+points[0].x+" "+points[0].y;
+  for(let i=1;i<points.length;i++){
+    const prev=points[i-1],cur=points[i];
+    const midX=(prev.x+cur.x)/2,midY=(prev.y+cur.y)/2;
+    d+=i===1?" L "+midX+" "+midY:" Q "+prev.x+" "+prev.y+" "+midX+" "+midY;
+  }
+  const last=points[points.length-1];
+  d+=" L "+last.x+" "+last.y;
+  const ns="http://www.w3.org/2000/svg";
+  const svg=document.createElementNS(ns,"svg");
+  svg.setAttribute("class","map-route-svg");
+  svg.setAttribute("viewBox",`0 0 ${width} ${height}`);
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.setAttribute("aria-hidden","true");
+  const glow=document.createElementNS(ns,"path");
+  glow.setAttribute("d",d);glow.setAttribute("class","map-route-glow");
+  const base=document.createElementNS(ns,"path");
+  base.setAttribute("d",d);base.setAttribute("class","map-route-base");
+  const progress=document.createElementNS(ns,"path");
+  progress.setAttribute("d",d);progress.setAttribute("class","map-route-progress");
+  svg.append(glow,base,progress);
+  map.insertBefore(svg,map.firstChild);
+  const total=progress.getTotalLength();
+  const mine=roomData?.players?.[myRole];
+  let contiguous=0;
+  while(mine?.completed?.includes(contiguous))contiguous++;
+  progress.style.strokeDasharray=total+" "+total;
+  progress.style.strokeDashoffset=String(total-total*(contiguous/Math.max(1,stops.length-1)));
+  const marker=document.createElementNS(ns,"circle");
+  const currentIndex=Math.min(mine?.stage??0,points.length-1);
+  marker.setAttribute("cx",points[currentIndex].x);
+  marker.setAttribute("cy",points[currentIndex].y);
+  marker.setAttribute("r","3.2");
+  marker.setAttribute("class","map-route-marker");
+  svg.appendChild(marker);
+}
+window.addEventListener("resize",()=>drawLivingMapRoute());
+
 function render(){
   const p=roomData.players;
   // Chaque appareil affiche uniquement le profil de la joueuse connectée.
@@ -185,6 +237,7 @@ function render(){
         : `<span class="map-number">${i+1}</span><span class="emoji">✧</span><small>Secret à découvrir</small><span class="map-state">🔒</span>`;
     $("map").appendChild(el);
   });
+  drawLivingMapRoute();
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
   if(mine.stage>=stages.length) openFinale(false);
