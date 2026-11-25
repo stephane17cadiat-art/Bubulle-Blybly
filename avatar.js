@@ -292,7 +292,6 @@ function buildAvatar() {
     sphere(avatarRoot,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
   }
   // Corsage et détails précieux
-  sphere(avatarRoot,trim,[0,1.52,.17],[.035,.16,.018]);
   for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
   // Ailes féeriques sculptées, avec contours et nervures visibles.
   if(state.wings!=="none"){
