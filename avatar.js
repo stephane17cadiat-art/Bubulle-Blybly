@@ -21,6 +21,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
+let companionMotion = null;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -306,30 +307,89 @@ function buildAvatar() {
       sphere(avatarRoot,gem,[0,1.66,.23],[.029,.038,.02]);
     }
   }
-  // Compagnon miniature assorti
+  // Compagnon 3D détaillé : volumes doux, museau, yeux brillants et petits mouvements.
+  companionMotion=null;
   if(state.companion!=="none"){
-    const colors={rabbit:"#eee5df",cat:"#8e879d",fox:"#d98443",fawn:"#c99b70",dragon:"#79b99c",unicorn:"#eee0f5"};
-    const pet=material(colors[state.companion]||"#eee5df",.55),x=.78;
-    sphere(avatarRoot,pet,[x,.55,.1],[.17,.23,.16]);
-    sphere(avatarRoot,pet,[x,.82,.12],[.16,.16,.15]);
-    sphere(avatarRoot,eye,[x-.055,.84,.25],[.018,.025,.012]);
-    sphere(avatarRoot,eye,[x+.055,.84,.25],[.018,.025,.012]);
-    if(state.companion==="rabbit"){
-      sphere(avatarRoot,pet,[x-.07,1.08,.1],[.045,.19,.045]);
-      sphere(avatarRoot,pet,[x+.07,1.08,.1],[.045,.19,.045]);
-    }else if(state.companion==="cat"||state.companion==="fox"){
-      for(const side of [-1,1])addMesh(avatarRoot,new THREE.ConeGeometry(.065,.15,16),pet,[x+side*.1,.98,.12]);
-    }else if(state.companion==="unicorn")addMesh(avatarRoot,new THREE.ConeGeometry(.035,.18,16),gold,[x,1.02,.13]);
-    else if(state.companion==="fawn"){
-      for(const side of [-1,1]){
-        cylinderBetween(avatarRoot,pet,[x+side*.07,.93,.1],[x+side*.14,1.12,.08],.018,.012);
-        sphere(avatarRoot,material("#f5e1bd"),[x+side*.14,1.13,.08],[.035,.045,.03]);
-      }
-      sphere(avatarRoot,material("#f2d5b5"),[x,.78,.25],[.035,.045,.018]);
-    }else if(state.companion==="dragon"){
-      for(const side of [-1,1]) addMesh(avatarRoot,new THREE.ConeGeometry(.07,.18,12),material("#5f9e85"),[x+side*.11,1.0,-.02],[1,1,1],[0,0,side*.55]);
-      sphere(avatarRoot,material("#e6c47c"),[x,.58,.25],[.035,.025,.018]);
+    const x=.78, petRoot=new THREE.Group();petRoot.position.set(x,0,.1);avatarRoot.add(petRoot);
+    const colors={rabbit:"#eee5df",cat:"#9690a8",fox:"#d98443",fawn:"#c99b70",dragon:"#79b99c",unicorn:"#eee0f5"};
+    const coat=material(colors[state.companion]||"#eee5df",.72), lightCoat=material(state.companion==="fox"?"#fff0dc":state.companion==="dragon"?"#c5ead7":"#fff7ef",.82);
+    const darkEye=material("#302637",.18), nose=material(state.companion==="fox"?"#3a2830":"#9d6878",.28);
+    const inner=material("#d99eae",.65), goldPet=material("#f0d58d",.25,{metalness:.35});
+    const petBall=(mat,pos,scale)=>sphere(petRoot,mat,pos,scale);
+    const petTube=(points,mat,r)=>{const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return addMesh(petRoot,new THREE.TubeGeometry(c,24,r,8,false),mat);};
+    // Corps, poitrail et tête avec proportions de petit animal.
+    petBall(coat,[0,.52,0],[.17,.22,.15]);
+    petBall(lightCoat,[0,.49,.128],[.105,.15,.045]);
+    const head=new THREE.Group();head.position.set(0,.79,.015);petRoot.add(head);
+    sphere(head,coat,[0,0,0],[.155,.15,.14]);
+    sphere(head,lightCoat,[0,-.055,.115],[.105,.075,.055]);
+    for(const side of [-1,1]){
+      sphere(head,darkEye,[side*.058,.025,.132],[.022,.03,.014]);
+      sphere(head,material("#ffffff",.2),[side*.064,.037,.145],[.007,.009,.006]);
+      sphere(head,inner,[side*.112,-.045,.105],[.035,.028,.018]);
+      cylinderBetween(petRoot,coat,[side*.09,.38,.02],[side*.105,.20,.07],.045,.035);
+      sphere(petRoot,coat,[side*.105,.19,.09],[.052,.045,.07]);
     }
+    sphere(head,nose,[0,-.055,.174],[.023,.017,.014]);
+    petTube([[-.025,-.095,.17],[0,-.11,.18],[.025,-.095,.17]],darkEye,.005);
+    const ears=[],wings=[],tailParts=[];
+    if(state.companion==="rabbit"){
+      for(const side of [-1,1]){
+        const ear=new THREE.Group();ear.position.set(side*.075,.105,0);head.add(ear);ears.push(ear);
+        sphere(ear,coat,[0,.105,0],[.045,.145,.038]);
+        sphere(ear,inner,[0,.11,.032],[.024,.105,.012]);
+        ear.rotation.z=side*.10;
+      }
+      sphere(petRoot,lightCoat,[0,.37,.14],[.075,.07,.045]);
+    }else if(state.companion==="cat"){
+      for(const side of [-1,1]){
+        const ear=new THREE.Group();ear.position.set(side*.095,.105,0);head.add(ear);ears.push(ear);
+        addMesh(ear,new THREE.ConeGeometry(.065,.16,20),coat,[0,.065,0]);
+        addMesh(ear,new THREE.ConeGeometry(.034,.105,16),inner,[0,.067,.035]);
+      }
+      petTube([[0,.43,-.08],[.18,.48,-.12],[.24,.68,-.08],[.18,.78,-.02]],coat,.035);
+      sphere(petRoot,coat,[.18,.78,-.02],[.045,.045,.045]);
+      for(let side of [-1,1])petTube([[side*.07,.75,.14],[side*.18,.73,.13]],lightCoat,.004);
+    }else if(state.companion==="fox"){
+      for(const side of [-1,1]){
+        const ear=new THREE.Group();ear.position.set(side*.095,.10,0);head.add(ear);ears.push(ear);
+        addMesh(ear,new THREE.ConeGeometry(.065,.17,20),coat,[0,.065,0]);
+        addMesh(ear,new THREE.ConeGeometry(.032,.105,16),inner,[0,.065,.035]);
+      }
+      // Museau allongé et masque clair caractéristique du renard.
+      sphere(head,lightCoat,[0,-.065,.14],[.085,.055,.09]);
+      const tail=new THREE.Group();tail.position.set(0,.43,-.10);petRoot.add(tail);tailParts.push(tail);
+      petTube([[0,0,0],[.12,.08,-.08],[.20,.23,-.12],[.12,.34,-.12]],coat,.075);
+      sphere(tail,lightCoat,[.12,.34,-.12],[.065,.07,.07]);
+    }else if(state.companion==="fawn"){
+      for(const side of [-1,1]){
+        const ear=new THREE.Group();ear.position.set(side*.12,.025,0);head.add(ear);ears.push(ear);
+        sphere(ear,coat,[side*.045,.015,0],[.09,.045,.035]);
+        sphere(ear,inner,[side*.045,.018,.03],[.06,.027,.012]);
+        petTube([[side*.09,.13,-.02],[side*.12,.23,-.04],[side*.10,.28,-.04]],goldPet,.012);
+        sphere(head,material("#fff0d9"),[side*.07,-.02,.129],[.018,.018,.01]);
+      }
+      for(let i=0;i<5;i++)sphere(petRoot,lightCoat,[(i-2)*.045,.60,.14],[.018,.022,.012]);
+      sphere(head,lightCoat,[0,-.07,.14],[.08,.05,.07]);
+    }else if(state.companion==="dragon"){
+      for(const side of [-1,1]){
+        const wing=new THREE.Group();wing.position.set(side*.10,.02,-.08);petRoot.add(wing);wings.push(wing);
+        const shape=new THREE.Shape();shape.moveTo(0,0);shape.lineTo(side*.13,.12);shape.lineTo(side*.28,.19);shape.lineTo(side*.22,.04);shape.lineTo(side*.12,-.04);shape.closePath();
+        addMesh(wing,new THREE.ShapeGeometry(shape),material("#5f9e85",.35,{side:THREE.DoubleSide}),[0,.12,0]);
+        petTube([[0,.12,0],[side*.13,.23,0],[side*.28,.31,0]],lightCoat,.009);
+      }
+      for(const side of [-1,1])addMesh(head,new THREE.ConeGeometry(.035,.11,12),goldPet,[side*.09,.12,-.015],[1,1,1],[0,0,side*.5]);
+      const tail=new THREE.Group();tail.position.set(0,.44,-.1);petRoot.add(tail);tailParts.push(tail);
+      petTube([[0,0,0],[.10,-.05,-.10],[.18,.03,-.15],[.22,.15,-.15]],coat,.035);
+      addMesh(tail,new THREE.ConeGeometry(.045,.13,12),goldPet,[.22,.19,-.15],[1,1,1],[0,0,-.7]);
+    }else if(state.companion==="unicorn"){
+      const horn=addMesh(head,new THREE.ConeGeometry(.027,.19,20),goldPet,[0,.19,.015],[1,1,1],[0,0,0]);
+      horn.rotation.z=-.12;
+      petTube([[-.12,.61,-.04],[-.17,.50,-.02],[-.15,.40,0]],material("#d7a3d0",.4),.025);
+      petTube([[.12,.61,-.04],[.17,.50,-.02],[.15,.40,0]],material("#a9b9e8",.4),.025);
+      for(let side of [-1,1])sphere(head,material("#f5c4de"),[side*.10,-.09,.10],[.03,.025,.018]);
+    }
+    companionMotion={head,ears,wings,tailParts,petRoot,kind:state.companion};
   }
   // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
@@ -441,6 +501,7 @@ function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
+  if(companionMotion){const p=companionMotion; p.head.rotation.z=Math.sin(t*2.1)*.035; for(let i=0;i<p.ears.length;i++){const side=i===0?-1:1;p.ears[i].rotation.z=side*(.10+Math.sin(t*3+i)*.07);} for(let i=0;i<p.wings.length;i++){p.wings[i].rotation.y=Math.sin(t*10+i)*.48;} for(let i=0;i<p.tailParts.length;i++){p.tailParts[i].rotation.x=Math.sin(t*2.4+i)*.13;p.tailParts[i].rotation.z=Math.sin(t*1.8+i)*.12;} p.petRoot.position.y=Math.sin(t*2)*.018;}
   if(avatarRoot){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
     if(Date.now()<danceUntil){avatarRoot.rotation.y+=.035;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.1;leftArm.rotation.z=Math.sin(t*12)*.45-.35;rightArm.rotation.z=-Math.sin(t*12)*.45+.35;}
