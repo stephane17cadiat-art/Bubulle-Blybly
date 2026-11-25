@@ -1,4 +1,5 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/GLTFLoader.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -20,7 +21,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let scene, camera, renderer, avatarRoot, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
+let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
   return new THREE.MeshStandardMaterial({color,roughness,...extra});
@@ -228,6 +229,46 @@ function buildAvatar() {
   const ring=material("#e5c47b",.28,{metalness:.45});
   addMesh(avatarRoot,new THREE.TorusGeometry(.59,.014,8,64),ring,[0,.12,0],[1,.45,1]);
 }
+async function loadRealisticCharacter(){
+  if(realisticReady || !scene) return;
+  status("✨ Chargement du modèle 3D détaillé…");
+  const loader=new GLTFLoader();
+  try{
+    const gltf=await loader.loadAsync("https://grab3d.com/dl/elf-rigged/elf-rigged.glb");
+    realisticRoot=gltf.scene;
+    const bounds=new THREE.Box3().setFromObject(realisticRoot);
+    const size=bounds.getSize(new THREE.Vector3());
+    const center=bounds.getCenter(new THREE.Vector3());
+    const targetHeight=2.48;
+    realisticRoot.scale.setScalar(targetHeight/size.y);
+    realisticRoot.position.set(-center.x*realisticRoot.scale.x,-bounds.min.y*realisticRoot.scale.y,-center.z*realisticRoot.scale.z);
+    realisticRoot.visible=false;
+    realisticRoot.traverse(obj=>{
+      if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;
+        const mats=Array.isArray(obj.material)?obj.material:[obj.material];
+        mats.forEach(m=>{if(m && m.name && /tunic|cloth|fabric|shirt|linen/i.test(m.name)){m.color?.set(state.outfitColor);m.needsUpdate=true;}});
+      }
+    });
+    scene.add(realisticRoot);
+    if(gltf.animations?.length){realisticMixer=new THREE.AnimationMixer(realisticRoot);realisticAction=realisticMixer.clipAction(gltf.animations[0]);}
+    realisticReady=true;
+    status("✓ Modèle 3D détaillé chargé — tu peux l’essayer dans le miroir.");
+    $("realisticBtn").disabled=false;
+  }catch(error){
+    console.warn("Le modèle 3D détaillé n’a pas pu être chargé :",error);
+    status("Le modèle détaillé n’est pas disponible ici ; le miroir classique reste utilisable.");
+    $("realisticBtn").disabled=true;
+  }
+}
+function toggleRealisticCharacter(){
+  if(!realisticReady)return;
+  realisticVisible=!realisticVisible;
+  if(avatarRoot)avatarRoot.visible=!realisticVisible;
+  realisticRoot.visible=realisticVisible;
+  $("realisticBtn").textContent=realisticVisible?"🌸 Revenir à mon avatar":"✨ Essayer le modèle réaliste";
+  if(realisticVisible && realisticAction)realisticAction.reset().fadeIn(.25).play();
+  else if(realisticAction)realisticAction.fadeOut(.2);
+}
 function initScene(){
   const host=$("avatarView");
   scene=new THREE.Scene();
@@ -239,7 +280,7 @@ function initScene(){
   const fill=new THREE.PointLight(0x9edfd0,35,9);fill.position.set(3,2,2);scene.add(fill);
   const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,48),material("#b6a0ca",.9,{transparent:true,opacity:.15}));
   floor.rotation.x=-Math.PI/2;floor.position.y=.08;scene.add(floor);
-  clock=new THREE.Clock();buildAvatar();resize();
+  clock=new THREE.Clock();buildAvatar();resize();loadRealisticCharacter();
   const observer=new ResizeObserver(resize);observer.observe(host);
   renderer.domElement.addEventListener("pointerdown",e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
   renderer.domElement.addEventListener("pointermove",e=>{if(!dragging)return;avatarRoot.rotation.y+=(e.clientX-lastX)*.012;lastX=e.clientX;lastY=e.clientY});
@@ -254,7 +295,7 @@ function resize(){
 }
 function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
-  const t=clock.getElapsedTime();
+  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   if(avatarRoot){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
     if(Date.now()<danceUntil){avatarRoot.rotation.y+=.035;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.1;leftArm.rotation.z=Math.sin(t*12)*.45-.35;rightArm.rotation.z=-Math.sin(t*12)*.45+.35;}
@@ -309,6 +350,7 @@ async function start(){
 }
 for(const key of Object.keys(defaults)) $(key).addEventListener("change",changed);
 $("saveBtn").addEventListener("click",saveAvatar);
-$("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;});
+$("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;if(realisticVisible&&realisticAction){realisticAction.reset().fadeIn(.2).play();}});
+$("realisticBtn").addEventListener("click",toggleRealisticCharacter);
 $("resetViewBtn").addEventListener("click",()=>{if(avatarRoot)avatarRoot.rotation.y=0;if(camera){camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);}});
 start();
