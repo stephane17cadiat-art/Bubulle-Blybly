@@ -208,7 +208,7 @@ function openFinale(preview=false){
 }
 $("finaleTestBtn").addEventListener("click",()=>openFinale(true));
 $("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
-$("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});\n
+$("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
 const albumGroups = [
   {title:"Les premiers pas",subtitle:"Les cinq premières découvertes",start:0,end:4},
   {title:"Chapitre 1 · La forêt des secrets",subtitle:"Là où la magie commence",start:5,end:8},
