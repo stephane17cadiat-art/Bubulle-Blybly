@@ -103,12 +103,7 @@ function buildAvatar() {
   sphere(avatarRoot,skin,[0,1.78,0],[.095,.13,.09]);
   // Fine bordure et plis lumineux sur la jupe
   const trim=material("#f3dcae",.38,{metalness:.18});
-  const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.49,.018,8,64),trim,[0,.47,0]);hem.scale.z=.78;
-  // Plis de robe discrets : on évite les longues lignes tubulaires qui traversaient le modèle.
-  for(let i=0;i<8;i++){
-    const a=i*Math.PI/4;
-    curveTube([[Math.sin(a)*.19,.58,Math.cos(a)*.15],[Math.sin(a)*.28,.82,Math.cos(a)*.22],[Math.sin(a)*.39,1.12,Math.cos(a)*.29],[Math.sin(a)*.47,1.48,Math.cos(a)*.35]],material(state.outfitColor,.58),.008);
-  }
+  // Aucun trait tubulaire sur la jupe : la robe reste lisse et nette.
   // Bras fins, épaules et mains
   leftArm=new THREE.Group();leftArm.position.set(-.25,1.62,0);avatarRoot.add(leftArm);
   sphere(leftArm,skin,[0,-.05,0],[.105,.13,.11]);
@@ -230,8 +225,7 @@ function buildAvatar() {
       sphere(avatarRoot,material("#e6c47c"),[x,.58,.25],[.035,.025,.018]);
     }
   }
-  const ring=material("#e5c47b",.28,{metalness:.45});
-  addMesh(avatarRoot,new THREE.TorusGeometry(.59,.014,8,64),ring,[0,.12,0],[1,.45,1]);
+  // Pas d'anneau au pied du personnage pour garder le miroir épuré.
 }
 async function loadRealisticCharacter(){
   if(realisticReady || !scene) return;
