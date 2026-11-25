@@ -545,6 +545,29 @@ function buildRealisticLook(g){
     const toe=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),bootMat);toe.scale.set(.075,.055,.14);toe.position.set(side*.105,.055,.075);g.add(toe);
     const shoeTrim=new THREE.Mesh(new THREE.TorusGeometry(.067,.009,6,24),gold);shoeTrim.position.set(side*.105,.245,.005);shoeTrim.rotation.x=Math.PI/2;g.add(shoeTrim);
     if(outfit==="princess"||outfit==="boho"){const rosette=new THREE.Mesh(new THREE.SphereGeometry(.035,12,10),gem);rosette.position.set(side*.105,.13,.073);g.add(rosette);}
+    // Brides et petits lacets pour donner du relief aux bottines.
+    const ankleBand=new THREE.Mesh(new THREE.TorusGeometry(.068,.009,6,24),gold);ankleBand.position.set(side*.105,.205,.005);ankleBand.rotation.x=Math.PI/2;g.add(ankleBand);
+    for(let lace=0;lace<3;lace++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.009,8,8),gold);dot.position.set(side*.105+(lace%2?-.018:.018),.12+Math.floor(lace/2)*.035,.067);g.add(dot);}
+    if(outfit==="princess"||outfit==="magic"){const heel=new THREE.Mesh(new THREE.BoxGeometry(.055,.055,.075),bootMat);heel.position.set(side*.105,.027,-.045);g.add(heel);}
+  }
+  // Broderies délicates en éventail sur le devant de la jupe.
+  const embroidery=new THREE.MeshPhysicalMaterial({color:outfit==="forest"?"#d7e8b9":outfit==="boho"?"#f1d5ad":"#f6dfb6",metalness:.22,roughness:.36,emissive:outfit==="magic"?"#8e79c7":"#000000",emissiveIntensity:.12});
+  for(let row=0;row<3;row++){
+    const y=.72+row*.105;
+    const r=outfit==="princess"?.25+row*.075:outfit==="forest"?.19+row*.045:.22+row*.06;
+    for(let side=-2;side<=2;side++){
+      const bead=new THREE.Mesh(new THREE.SphereGeometry(.014,8,8),embroidery);
+      bead.position.set(side*.075,y,.12+Math.max(0,1-Math.abs(side)/3)*.018);
+      bead.scale.set(.8,1.35,.55);g.add(bead);
+    }
+    const stitch=new THREE.Mesh(new THREE.TorusGeometry(r,.006,5,40,Math.PI*.38),embroidery);
+    stitch.rotation.x=Math.PI/2;stitch.position.set(0,y-.025,.025);g.add(stitch);
+  }
+  // Petite broche florale au corsage et rubans satinés aux épaules.
+  const brooch=new THREE.Mesh(new THREE.OctahedronGeometry(.045,1),gem);brooch.position.set(0,1.43,.205);g.add(brooch);
+  for(const side of [-1,1]){
+    const ribbon=new THREE.Mesh(new THREE.TorusGeometry(.075,.012,6,24,Math.PI),cloth);
+    ribbon.position.set(side*.235,1.52,.045);ribbon.rotation.set(Math.PI/2,0,side*.22);g.add(ribbon);
   }
 }
 function buildRealisticAccessories(){
