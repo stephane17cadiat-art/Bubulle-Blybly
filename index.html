@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261125-next-stage">
+  <link rel="stylesheet" href="./style.css?v=20261125-grand-finale">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -35,7 +35,7 @@
     <section id="game" class="hidden">
       <div class="game-heading">
         <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
-        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button></div>
+        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="finaleTestBtn" class="secondary finale-test-btn">✨ Tester le grand final</button></div>
       </div>
       <div class="song-player"><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Notre chanson — bientôt</button><span id="songStatus" class="song-status" role="status">Le fichier audio sera ajouté dès que tu pourras nous l’envoyer.</span><audio id="bestiesSong" preload="none" src="./assets/notre-chanson.mp3"></audio></div>
       <div class="player-strip">
@@ -72,8 +72,22 @@
     </section>
     <footer class="site-footer">Fait avec ✨ pour Bubulle & Blybly</footer>
   </main>
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-card panel"><div class="modal-icon">👑</div><p class="eyebrow">TRÉSOR LÉGENDAIRE</p><h2>La Couronne des Besties !</h2><p>Vous avez exploré les cinq mondes. Votre duo entre dans la légende de la forêt enchantée.</p><button id="closeModal" class="primary">Hourra !</button></div>
+  <div id="modal" class="modal hidden finale-modal" role="dialog" aria-modal="true" aria-labelledby="finaleTitle">
+    <div class="modal-card panel finale-card">
+      <button id="closeModal" class="finale-close" aria-label="Fermer">×</button>
+      <p class="eyebrow">✦ LE TRÉSOR LÉGENDAIRE ✦</p>
+      <div class="finale-chest" aria-hidden="true"><span class="finale-chest-glow">✧</span><span class="finale-chest-icon">🎁</span><span class="finale-crown">👑</span></div>
+      <h2 id="finaleTitle">La Couronne des Besties !</h2>
+      <p class="finale-intro">Vous avez traversé les quatre chapitres et relevé les 21 énigmes. Le coffre légendaire s’ouvre enfin…</p>
+      <div class="royal-titles">
+        <div class="royal-title"><span>🧭</span><div><b>Bubulle</b><small>Gardien du cœur enchanté</small></div></div>
+        <div class="royal-title"><span>🌷</span><div><b>Blybly</b><small>Reine des étoiles et des fous rires</small></div></div>
+      </div>
+      <p class="finale-message">Deux chemins, mille éclats de rire et un trésor qui ne se mesure pas en points : votre belle complicité. Que la magie de votre duo continue de briller ! 💗</p>
+      <p id="finalePreviewNote" class="finale-preview-note hidden">Aperçu du grand final : aucune progression ni aucun score n’a été modifié.</p>
+      <button id="finaleReplayBtn" class="reward-replay">✨ Revoir l’ouverture du coffre</button>
+      <button id="finaleCelebrateBtn" class="primary">Hourra, vive les Besties !</button>
+    </div>
   </div>
   <div id="rewardModal" class="reward-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
     <section class="reward-card">
@@ -88,6 +102,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261125-next-stage"></script>
+  <script type="module" src="./app.js?v=20261125-grand-finale"></script>
 </body>
 </html>
