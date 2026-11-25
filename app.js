@@ -170,7 +170,7 @@ function render(){
   });
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
-  if(mine.stage>=stages.length) $("modal").classList.remove("hidden");
+  if(mine.stage>=stages.length) openFinale(false);
 }
 
 let activeReward = null;
@@ -191,6 +191,25 @@ const milestoneMessages = {
   15: "Tu approches du grand secret… Les étoiles sont de ton côté. 💫",
   21: "Le trésor légendaire est à portée de main : quelle belle aventure ! 👑"
 };
+
+let finalePreview = false;
+function replayFinaleAnimation(){
+  const chest=$("modal").querySelector(".finale-chest");
+  if(!chest) return;
+  chest.classList.remove("opening");
+  void chest.offsetWidth;
+  chest.classList.add("opening");
+}
+function openFinale(preview=false){
+  finalePreview=preview;
+  $("finalePreviewNote").classList.toggle("hidden",!preview);
+  $("modal").classList.remove("hidden");
+  replayFinaleAnimation();
+}
+$("finaleTestBtn").addEventListener("click",()=>openFinale(true));
+$("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
+$("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
+
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
@@ -280,4 +299,5 @@ $("hintBtn").addEventListener("click",()=>{const stage=Math.min(roomData.players
 $("nextBtn").addEventListener("click",()=>render());
 $("leaveBtn").addEventListener("click",()=>{if(unsubscribe)unsubscribe();history.replaceState({},"",location.pathname);location.reload()});
 $("closeModal").addEventListener("click",()=>hide("modal"));
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal") hide("modal");});
 boot();
