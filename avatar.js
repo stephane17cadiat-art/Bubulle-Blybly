@@ -21,7 +21,7 @@ const defaults = {
   outfit:"princess",outfitColor:"#d98ab9",wings:"fairy",companion:"none",theme:"forest"
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
-let companionMotion = null, faceBlinkMeshes = [], hairMotionMesh = null;
+let companionMotion = null, faceBlinkMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, faceAction = "smile", faceActionUntil = 0;
 let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
@@ -45,7 +45,7 @@ function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   return mesh;
 }
 function buildAvatar() {
-  faceBlinkMeshes = []; hairMotionMesh = null;
+  faceBlinkMeshes = []; hairMotionMesh = null; faceSmileMesh = null; kissPucker = null;
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.58), hair=material(state.hairColor,.34,{metalness:.04}), dress=material(state.outfitColor,.34,{metalness:.07}), dark=material("#342536");
@@ -195,7 +195,8 @@ function buildAvatar() {
   // Nez délicat et sourire discret, plutôt qu'une simple pastille.
   sphere(avatarRoot,skin,[0,2.085,.273],[.025,.043,.032]);
   sphere(avatarRoot,material("#d99a91",.65),[0,2.055,.297],[.012,.008,.006]);
-  curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
+  faceSmileMesh=curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
+  kissPucker=sphere(avatarRoot,lip,[0,1.985,.278],[.001,.001,.001]);
   curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
   sphere(avatarRoot,blush,[-.19,2.04,.205],[.045,.022,.012]);
   sphere(avatarRoot,blush,[.19,2.04,.205],[.045,.022,.012]);
@@ -559,10 +560,27 @@ function animate(){
   const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
-  if(faceBlinkMeshes.length){const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;for(const eyeMesh of faceBlinkMeshes)eyeMesh.scale.y=.076*(1-.88*blink);}
+  if(faceBlinkMeshes.length){
+    const blinkPhase=(t%4.7);const blink=blinkPhase>4.48&&blinkPhase<4.62?Math.sin((blinkPhase-4.48)/.14*Math.PI):0;
+    for(let i=0;i<faceBlinkMeshes.length;i++){
+      const wink=faceAction==="wink"&&Date.now()<faceActionUntil&&i===1?1:0;
+      faceBlinkMeshes[i].scale.y=.076*(1-.88*Math.max(blink,wink));
+    }
+  }
+  const expressionActive=Date.now()<faceActionUntil;
+  if(faceSmileMesh){
+    const laughing=faceAction==="laugh"&&expressionActive;
+    faceSmileMesh.scale.set(laughing?1.45:1,laughing?1.7:1,1);
+  }
+  if(kissPucker){
+    const kissing=faceAction==="kiss"&&expressionActive;
+    kissPucker.scale.set(kissing?.028:0.001,kissing?.022:0.001,kissing?.012:0.001);
+  }
   if(companionMotion){const p=companionMotion; p.head.rotation.z=Math.sin(t*2.1)*.035; for(let i=0;i<p.ears.length;i++){const side=i===0?-1:1;p.ears[i].rotation.z=side*(.10+Math.sin(t*3+i)*.07);} for(let i=0;i<p.wings.length;i++){p.wings[i].rotation.y=Math.sin(t*10+i)*.48;} for(let i=0;i<p.tailParts.length;i++){p.tailParts[i].rotation.x=Math.sin(t*2.4+i)*.13;p.tailParts[i].rotation.z=Math.sin(t*1.8+i)*.12;} p.petRoot.position.y=Math.sin(t*2)*.018;}
   if(avatarRoot){
     avatarRoot.position.y=Math.sin(t*1.5)*.035;
+    if(faceAction==="laugh"&&Date.now()<faceActionUntil){avatarRoot.position.y+=Math.abs(Math.sin(t*13))*.035;avatarRoot.rotation.z=Math.sin(t*12)*.018;}
+    else avatarRoot.rotation.z=THREE.MathUtils.lerp(avatarRoot.rotation.z,0,.12);
     if(Date.now()<danceUntil){avatarRoot.rotation.y+=.035;avatarRoot.position.y+=Math.abs(Math.sin(t*9))*.1;leftArm.rotation.z=Math.sin(t*12)*.45-.35;rightArm.rotation.z=-Math.sin(t*12)*.45+.35;}
     else {leftArm.rotation.z=THREE.MathUtils.lerp(leftArm.rotation.z,0,.08);rightArm.rotation.z=THREE.MathUtils.lerp(rightArm.rotation.z,0,.08);}
   }
@@ -616,6 +634,14 @@ async function start(){
 for(const key of Object.keys(defaults)) $(key).addEventListener("change",changed);
 $("saveBtn").addEventListener("click",saveAvatar);
 $("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;if(realisticVisible&&realisticAction){realisticAction.reset().fadeIn(.2).play();}});
+function playFace(action){
+  faceAction=action;faceActionUntil=Date.now()+(action==="smile"?2200:action==="wink"?950:action==="laugh"?1900:1400);
+  if(action==="kiss"&&avatarRoot)avatarRoot.rotation.y+=.08;
+}
+$("smileBtn").addEventListener("click",()=>playFace("smile"));
+$("winkBtn").addEventListener("click",()=>playFace("wink"));
+$("laughBtn").addEventListener("click",()=>playFace("laugh"));
+$("kissBtn").addEventListener("click",()=>playFace("kiss"));
 $("realisticBtn").addEventListener("click",toggleRealisticCharacter);
 $("resetViewBtn").addEventListener("click",()=>{if(avatarRoot)avatarRoot.rotation.y=0;if(camera){camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);}});
 start();
