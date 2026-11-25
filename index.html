@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261125-fireworks-final">
+  <link rel="stylesheet" href="./style.css?v=20261125-home-enchanted">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -16,20 +16,39 @@
       <div class="top-gem"><span class="heart-bow-mark" aria-label="Cœur rose avec un nœud">💗<i>🎀</i></span></div>
     </header>
 
-    <section id="welcome" class="panel hero">
-      <div class="hero-art">🏰<span>✨</span><i>🌲</i></div>
-      <p class="eyebrow">LE ROYAUME ENCHANTÉ VOUS ATTEND</p>
-      <h2>La Forêt des Trésors</h2>
-      <p class="intro">Deux aventurières, quatre chapitres, 21 énigmes et une couronne légendaire à retrouver.</p>
-      <div class="welcome-actions">
-        <button id="createBtn" class="primary">Créer une aventure <span>✦</span></button>
+    <section id="welcome" class="panel hero enchanted-home">
+      <div class="home-scene" aria-hidden="true">
+        <div class="home-moon"></div><span class="home-star star-one">✦</span><span class="home-star star-two">✧</span><span class="home-star star-three">✦</span><span class="home-star star-four">✧</span>
+        <div class="home-hills hill-back"></div><div class="home-hills hill-front"></div>
+        <div class="home-tree tree-left">♠</div><div class="home-tree tree-right">♠</div>
+        <svg class="home-castle" viewBox="0 0 320 190">
+          <defs><linearGradient id="castleStone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4d9ed"/><stop offset="1" stop-color="#a98ac7"/></linearGradient><linearGradient id="castleRoof" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7b6d8"/><stop offset="1" stop-color="#9165ae"/></linearGradient></defs>
+          <path d="M73 168V78h42V168M205 168V78h42V168M111 168V100h98v68" fill="url(#castleStone)" stroke="#fff0f8" stroke-width="3"/>
+          <path d="M63 80L94 24l31 56ZM195 80l31-56 31 56Z" fill="url(#castleRoof)" stroke="#ffe6f4" stroke-width="3"/>
+          <path d="M143 100V57h34v43M137 57l23-39 23 39Z" fill="url(#castleStone)" stroke="#fff0f8" stroke-width="3"/>
+          <path d="M145 168v-35q15-24 30 0v35" fill="#67466f" stroke="#fff0f8" stroke-width="3"/>
+          <g fill="#fff0c8"><path d="M91 90h7v16h-7zM222 90h7v16h-7zM156 72h7v13h-7z"/></g>
+          <g fill="#fff"><circle cx="94" cy="52" r="4"/><circle cx="226" cy="52" r="4"/><circle cx="160" cy="36" r="4"/></g>
+        </svg>
+        <div class="home-fireflies"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="home-ground-glow"></div>
+      </div>
+      <div class="home-copy">
+        <p class="eyebrow"><span>✧</span> UN SECRET SE CACHE DANS LA FORÊT <span>✧</span></p>
+        <h2>La Forêt des <em>Trésors</em></h2>
+        <p class="intro">Au bout du sentier, un royaume vous attend…<br>À deux, faites éclore la magie, résolvez 21 énigmes et découvrez votre trésor légendaire.</p>
+        <div class="home-chapter-tease"><span>🌲 La forêt</span><i>✦</i><span>🏰 Le château</span><i>✦</i><span>👑 Le trésor</span></div>
+      </div>
+      <div class="welcome-actions home-actions">
+        <button id="createBtn" class="primary home-create">Ouvrir le grimoire <span>✦</span></button>
+        <div class="home-divider"><span>OU REJOINDRE UNE AVENTURE</span></div>
         <div class="join-row">
-          <input id="inviteInput" type="text" placeholder="Code d’invitation" autocomplete="off" aria-label="Code d’invitation">
+          <input id="inviteInput" type="text" placeholder="Votre code secret…" autocomplete="off" aria-label="Code d’invitation">
           <button id="joinBtn" class="secondary">Rejoindre</button>
         </div>
       </div>
       <p id="welcomeMessage" class="message" role="status"></p>
-      <p class="fineprint">Accès par invitation · Sauvegarde automatique · iPhone & Android</p>
+      <p class="fineprint home-footnote"><span>✧</span> Une aventure à deux · Vos progrès sont sauvegardés <span>✧</span></p>
     </section>
 
     <section id="game" class="hidden">
