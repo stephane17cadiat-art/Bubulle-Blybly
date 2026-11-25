@@ -106,9 +106,9 @@
 /* Révélation spectaculaire du trésor : la couronne et le cœur sortent du coffre */
 .finale-chest.opening{animation:chestAnticipation .62s ease-in-out both}
 .finale-chest.opening .treasure-lid{animation:lidReveal 1.05s .08s cubic-bezier(.18,.86,.25,1.18) both}
-.treasure-pop{position:absolute;z-index:5;left:50%;top:35px;width:150px;height:105px;transform:translateX(-50%);opacity:0;pointer-events:none;filter:drop-shadow(0 0 13px #ffe8ad)}
+.treasure-pop{position:absolute;z-index:20;left:50%;top:25px;width:170px;height:120px;transform:translate(-50%,-66px);opacity:1;pointer-events:none;filter:drop-shadow(0 0 16px #ffe8ad);visibility:visible}
 .finale-chest.opening .treasure-pop{animation:treasureEmerge 1.35s .42s cubic-bezier(.16,.88,.24,1.22) forwards}
-.floating-crown{position:absolute;width:112px;height:84px;left:10px;top:0;overflow:visible;filter:drop-shadow(0 0 9px #f7d58b)}
+.floating-crown{position:absolute;width:132px;height:99px;left:8px;top:0;overflow:visible;filter:drop-shadow(0 0 12px #f7d58b)}
 .finale-chest.opening .floating-crown{animation:crownHover 2.4s 1.8s ease-in-out infinite}
 .floating-heart{position:absolute;width:48px;height:48px;right:0;top:18px;opacity:0;filter:drop-shadow(0 0 12px #ff9bd2)}
 .finale-chest.opening .floating-heart{animation:heartJoin .8s 1.25s cubic-bezier(.2,.9,.3,1.3) forwards,heartHover 2s 2.1s ease-in-out infinite}
@@ -122,7 +122,7 @@
 .spark-f{right:25px;top:76px;--sx:29px;--sy:26px;animation-delay:1.32s!important}
 @keyframes chestAnticipation{0%,100%{transform:translateX(0) rotate(0)}22%{transform:translateX(-3px) rotate(-1deg)}45%{transform:translateX(3px) rotate(1deg)}68%{transform:translateX(-2px) rotate(-.5deg)}}
 @keyframes lidReveal{0%{transform:translate(0,0) rotate(0)}18%{transform:translate(0,5px) rotate(2deg)}72%{transform:translate(-10px,-45px) rotate(-19deg)}100%{transform:translate(-8px,-39px) rotate(-15deg)}}
-@keyframes treasureEmerge{0%{opacity:0;transform:translate(-50%,40px) scale(.38)}58%{opacity:1;transform:translate(-50%,-47px) scale(1.12)}78%{transform:translate(-50%,-37px) scale(.96)}100%{opacity:1;transform:translate(-50%,-43px) scale(1)}}
+@keyframes treasureEmerge{0%{opacity:0;transform:translate(-50%,58px) scale(.28)}52%{opacity:1;transform:translate(-50%,-78px) scale(1.18)}76%{transform:translate(-50%,-59px) scale(.96)}100%{opacity:1;transform:translate(-50%,-66px) scale(1)}}
 @keyframes crownHover{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(3deg)}}
 @keyframes heartJoin{0%{opacity:0;transform:translate(10px,30px) scale(.25) rotate(-25deg)}70%{opacity:1;transform:translate(0,-8px) scale(1.2) rotate(9deg)}100%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}}
 @keyframes heartHover{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(7deg)}}
