@@ -128,7 +128,7 @@ async function joinRoom(code){
     history.replaceState({}, "", "?room="+roomId); enterGame(); listen();
   }catch(e){say("welcomeMessage",friendlyError(e));}
 }
-function enterGame(){hide("welcome");show("game");if ($("previewSurpriseBtn")) $("previewSurpriseBtn").classList.toggle("hidden", myRole !== "BUBULLE");}
+function enterGame(){hide("welcome");show("game");}
 function listen(){
   if(unsubscribe) unsubscribe();
   unsubscribe=onSnapshot(roomRef,snap=>{
@@ -148,7 +148,6 @@ function render(){
   $("blyblyStatus").textContent=p.BLYBLY.joined?"Dans l'aventure":"En attente";
   $("bubulleCard").classList.toggle("active",myRole==="BUBULLE");
   $("blyblyCard").classList.toggle("active",myRole==="BLYBLY");
-  if ($("previewSurpriseBtn")) $("previewSurpriseBtn").classList.toggle("hidden", myRole !== "BUBULLE");
   const mine=p[myRole], stage=Math.min(mine.stage,stages.length-1), s=stages[stage];
   $("stageLabel").textContent=`${s.chapter || "Premiers pas"} · ÉPREUVE ${stage+1} / ${stages.length}`;
   $("stagePlace").textContent=s.emoji+" "+s.place.toUpperCase();
@@ -267,17 +266,6 @@ async function resetGame(){
   }
 }
 $("resetGameBtn").addEventListener("click",resetGame);
-const previewSurpriseBtn = $("previewSurpriseBtn");
-if (previewSurpriseBtn) previewSurpriseBtn.addEventListener("click", () => {
-  activeReward = { reward: "💗 Cœur enchanté au nœud rose", owner: "Bubulle" };
-  $("rewardTitle").textContent = "✨ Aperçu de la surprise";
-  $("rewardOwner").textContent = "Voici l’animation qui accompagnera les trésors.";
-  $("rewardName").textContent = activeReward.reward;
-  $("rewardMessage").textContent = surpriseMessages[Math.floor(Math.random()*surpriseMessages.length)];
-  $("rewardModal").style.display = "grid";
-  show("rewardModal");
-  playRewardAnimation();
-});
 
 $("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
 $("createBtn").addEventListener("click",createRoom);
