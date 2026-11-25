@@ -206,7 +206,7 @@ function openFinale(preview=false){
   $("modal").classList.remove("hidden");
   replayFinaleAnimation();
 }
-$("finaleTestBtn").addEventListener("click",()=>openFinale(true));
+
 $("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
 $("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
 const albumGroups = [
