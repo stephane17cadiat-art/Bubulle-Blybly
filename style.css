@@ -600,3 +600,19 @@ body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphe
  .map-subtitle{max-width:245px;font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.map-stop,.map-stop.current{animation:none!important;transition:none!important}}
+
+
+/* Sentier doré continu entre les 21 étapes */
+.living-map{position:relative}
+.map-route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none}
+.map-route-svg path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.map-route-glow{stroke:#f7c9e9;stroke-width:9;opacity:.12;filter:blur(5px)}
+.map-route-base{stroke:#d9b6df;stroke-width:2.4;stroke-dasharray:3 8;opacity:.48}
+.map-route-progress{stroke:url(#mapRouteGold);stroke:#f5d58b;stroke-width:3.2;opacity:.95;filter:drop-shadow(0 0 4px #f7d58b88);transition:stroke-dashoffset .8s ease}
+.map-route-marker{fill:#fff4c6;stroke:#f5b8dc;stroke-width:2;filter:drop-shadow(0 0 6px #f7d58b);animation:mapMarkerGlow 1.8s ease-in-out infinite}
+.map-stop{z-index:1}
+.map-stop.done{box-shadow:inset 0 0 18px #a8e6cf0d,0 0 13px #9de4c51c,0 0 0 1px #a8e6cf18}
+.map-stop.done:after{content:"✦";position:absolute;top:-7px;right:7px;color:#f7d58b;font-size:12px;text-shadow:0 0 9px #f7d58b;animation:mapFoundTwinkle 2.6s ease-in-out infinite}
+@keyframes mapMarkerGlow{0%,100%{opacity:.72;r:2.8}50%{opacity:1;r:4.2}}
+@keyframes mapFoundTwinkle{0%,100%{opacity:.45;transform:scale(.8) rotate(-12deg)}50%{opacity:1;transform:scale(1.15) rotate(12deg)}}
+@media(prefers-reduced-motion:reduce){.map-route-progress,.map-route-marker,.map-stop.done:after{animation:none!important;transition:none!important}}
