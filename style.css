@@ -924,3 +924,26 @@ body.avatar-workshop-open{overflow:hidden}
 @keyframes whisperReveal{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:650px){.realm-card{min-height:250px}.realm-friends{gap:9px}}
 @media(prefers-reduced-motion:reduce){.realm-friend,.guardian-creature,.realm-whisper{animation:none!important}}
+
+
+/* Badges personnels et récompenses communes des Besties */
+.kingdom-badge-grid,.kingdom-shared-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}
+.kingdom-badge{display:grid;grid-template-columns:30px minmax(0,1fr);gap:2px 7px;align-items:center;min-width:0;padding:8px;border-radius:12px;border:1px solid #f7d58b30;background:#ffffff09}
+.kingdom-badge>span{grid-row:span 2;font-size:22px;text-align:center;filter:grayscale(1);opacity:.55}
+.kingdom-badge>b{font-size:9px;color:#f8eaf5;line-height:1.25}
+.kingdom-badge>small{font-size:8px;color:var(--muted);line-height:1.3}
+.kingdom-badge.earned{border-color:#f7d58b88;background:linear-gradient(135deg,#f7d58b20,#f5a9d212);box-shadow:inset 0 0 12px #f7d58b0b}
+.kingdom-badge.earned>span{filter:none;opacity:1}
+.kingdom-badge.earned>small{color:#ffe8ad}
+.kingdom-badge.locked{opacity:.68}
+.kingdom-shared-badges{margin-top:17px;padding:15px;border:1px solid #f5a9d266;border-radius:18px;background:linear-gradient(145deg,#f5a9d216,#c7b2ff0c)}
+.kingdom-shared-heading{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;color:#ffe8ad}
+.kingdom-shared-heading>span{font-size:22px;color:#f5a9d2}
+.kingdom-shared-heading b{display:block;font:700 17px 'Playfair Display',serif;color:#fff0f8}
+.kingdom-shared-heading small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+.kingdom-shared-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kingdom-shared-grid .kingdom-badge{grid-template-columns:1fr;text-align:center;justify-items:center;padding:10px 6px}
+.kingdom-shared-grid .kingdom-badge>span{grid-row:auto;font-size:25px}
+.kingdom-shared-grid .kingdom-badge>b{font-size:9px}
+.kingdom-shared-grid .kingdom-badge>small{font-size:8px}
+@media(max-width:620px){.kingdom-shared-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kingdom-shared-grid .kingdom-badge:last-child{grid-column:1/-1}}
