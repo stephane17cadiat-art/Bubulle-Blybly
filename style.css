@@ -829,3 +829,44 @@ body.avatar-workshop-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.album-hidden-chest{animation:none!important}}
 
 .album-hidden-chest{opacity:1!important;visibility:visible!important;pointer-events:auto!important;filter:drop-shadow(0 0 12px #ffdc9c)}
+
+
+/* Deux royaumes personnels — profils et collections synchronisés */
+.kingdoms-modal{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:12px;background:#090817e8;backdrop-filter:blur(11px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.kingdoms-book{position:relative;width:min(100%,850px);max-height:calc(100dvh - 24px);overflow-y:auto;border:1px solid #f7d58b99;border-radius:25px;background:linear-gradient(145deg,#302448,#1c1a32 70%);box-shadow:0 25px 90px #000b,0 0 35px #f5a9d233;padding:0 20px 20px}
+.kingdoms-close{position:sticky;z-index:4;float:right;top:10px;margin:10px -8px -43px 0;width:35px;height:35px;border:1px solid #ffffff55;border-radius:50%;background:#ffffff18;color:#fff;font-size:24px;cursor:pointer}
+.kingdoms-cover{text-align:center;padding:29px 15px 21px;border-bottom:1px solid #f7d58b55;background:radial-gradient(ellipse at 50% 0%,#75527e88,transparent 75%)}
+.kingdoms-kicker{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--gold);margin:0}
+.kingdoms-crown{font-size:43px;margin:9px 0 1px;filter:drop-shadow(0 0 14px #f7d58b66)}
+.kingdoms-cover h2{font:800 clamp(25px,5vw,36px) 'Playfair Display',serif;margin:0;color:#fff0f8}
+.kingdoms-cover>p:last-child{color:var(--muted);font-size:12px;margin:7px 0 0}
+.kingdom-profiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:18px}
+.kingdom-profile{min-width:0;padding:15px;border:1px solid #ffffff28;border-radius:19px;background:linear-gradient(150deg,#ffffff12,#ffffff06)}
+.kingdom-profile.rose{border-color:#f5a9d266;background:linear-gradient(150deg,#f5a9d21a,#ffffff06)}
+.kingdom-profile.lilac{border-color:#c7b2ff77;background:linear-gradient(150deg,#c7b2ff1c,#ffffff06)}
+.kingdom-profile-top{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.kingdom-profile-top img{width:70px;height:70px;object-fit:cover;object-position:center 25%;border-radius:18px;border:2px solid #f7d58b88;box-shadow:0 5px 18px #0005}
+.kingdom-role{font-size:8px;letter-spacing:1.2px;color:var(--gold);font-weight:800}
+.kingdom-profile-top h3{font:700 23px 'Playfair Display',serif;margin:2px 0;color:#fff1fa}
+.kingdom-profile-top p{font-size:10px;color:var(--muted);margin:0}
+.kingdom-scoreline{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.kingdom-scoreline strong{font:800 27px 'Playfair Display',serif;color:var(--gold)}
+.kingdom-scoreline span{font-size:10px;color:var(--muted);margin-right:auto}
+.kingdom-scoreline b{font-size:12px;color:#fff0f8}
+.kingdom-progress{height:8px;background:#ffffff18;border-radius:99px;overflow:hidden;margin:7px 0}
+.kingdom-progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f5a9d2,#c7b2ff);box-shadow:0 0 12px #f5a9d277}
+.kingdom-next{font-size:10px;color:#e9d8f4;margin:7px 0 15px}
+.kingdom-achievements,.kingdom-treasures{border-top:1px solid #ffffff1b;padding-top:11px;margin-top:10px}
+.kingdom-achievements>b,.kingdom-treasures>b{display:block;font-size:11px;color:#ffe8ad;margin-bottom:8px}
+.kingdom-achievements>div{display:flex;flex-wrap:wrap;gap:5px}
+.kingdom-achievements>div span{font-size:9px;padding:5px 7px;border-radius:99px;background:#f7d58b18;border:1px solid #f7d58b44;color:#ffe8ad}
+.kingdom-achievements small{font-size:10px;color:var(--muted);line-height:1.5}
+.kingdom-treasures>b small{font-weight:500;color:var(--muted)}
+.kingdom-treasures ul{list-style:none;padding:0;margin:0;display:grid;gap:5px;max-height:185px;overflow:auto}
+.kingdom-treasures li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:3px 6px;align-items:center;padding:6px 7px;border-radius:9px;background:#ffffff0b;font-size:10px;color:#f8eaf5}
+.kingdom-treasures li>span:first-child{grid-row:span 2;font-size:16px}
+.kingdom-treasures li small{grid-column:2;color:var(--muted);font-size:8px}
+.kingdom-treasures li.kingdom-empty{display:block;color:var(--muted);font-style:italic;padding:12px}
+.kingdom-presence{text-align:center;font-size:9px;color:#bfe8d3;margin:13px 0 0}
+.kingdoms-footnote{text-align:center;color:var(--muted);font-size:10px;line-height:1.5;margin:17px 5px 0}
+@media(max-width:620px){.kingdoms-book{padding:0 12px 15px}.kingdom-profiles{grid-template-columns:1fr;gap:10px}.kingdom-profile{padding:13px}.kingdom-profile-top img{width:62px;height:62px}.kingdom-treasures ul{max-height:145px}}
