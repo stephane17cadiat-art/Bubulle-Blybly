@@ -451,6 +451,7 @@ function openAlbum(){
   album.classList.remove("hidden");
   void album.offsetWidth;
   album.classList.add("is-opening");
+  window.setTimeout(()=>album.classList.remove("is-opening"),3600);
 }
 $("albumOpenBtn").addEventListener("click",openAlbum);
 $("albumCloseBtn").addEventListener("click",()=>hide("albumModal"));
