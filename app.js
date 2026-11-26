@@ -641,7 +641,26 @@ async function resetGame(){
 }
 $("resetGameBtn").addEventListener("click",resetGame);
 
-$("avatarBtn").addEventListener("click",()=>{ if(roomId && myRole){ location.href="./avatar.html?room="+encodeURIComponent(roomId); } });
+const avatarOverlay = $("avatarWorkshopOverlay");
+const avatarFrame = $("avatarWorkshopFrame");
+function closeAvatarWorkshop(){
+  if(!avatarOverlay) return;
+  avatarOverlay.classList.add("hidden");
+  if(avatarFrame) avatarFrame.src = "about:blank";
+  document.body.classList.remove("avatar-workshop-open");
+}
+$("avatarBtn").addEventListener("click",()=>{
+  if(roomId && myRole && avatarOverlay && avatarFrame){
+    avatarFrame.src="./avatar.html?room="+encodeURIComponent(roomId)+"&embedded=1";
+    avatarOverlay.classList.remove("hidden");
+    document.body.classList.add("avatar-workshop-open");
+  }
+});
+$("closeAvatarWorkshop")?.addEventListener("click",closeAvatarWorkshop);
+window.addEventListener("message",event=>{
+  if(event.origin!==location.origin || event.data?.type!=="BUBULLE_CLOSE_AVATAR") return;
+  closeAvatarWorkshop();
+});
 $("goConnectionBtn").addEventListener("click",()=>{
   if(document.body.classList.contains("portal-leaving")) return;
   const overlay=$("portalTransition");
