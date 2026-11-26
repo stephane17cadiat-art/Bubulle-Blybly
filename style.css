@@ -1572,3 +1572,16 @@ body{
 @media(max-width:760px){.realm-atlas{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.realm-card{min-height:275px}}
 @media(max-width:430px){.realm-atlas{grid-template-columns:1fr}.realm-card{min-height:0}.realm-card::after{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.realm-card,.realm-meter i{transition:none!important}}
+
+/* Accueil royal — portraits originaux de Bubulle et Blybly */
+.home-duo-frame{position:absolute;z-index:3;left:50%;bottom:13px;transform:translateX(-50%);width:min(72%,390px);height:clamp(142px,22vw,190px);display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 18px 10px;border:2px solid #e9c77f;border-radius:24px 24px 19px 19px;background:linear-gradient(145deg,#fff1d9ee,#e7c8a9ee 52%,#f8e5cbef);box-shadow:0 0 0 4px #fff2d633,0 9px 26px #160f2d99,inset 0 0 0 3px #fff8e6aa;animation:duoFrameFloat 5s ease-in-out infinite}
+.home-duo-frame:before{content:"";position:absolute;inset:6px;border:1px solid #a97848aa;border-radius:17px 17px 13px 13px;pointer-events:none}
+.home-duo-portrait{position:relative;z-index:1;flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.home-duo-portrait img{width:100%;height:calc(100% - 21px);max-width:126px;object-fit:cover;object-position:center 30%;border:3px solid #fff5df;border-radius:48% 48% 15px 15px;box-shadow:0 3px 10px #593a3855}
+.home-duo-portrait span{font:800 9px/1.1 Georgia,serif;letter-spacing:1.4px;color:#754a32;text-shadow:0 1px #fff8e8}
+.home-duo-heart{position:relative;z-index:2;align-self:center;margin-top:-5px;color:#c65c91;font:36px/1 Georgia,serif;text-shadow:0 1px 0 #fff,0 0 12px #fff0c9}
+.duo-frame-spark{position:absolute;color:#fff1b8;text-shadow:0 0 9px #ffd5ec;font-size:18px}
+.duo-frame-spark.spark-left{left:9px;top:10px}.duo-frame-spark.spark-right{right:9px;bottom:10px}
+@keyframes duoFrameFloat{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
+@media(max-width:520px){.home-duo-frame{width:min(84%,340px);height:150px;bottom:11px;gap:5px;padding:11px 14px 8px}.home-duo-portrait img{max-width:112px}.home-duo-portrait span{font-size:8px}.home-duo-heart{font-size:29px}.home-tree{opacity:.55}}
+@media(prefers-reduced-motion:reduce){.home-duo-frame{animation:none}}
