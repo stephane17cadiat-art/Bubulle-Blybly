@@ -1093,3 +1093,27 @@ body.avatar-workshop-open{overflow:hidden}
   position:relative;z-index:4
 }
 @media(prefers-reduced-motion:reduce){.finale-heart{animation-duration:.01ms!important;opacity:0}}
+
+
+/* Message surprise au premier jaillissement */
+.finale-love-message{
+  position:absolute;z-index:4;top:48%;left:50%;
+  width:max-content;max-width:94%;
+  transform:translate(-50%,-50%);
+  text-align:center;white-space:normal;
+  font-family:Georgia,serif;font-size:clamp(23px,5.4vw,39px);
+  line-height:1.15;font-weight:800;letter-spacing:.035em;
+  text-shadow:0 2px 5px #45233c,0 0 14px #f6a8d7;
+  animation:finaleLoveReveal 4.8s ease-out both;
+  pointer-events:none
+}
+.love-pink{color:#f3a4cf}
+.love-white{color:#fff}
+@keyframes finaleLoveReveal{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.45)}
+  14%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+  24%{transform:translate(-50%,-50%) scale(1)}
+  76%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}
+}
+@media(max-width:380px){.finale-love-message{font-size:clamp(20px,6vw,27px);letter-spacing:0}}
