@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-illustrated-memories">
+  <link rel="stylesheet" href="./style.css?v=20261126-local-song">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -83,7 +83,7 @@
         <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
         <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="albumOpenBtn" class="secondary album-open-btn">📖 Album secret</button></div>
       </div>
-      <div class="song-player"><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Notre chanson — bientôt</button><span id="songStatus" class="song-status" role="status">Le fichier audio sera ajouté dès que tu pourras nous l’envoyer.</span><audio id="bestiesSong" preload="none" src="./assets/notre-chanson.mp3"></audio></div>
+      <div class="song-player"><div class="song-controls"><button id="songChooseBtn" class="song-choose" type="button">🎵 Choisir notre chanson</button><input id="songFileInput" type="file" accept="audio/mpeg,audio/mp3,audio/*" hidden><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Choisis d’abord le MP3</button></div><span id="songStatus" class="song-status" role="status">Sélectionne le fichier audio sur cet appareil. Il reste privé et n’est pas envoyé sur le site.</span><audio id="bestiesSong" preload="none"></audio></div>
       <div class="player-strip">
         <article class="player-card" id="bubulleCard"><div class="avatar">🧭</div><div><b>BUBULLE</b><small id="bubulleStatus">En attente</small></div><strong id="bubulleScore">0 pts</strong></article>
         <article class="player-card" id="blyblyCard"><div class="avatar">🌷</div><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
@@ -274,6 +274,6 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261126-illustrated-memories"></script>
+  <script type="module" src="./app.js?v=20261126-local-song"></script>
 </body>
 </html>
