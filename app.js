@@ -481,7 +481,7 @@ function startFinaleHearts(){
   const layer=$("finaleHearts");
   if(!layer) return;
   layer.innerHTML="";
-  for(let i=0;i<78;i++){
+  for(let i=0;i<156;i++){
     const heart=document.createElement("span");
     const wave=Math.floor(i/26);
     const angle=(Math.PI*2*(i%26)/26)+(Math.random()-.5)*.34;
@@ -495,7 +495,7 @@ function startFinaleHearts(){
     heart.style.setProperty("--burst-y",(Math.sin(angle)*distance)+"px");
     heart.style.setProperty("--burst-rotate",(Math.random()*120-60)+"deg");
     heart.style.setProperty("--burst-size",(0.82+Math.random()*.58).toFixed(2));
-    heart.style.animationDelay=(wave*.62+Math.random()*.22)+"s";
+    heart.style.animationDelay=(wave*.38+Math.random()*.18)+"s";
     heart.style.animationDuration=(3.1+Math.random()*.8)+"s";
     layer.appendChild(heart);
   }
