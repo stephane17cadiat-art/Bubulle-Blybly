@@ -439,6 +439,14 @@ function openAlbum(){
     return `<section class="album-chapter"><header><div><h3>${group.title}</h3><p>${group.subtitle}</p></div><span>${doneCount}/${groupStages.length} découvertes</span></header><div class="album-chapter-track"><i style="width:${doneCount/groupStages.length*100}%"></i></div><ol>${items}</ol></section>`;
   }).join("");
   const album=$("albumModal");
+  if(!album.querySelector(".album-living-sky")){
+    const sky=document.createElement("div");
+    sky.className="album-living-sky";
+    sky.setAttribute("aria-hidden","true");
+    sky.innerHTML=Array.from({length:30},(_,i)=>`<i class="album-firefly firefly-${i%6}" style="--x:${(i*37+11)%96}%;--y:${(i*23+7)%94}%;--delay:-${(i%9)*.7}s;--duration:${5+(i%7)}s"></i>`).join("")+
+      '<span class="album-orbit-glow"></span><span class="album-floating-petal petal-one">✿</span><span class="album-floating-petal petal-two">✧</span><span class="album-floating-petal petal-three">✿</span>';
+    album.prepend(sky);
+  }
   album.classList.remove("is-opening");
   album.classList.remove("hidden");
   void album.offsetWidth;
