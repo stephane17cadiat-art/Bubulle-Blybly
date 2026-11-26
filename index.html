@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-local-song">
+  <link rel="stylesheet" href="./style.css?v=20261126-avatar-overlay">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -274,6 +274,11 @@
       <button id="replayReward" class="reward-replay">↻ Revoir l’animation</button>
     </section>
   </div>
-  <script type="module" src="./app.js?v=20261126-local-song"></script>
+
+  <div id="avatarWorkshopOverlay" class="avatar-workshop-overlay hidden" role="dialog" aria-modal="true" aria-label="Atelier de création du personnage">
+    <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
+    <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
+  </div>
+  <script type="module" src="./app.js?v=20261126-avatar-overlay"></script>
 </body>
 </html>
