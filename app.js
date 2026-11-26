@@ -442,9 +442,13 @@ function openAlbum(){
   if(!album.querySelector(".album-living-sky")){
     const sky=document.createElement("div");
     sky.className="album-living-sky";
-    sky.setAttribute("aria-hidden","true");
-    sky.innerHTML=Array.from({length:30},(_,i)=>`<i class="album-firefly firefly-${i%6}" style="--x:${(i*37+11)%96}%;--y:${(i*23+7)%94}%;--delay:-${(i%9)*.7}s;--duration:${5+(i%7)}s"></i>`).join("")+
-      '<span class="album-orbit-glow"></span><span class="album-floating-petal petal-one">✿</span><span class="album-floating-petal petal-two">✧</span><span class="album-floating-petal petal-three">✿</span>';
+    sky.innerHTML=Array.from({length:30},(_,i)=>{
+      const style=`--x:${(i*37+11)%96}%;--y:${(i*23+7)%94}%;--delay:-${(i%9)*.7}s;--duration:${5+(i%7)}s`;
+      return i%4===0
+        ? `<button type="button" class="album-firefly firefly-${i%6} album-secret-firefly" style="${style}" data-secret-firefly aria-label="Découvrir un message secret"></button>`
+        : `<i class="album-firefly firefly-${i%6}" style="${style}" aria-hidden="true"></i>`;
+    }).join("")+
+      '<span class="album-orbit-glow" aria-hidden="true"></span><span class="album-floating-petal petal-one" aria-hidden="true">✿</span><span class="album-floating-petal petal-two" aria-hidden="true">✧</span><span class="album-floating-petal petal-three" aria-hidden="true">✿</span><div class="album-secret-note" role="status" aria-live="polite"></div>';
     album.prepend(sky);
   }
   album.classList.remove("is-opening");
@@ -456,6 +460,30 @@ function openAlbum(){
 $("albumOpenBtn").addEventListener("click",openAlbum);
 $("albumCloseBtn").addEventListener("click",()=>hide("albumModal"));
 $("albumModal").addEventListener("click",event=>{if(event.target.id==="albumModal")hide("albumModal");});
+const albumSecretMessages=[
+  "Même les plus petites lumières peuvent illuminer une grande histoire. ✨",
+  "Un souvenir partagé devient un trésor que le temps ne peut faner. 🌷",
+  "Dans cette forêt, chaque éclat de lumière porte un peu de votre magie. 💗",
+  "Deux chemins, deux princesses… et mille aventures à écrire. 👑",
+  "La plus belle magie est celle qui grandit quand on la partage. 🦋",
+  "Une fleur, un sourire, un souvenir : le royaume s’éveille. 🌸",
+  "Les lucioles gardent vos secrets avec douceur. 🤫",
+  "Votre histoire n’a pas besoin d’être parfaite pour être précieuse. 💞"
+];
+let albumSecretIndex=0;
+$("albumModal").addEventListener("click",event=>{
+  const firefly=event.target.closest("[data-secret-firefly]");
+  if(!firefly)return;
+  const note=$("albumModal").querySelector(".album-secret-note");
+  if(!note)return;
+  note.textContent=albumSecretMessages[albumSecretIndex%albumSecretMessages.length];
+  albumSecretIndex++;
+  note.classList.remove("visible");
+  void note.offsetWidth;
+  note.classList.add("visible");
+  window.clearTimeout(window.albumSecretNoteTimer);
+  window.albumSecretNoteTimer=window.setTimeout(()=>note.classList.remove("visible"),4800);
+});
 
 
 function playRewardAnimation(){
