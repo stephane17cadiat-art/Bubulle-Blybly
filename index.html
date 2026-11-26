@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-personal-kingdoms">
+  <link rel="stylesheet" href="./style.css?v=20261126-living-realm-atlas">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -90,6 +90,8 @@
       </div>
       <div class="map-panel panel">
         <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 21 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 21 trésors</b></div></div>
+        <div class="realm-atlas-heading"><div><p class="eyebrow">LES CINQ TERRES MAGIQUES</p><h4>Votre royaume évolutif</h4><p>Chaque victoire réveille une nouvelle merveille.</p></div><b id="realmAtlasStatus">0 / 5 régions éveillées</b></div>
+        <div id="realmAtlas" class="realm-atlas" aria-live="polite"></div>
         <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
         <div class="map-legend"><span><i class="legend-dot found"></i> Découvert</span><span><i class="legend-dot next"></i> Prochaine étape</span><span><i class="legend-dot secret"></i> Mystère</span></div>
       </div>
@@ -293,6 +295,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261126-personal-kingdoms"></script>
+  <script type="module" src="./app.js?v=20261126-living-realm-atlas"></script>
 </body>
 </html>
