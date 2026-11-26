@@ -481,10 +481,11 @@ function startFinaleHearts(){
   const layer=$("finaleHearts");
   if(!layer) return;
   layer.innerHTML="";
-  for(let i=0;i<48;i++){
+  for(let i=0;i<78;i++){
     const heart=document.createElement("span");
-    const angle=(Math.PI*2*i/48)+(Math.random()-.5)*.28;
-    const distance=150+Math.random()*250;
+    const wave=Math.floor(i/26);
+    const angle=(Math.PI*2*(i%26)/26)+(Math.random()-.5)*.34;
+    const distance=175+Math.random()*285;
     heart.className="finale-heart";
     heart.textContent="♥";
     heart.style.color=i%2===0?"#f3a4cf":"#ffffff";
@@ -492,10 +493,10 @@ function startFinaleHearts(){
     heart.style.top="48%";
     heart.style.setProperty("--burst-x",(Math.cos(angle)*distance)+"px");
     heart.style.setProperty("--burst-y",(Math.sin(angle)*distance)+"px");
-    heart.style.setProperty("--burst-rotate",(Math.random()*100-50)+"deg");
-    heart.style.setProperty("--burst-size",(0.65+Math.random()*.65).toFixed(2));
-    heart.style.animationDelay=(Math.random()*.28)+"s";
-    heart.style.animationDuration=(1.55+Math.random()*.65)+"s";
+    heart.style.setProperty("--burst-rotate",(Math.random()*120-60)+"deg");
+    heart.style.setProperty("--burst-size",(0.82+Math.random()*.58).toFixed(2));
+    heart.style.animationDelay=(wave*.62+Math.random()*.22)+"s";
+    heart.style.animationDuration=(3.1+Math.random()*.8)+"s";
     layer.appendChild(heart);
   }
 }
