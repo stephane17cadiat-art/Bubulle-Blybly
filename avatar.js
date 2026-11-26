@@ -119,9 +119,9 @@ function buildAvatar() {
     const satin=material("#f4c3df",.38,{metalness:.12,clearcoat:.3});
     const pearl=material("#fff3fa",.24,{metalness:.18});
     const trim=material("#e8c77f",.28,{metalness:.55});
-    const waist=addMesh(avatarRoot,new THREE.TorusGeometry(.184,.018,12,80),satin,[0,1.30,.012]);
+    const waist=addMesh(avatarRoot,new THREE.TorusGeometry(.184,.018,12,80),satin,[0,1.30,.205]);
     waist.rotation.x=Math.PI/2;
-    const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.342,.009,8,96),trim,[0,.48,0]);
+    const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.342,.009,8,96),trim,[0,.48,.27]);
     hem.rotation.x=Math.PI/2;
     // Petit nœud central et broche en forme de fleur.
     sphere(avatarRoot,satin,[0,1.30,.194],[.055,.035,.018]);
