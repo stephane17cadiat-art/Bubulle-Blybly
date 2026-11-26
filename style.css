@@ -870,3 +870,32 @@ body.avatar-workshop-open{overflow:hidden}
 .kingdom-presence{text-align:center;font-size:9px;color:#bfe8d3;margin:13px 0 0}
 .kingdoms-footnote{text-align:center;color:var(--muted);font-size:10px;line-height:1.5;margin:17px 5px 0}
 @media(max-width:620px){.kingdoms-book{padding:0 12px 15px}.kingdom-profiles{grid-template-columns:1fr;gap:10px}.kingdom-profile{padding:13px}.kingdom-profile-top img{width:62px;height:62px}.kingdom-treasures ul{max-height:145px}}
+
+
+/* Atlas vivant des cinq royaumes */
+.realm-atlas-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:22px 0 10px;position:relative;z-index:1}
+.realm-atlas-heading h4{margin:0;color:#fff0fa;font:700 17px 'Playfair Display',serif}
+.realm-atlas-heading p:not(.eyebrow){margin:4px 0 0;color:#cdbbd9;font-size:10px}
+.realm-atlas-heading>b{flex:none;color:#f6d994;font-size:9px;white-space:nowrap}
+.realm-atlas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;position:relative;z-index:1}
+.realm-card{position:relative;min-width:0;min-height:174px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:8px;padding:12px 8px;border:1px solid #ffffff24;border-radius:16px;background:linear-gradient(155deg,#ffffff12,#ffffff05);text-align:center;transition:transform .3s,border-color .3s,filter .3s}
+.realm-card.realm-open{border-color:#e9c3e766;box-shadow:inset 0 0 24px #f2bce512}
+.realm-card.realm-complete{border-color:#f7d58baa;background:linear-gradient(155deg,#f7d58b22,#f5a9d215);box-shadow:0 0 20px #f7d58b1c,inset 0 0 20px #f7d58b0c}
+.realm-card.realm-locked{filter:saturate(.45);opacity:.66}
+.realm-art{width:65px;height:65px;display:grid;place-items:center;position:relative;flex:none;border-radius:50%;background:radial-gradient(circle,#f6c7e733,transparent 70%)}
+.realm-symbol{font-size:36px;filter:drop-shadow(0 0 10px #f4c1e9aa);z-index:1}
+.realm-complete .realm-symbol{animation:realmAwaken 3s ease-in-out infinite}
+.realm-orbit{position:absolute;inset:4px;border:1px dashed #f4d9f077;border-radius:50%;animation:realmOrbit 18s linear infinite}
+.realm-spark{position:absolute;right:1px;top:2px;color:#ffe8ad;text-shadow:0 0 8px #ffe8ad;font-size:14px}
+.realm-copy{width:100%;min-width:0}
+.realm-state{font-size:7px;letter-spacing:1px;font-weight:800;color:#f6d994}
+.realm-copy h4{margin:4px 0;color:#fff0fa;font:700 11px/1.25 'Playfair Display',serif}
+.realm-copy p{min-height:22px;margin:0 0 8px;color:#cdbbd9;font-size:8px;line-height:1.3}
+.realm-meter{height:5px;overflow:hidden;border-radius:99px;background:#ffffff1b;margin:0 0 5px}
+.realm-meter i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f5a9d2,#f7d58b);box-shadow:0 0 9px #f5a9d277;transition:width .7s ease}
+.realm-copy small{font-size:7px;color:#d7c7df}
+.realm-seal{font-size:8px;color:#ffe8ad;letter-spacing:.5px}
+@keyframes realmOrbit{to{transform:rotate(360deg)}}
+@keyframes realmAwaken{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.1)}}
+@media(max-width:650px){.realm-atlas{grid-template-columns:repeat(2,minmax(0,1fr))}.realm-card{min-height:150px}.realm-atlas-heading{align-items:start}.realm-atlas-heading>b{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.realm-orbit,.realm-complete .realm-symbol{animation:none!important}}
