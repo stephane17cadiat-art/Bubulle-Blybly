@@ -476,10 +476,27 @@ function replayFinaleAnimation(){
   void chest.offsetWidth;
   chest.classList.add("opening");
 }
+function startFinaleHearts(){
+  const layer=$("finaleHearts");
+  if(!layer) return;
+  layer.innerHTML="";
+  for(let i=0;i<42;i++){
+    const heart=document.createElement("span");
+    heart.className="finale-heart";
+    heart.textContent=i%2===0?"🩷":"🤍";
+    heart.style.left=(Math.random()*100)+"%";
+    heart.style.animationDelay=(Math.random()*3)+"s";
+    heart.style.animationDuration=(4.5+Math.random()*3)+"s";
+    heart.style.fontSize=(15+Math.random()*17)+"px";
+    layer.appendChild(heart);
+  }
+}
 function openFinale(preview=false){
   finalePreview=preview;
   $("finalePreviewNote").classList.toggle("hidden",!preview);
+  const wasHidden=$("modal").classList.contains("hidden");
   $("modal").classList.remove("hidden");
+  if(wasHidden) startFinaleHearts();
   replayFinaleAnimation();
 }
 
