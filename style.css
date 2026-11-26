@@ -804,6 +804,9 @@ body.avatar-workshop-open{overflow:hidden}
 
 
 /* Lucioles secrètes à découvrir dans le grimoire */
+.album-living-sky{z-index:1}
+.album-book{z-index:2}
+.album-secret-note{z-index:3}
 .album-secret-firefly{z-index:3;padding:0;border:0;cursor:pointer;pointer-events:auto;appearance:none;transition:filter .2s,scale .2s}
 .album-secret-firefly:focus-visible{outline:2px solid #fff1bd;outline-offset:7px}
 .album-secret-firefly:hover,.album-secret-firefly:active{scale:1.9;filter:brightness(1.7)}
