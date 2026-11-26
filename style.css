@@ -804,7 +804,7 @@ body.avatar-workshop-open{overflow:hidden}
 
 
 /* Lucioles secrètes à découvrir dans le grimoire */
-.album-living-sky{z-index:1}
+.album-living-sky{z-index:3}
 .album-book{z-index:2}
 .album-secret-note{z-index:3}
 .album-secret-firefly{z-index:3;padding:0;border:0;cursor:pointer;pointer-events:auto;appearance:none;transition:filter .2s,scale .2s}
@@ -827,3 +827,5 @@ body.avatar-workshop-open{overflow:hidden}
 @keyframes chestPop{0%{scale:1}45%{scale:1.45;rotate:10deg}100%{scale:1}}
 @media(max-width:520px){.album-hidden-chest{width:36px;height:36px;font-size:20px}.album-hidden-chest.chest-one{left:4%;top:20%}.album-hidden-chest.chest-two{right:4%;top:50%}.album-hidden-chest.chest-three{left:12%;bottom:9%}}
 @media(prefers-reduced-motion:reduce){.album-hidden-chest{animation:none!important}}
+
+.album-hidden-chest{opacity:1!important;visibility:visible!important;pointer-events:auto!important;filter:drop-shadow(0 0 12px #ffdc9c)}
