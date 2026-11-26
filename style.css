@@ -1616,3 +1616,11 @@ body{
 .home-hero-halo img{object-fit:contain;object-position:center;width:100%;height:100%;background:linear-gradient(145deg,#f8e6d2,#e6c6d8);image-rendering:auto;filter:none;transform:none}
 @media(max-width:520px){.home-hero,.home-hero-blybly{width:clamp(106px,34vw,126px)}.home-hero-halo{aspect-ratio:1/1}}
 @media(max-width:360px){.home-hero,.home-hero-blybly{width:104px}}
+
+/* Fond doux autour des portraits : remplacer les zones grises par un halo rose ivoire */
+.home-hero-halo{
+  background:linear-gradient(145deg,#fff4f7 0%,#f6dce9 48%,#fff0dc 100%) !important;
+}
+.home-hero-halo img{
+  background:linear-gradient(145deg,#fff5f7 0%,#f7e2ec 52%,#fff1df 100%) !important;
+}
