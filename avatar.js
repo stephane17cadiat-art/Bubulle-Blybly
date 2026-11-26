@@ -13,6 +13,14 @@ const firebaseConfig = {
   appId: "1:61199635297:web:9c440eaa89b6a94d846b20"
 };
 const params = new URLSearchParams(location.search);
+const embeddedWorkshop = params.get("embedded") === "1";
+if (embeddedWorkshop) {
+  const back = document.getElementById("backLink");
+  back?.addEventListener("click", event => {
+    event.preventDefault();
+    window.parent.postMessage({type:"BUBULLE_CLOSE_AVATAR"}, location.origin);
+  });
+}
 const roomId = params.get("room");
 const $ = id => document.getElementById(id);
 const status = message => $("saveStatus").textContent = message;
