@@ -523,10 +523,11 @@ function renderKingdoms(){
     const percent=Math.round(count/stages.length*100);
     const next=data.stage>=stages.length?"Toutes les épreuves sont terminées !":"Prochaine épreuve : "+(Math.max(0,Number(data.stage)||0)+1)+" / "+stages.length;
     const milestones=[
-      {at:5,label:"🌱 Première floraison"},
-      {at:10,label:"🏰 Gardienne du château"},
-      {at:15,label:"💎 Maîtresse des cristaux"},
-      {at:21,label:"👑 Légende des Besties"}
+      {at:1,icon:"✨",label:"Première étincelle",detail:"Réussir une première énigme"},
+      {at:5,icon:"🌱",label:"Première floraison",detail:"Réussir 5 énigmes"},
+      {at:10,icon:"🏰",label:"Gardienne du château",detail:"Réussir 10 énigmes"},
+      {at:15,icon:"💎",label:"Maîtresse des cristaux",detail:"Réussir 15 énigmes"},
+      {at:21,icon:"👑",label:"Légende du royaume",detail:"Réussir les 21 énigmes"}
     ];
     const earned=milestones.filter(m=>count>=m.at);
     const treasures=completed.length
@@ -540,11 +541,22 @@ function renderKingdoms(){
       <div class="kingdom-scoreline"><strong>${score}</strong><span>points gagnés</span><b>${count} / 21</b></div>
       <div class="kingdom-progress"><i style="width:${percent}%"></i></div>
       <p class="kingdom-next">${next}</p>
-      <div class="kingdom-achievements"><b>Ses distinctions</b><div>${earned.length?earned.map(m=>'<span>'+m.label+'</span>').join(""):'<small>Les premiers badges se dévoileront au fil des victoires.</small>'}</div></div>
+      <div class="kingdom-achievements"><b>Ses badges personnels · ${earned.length}/${milestones.length}</b><div class="kingdom-badge-grid">${milestones.map(m=>'<article class="kingdom-badge '+(count>=m.at?'earned':'locked')+'"><span>'+m.icon+'</span><b>'+m.label+'</b><small>'+(count>=m.at?'Débloqué':m.detail)+'</small></article>').join("")}</div></div>
       <div class="kingdom-treasures"><b>Sa collection de trésors <small>(${count})</small></b><ul>${treasures}</ul></div>
       <p class="kingdom-presence">${data.joined?"✦ Présente dans l’aventure":"✧ Attend de rejoindre le royaume"}</p>
     </article>`;
   }).join("");
+  const sharedCompleted=[...(roomData.players.BUBULLE.completed||[])].filter(i=>(roomData.players.BLYBLY.completed||[]).includes(i));
+  const sharedCount=sharedCompleted.length;
+  const sharedBadges=[
+    {at:1,icon:"💗",title:"Premier secret à deux",detail:"Réussir ensemble une même énigme"},
+    {at:5,icon:"🌷",title:"Duo en fleurs",detail:"Réussir 5 énigmes ensemble"},
+    {at:10,icon:"🦋",title:"Complices légendaires",detail:"Réussir 10 énigmes ensemble"},
+    {at:15,icon:"🌟",title:"Étoiles jumelles",detail:"Réussir 15 énigmes ensemble"},
+    {at:21,icon:"👑",title:"Légende des Besties",detail:"Terminer les 21 énigmes toutes les deux"}
+  ];
+  const sharedRoot=$("kingdomSharedBadges");
+  if(sharedRoot) sharedRoot.innerHTML='<div class="kingdom-shared-heading"><span>♡</span><div><b>Les badges du duo</b><small>'+sharedCount+' énigme(s) réussie(s) ensemble</small></div><span>♡</span></div><div class="kingdom-shared-grid">'+sharedBadges.map(b=>'<article class="kingdom-badge '+(sharedCount>=b.at?'earned':'locked')+'"><span>'+b.icon+'</span><b>'+b.title+'</b><small>'+(sharedCount>=b.at?'Débloqué à deux':b.detail)+'</small></article>').join("")+'</div>';
 }
 $("kingdomsOpenBtn").addEventListener("click",()=>{
   renderKingdoms();
