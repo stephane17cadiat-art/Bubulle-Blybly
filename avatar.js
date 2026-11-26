@@ -1,5 +1,4 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/loaders/GLTFLoader.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInAnonymously, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -31,7 +30,7 @@ const defaults = {
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
 let companionMotion = null, magicParticles = [], magicAura = null, powerBurstGroup = null, powerStarted = 0, faceBlinkMeshes = [], faceGazeMeshes = [], faceBrowMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, surpriseMouth = null, faceAction = "smile", faceActionUntil = 0;
-let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticExtras = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticLoading = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
+let scene, camera, renderer, avatarRoot, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
   return new THREE.MeshPhysicalMaterial({
@@ -509,92 +508,6 @@ function buildRealisticLook(g){
   if(outfit==="princess"||outfit==="boho"||outfit==="magic"){for(let i=0;i<3;i++){const trim=new THREE.Mesh(new THREE.TorusGeometry(radius*(.45+i*.2),.009,6,48),gold);trim.rotation.x=Math.PI/2;trim.position.y=bottom+.07+i*.1;g.add(trim);}}
 }
 
-function buildRealisticAccessories(){
-  if(!realisticRoot)return;
-  if(realisticExtras){realisticRoot.remove(realisticExtras);realisticExtras=null;}
-  const g=new THREE.Group();realisticExtras=g;realisticRoot.add(g);buildRealisticLook(g);
-  const gold=new THREE.MeshPhysicalMaterial({color:'#e8c77f',metalness:.7,roughness:.25});
-  const gem=new THREE.MeshPhysicalMaterial({color:state.outfitColor||'#d98ab9',roughness:.22,metalness:.15,emissive:state.outfitColor||'#d98ab9',emissiveIntensity:.1});
-  const wc={fairy:'#d9a8ef',butterfly:'#8bd9ce',crystal:'#b7d8ff'}[state.wings];
-  if(wc){const wm=new THREE.MeshPhysicalMaterial({color:wc,transparent:true,opacity:.76,side:THREE.DoubleSide,roughness:.25,emissive:wc,emissiveIntensity:.12});const sh=new THREE.Shape();sh.moveTo(0,0);sh.bezierCurveTo(.12,.24,.42,.55,.66,.52);sh.bezierCurveTo(.62,.28,.43,.03,.16,-.12);sh.bezierCurveTo(.34,-.04,.38,-.27,.12,-.32);sh.bezierCurveTo(.06,-.22,-.02,-.12,0,0);const geo=new THREE.ShapeGeometry(sh,20);for(const side of [-1,1]){const w=new THREE.Mesh(geo,wm);w.position.set(side*.12,1.55,-.16);w.scale.x=side;w.rotation.z=side*.08;g.add(w);}}
-  if(state.hairAccessory==='crown'||state.accessoryStyle==='tiara'||state.accessoryStyle==='set'){const c=new THREE.Group();c.position.set(0,2.18,.11);g.add(c);const b=new THREE.Mesh(new THREE.TorusGeometry(.19,.018,8,48,Math.PI),gold);b.rotation.x=Math.PI/2;c.add(b);for(let i=-2;i<=2;i++){const x=new THREE.Mesh(new THREE.SphereGeometry(i===0?.045:.028,12,10),gem);x.position.set(i*.075,.045+.09-Math.abs(i)*.025,0);c.add(x);}}
-  else if(state.hairAccessory==='flower'||state.hairAccessory==='bow'){const o=new THREE.Group();o.position.set(.19,2.12,.13);g.add(o);for(let i=0;i<5;i++){const p=new THREE.Mesh(new THREE.SphereGeometry(.05,12,10),gem);p.scale.set(.75,1.2,.4);p.position.set(Math.cos(i*Math.PI*2/5)*.055,Math.sin(i*Math.PI*2/5)*.055,0);o.add(p);}}
-  if(['earrings','necklace','set'].includes(state.accessoryStyle)){const n=new THREE.Mesh(new THREE.TorusGeometry(.17,.012,8,48,Math.PI),gold);n.position.set(0,1.55,.145);n.rotation.x=Math.PI/2;g.add(n);const p=new THREE.Mesh(new THREE.OctahedronGeometry(.05),gem);p.position.set(0,1.39,.16);g.add(p);}
-}
-async function applyRealisticStyle(){
-  if(!realisticRoot)return;
-  const colors={
-    skin:(state.skinColor||defaults.skinColor),
-    hair:(state.hairColor||defaults.hairColor),
-    cloth:(state.outfitColor||defaults.outfitColor)
-  };
-  realisticRoot.traverse(obj=>{
-    if(!obj.isMesh)return;
-    const label=((obj.name||"")+" "+(Array.isArray(obj.material)?obj.material: [obj.material]).map(m=>m?.name||"").join(" ")).toLowerCase();
-    const target=/hair|braid|ponytail|beard/.test(label)?"hair":
-      /skin|face|body|hand|arm|leg|head|ear/.test(label)?"skin":
-      /cloth|fabric|tunic|dress|shirt|skirt|sleeve|cape|衣/.test(label)?"cloth":null;
-    if(!target)return;
-    const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-    mats.forEach(m=>{
-      if(!m)return;
-      if(m.color)m.color.set(colors[target]);
-      if("roughness" in m)m.roughness=target==="hair"?.42:target==="skin"?.72:.48;
-      if("metalness" in m)m.metalness=target==="cloth"?.04:.015;
-      if("clearcoat" in m)m.clearcoat=target==="hair"?.28:target==="skin"?.04:.14;
-      m.needsUpdate=true;
-    });
-  });
-}
-async function loadRealisticCharacter(){
-  if(realisticReady || realisticLoading || !scene) return;
-  realisticLoading=true;
-  $("realisticBtn").disabled=true;
-  $("realisticBtn").textContent="⏳ Chargement du modèle…";
-  status("✨ Chargement du modèle humain…");
-  const loader=new GLTFLoader();
-  try{
-    const gltf=await loader.loadAsync("https://grab3d.com/dl/elf-rigged/elf-rigged.glb");
-    realisticRoot=gltf.scene;
-    const bounds=new THREE.Box3().setFromObject(realisticRoot);
-    const size=bounds.getSize(new THREE.Vector3());
-    const center=bounds.getCenter(new THREE.Vector3());
-    const targetHeight=2.48;
-    realisticRoot.scale.setScalar(targetHeight/size.y);
-    realisticRoot.position.set(-center.x*realisticRoot.scale.x,-bounds.min.y*realisticRoot.scale.y,-center.z*realisticRoot.scale.z);
-    realisticRoot.visible=false;
-    realisticRoot.traverse(obj=>{
-      if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;
-        const mats=Array.isArray(obj.material)?obj.material:[obj.material];
-        mats.forEach(m=>{if(m){m.roughness=Math.max(m.roughness??.45,.38);m.needsUpdate=true;}});
-      }
-    });
-    scene.add(realisticRoot);
-    applyRealisticStyle();buildRealisticAccessories();
-    if(gltf.animations?.length){realisticMixer=new THREE.AnimationMixer(realisticRoot);realisticAction=realisticMixer.clipAction(gltf.animations[0]);}
-    realisticReady=true;
-    status("✓ Modèle humain 3D chargé — base de personnalisation prête.");
-    $("realisticBtn").disabled=false;
-    $("realisticBtn").textContent="✨ Essayer le modèle humain";
-  }catch(error){
-    console.warn("Le modèle 3D détaillé n’a pas pu être chargé :",error);
-    status("Échec du chargement 3D : "+(error?.message||error?.target?.statusText||"erreur réseau ou CORS")+". Tu peux réessayer avec le bouton.");
-    $("realisticBtn").disabled=false;
-    $("realisticBtn").textContent="↻ Réessayer le modèle 3D";
-  }finally{
-    realisticLoading=false;
-  }
-}
-function toggleRealisticCharacter(){
-  if(!realisticReady)return;
-  realisticVisible=!realisticVisible;
-  if(avatarRoot)avatarRoot.visible=!realisticVisible;
-  realisticRoot.visible=realisticVisible;
-  $("realisticBtn").textContent=realisticVisible?"🌸 Revenir à mon personnage":"✨ Essayer le modèle humain";
-  if(realisticVisible && realisticAction)realisticAction.reset().fadeIn(.25).play();
-  else if(realisticAction)realisticAction.fadeOut(.2);
-}
-
 // Petit décor 3D : arbres féeriques, champignons et fleurs lumineuses.
 let forestFireflies=[];
 function buildForestDecor(){
@@ -637,9 +550,10 @@ function initScene(){
   const host=$("avatarView");
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(35,1,.1,100);camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);
-  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"default"});
+  const compactDevice=window.matchMedia("(max-width: 760px)").matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio,compactDevice?1.25:1.6));
+  renderer.shadowMap.enabled=!compactDevice;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
   host.innerHTML="";host.appendChild(renderer.domElement);
@@ -651,10 +565,10 @@ function initScene(){
   buildForestDecor();
   const floor=new THREE.Mesh(new THREE.CircleGeometry(1.8,48),material("#b6a0ca",.9,{transparent:true,opacity:.15}));
   floor.rotation.x=-Math.PI/2;floor.position.y=.08;scene.add(floor);
-  clock=new THREE.Clock();buildAvatar();resize();loadRealisticCharacter();
+  clock=new THREE.Clock();buildAvatar();resize();
   const observer=new ResizeObserver(resize);observer.observe(host);
   renderer.domElement.addEventListener("pointerdown",e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});
-  renderer.domElement.addEventListener("pointermove",e=>{if(!dragging)return;const turn=(e.clientX-lastX)*.012;if(avatarRoot)avatarRoot.rotation.y+=turn;if(realisticRoot&&realisticVisible)realisticRoot.rotation.y+=turn;lastX=e.clientX;lastY=e.clientY});
+  renderer.domElement.addEventListener("pointermove",e=>{if(!dragging)return;const turn=(e.clientX-lastX)*.012;if(avatarRoot)avatarRoot.rotation.y+=turn;lastX=e.clientX;lastY=e.clientY});
   renderer.domElement.addEventListener("pointerup",()=>dragging=false);
   renderer.domElement.addEventListener("pointercancel",()=>dragging=false);
   renderer.domElement.addEventListener("wheel",e=>{e.preventDefault();camera.position.z=THREE.MathUtils.clamp(camera.position.z+e.deltaY*.008,4.8,9.5)},{passive:false});
@@ -666,8 +580,7 @@ function resize(){
 }
 function animate(){
   requestAnimationFrame(animate);if(!renderer)return;
-  const delta=clock.getDelta();const t=clock.elapsedTime; if(realisticMixer)realisticMixer.update(delta);
-  if(realisticRoot&&realisticVisible){realisticRoot.position.y=Math.sin(t*1.35)*.018;realisticRoot.rotation.z=Math.sin(t*.82)*.008;}
+  const delta=clock.getDelta();const t=clock.elapsedTime;
   for(const f of forestFireflies){f.mesh.position.y=f.baseY+Math.sin(t*1.25+f.phase)*.10;f.mesh.position.x=f.baseX+Math.sin(t*.7+f.phase)*.055;const pulse=.75+.45*(.5+.5*Math.sin(t*2+f.phase));f.mesh.scale.setScalar(.025*pulse);}
   if(hairMotionMesh){hairMotionMesh.rotation.z=Math.sin(t*1.15)*.012;hairMotionMesh.rotation.y=Math.sin(t*.8)*.018;}
   const powerElapsed=powerStarted?Date.now()-powerStarted:9999;
@@ -765,7 +678,7 @@ function fillControls(){
   document.body.className="theme-"+state.theme;
 }
 function changed(){
-  readControls();document.body.className="theme-"+state.theme;buildAvatar();applyRealisticStyle();buildRealisticAccessories();scheduleSave();
+  readControls();document.body.className="theme-"+state.theme;buildAvatar();scheduleSave();
 }
 function scheduleSave(){
   status("☁️ Sauvegarde de tes choix…");clearTimeout(saveTimer);
@@ -807,9 +720,8 @@ for(const key of Object.keys(defaults)) $(key).addEventListener("change",changed
 $("saveBtn").addEventListener("click",saveAvatar);
 function playPose(mode){
   poseMode=mode;poseUntil=Date.now()+(mode==="wave"?2600:mode==="curtsy"?2100:2400);
-  if(realisticVisible&&realisticAction)realisticAction.reset().fadeIn(.2).play();
 }
-$("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;if(realisticVisible&&realisticAction){realisticAction.reset().fadeIn(.2).play();}});
+$("poseBtn").addEventListener("click",()=>{danceUntil=Date.now()+2600;});
 $("waveBtn").addEventListener("click",()=>playPose("wave"));
 $("princessBtn").addEventListener("click",()=>playPose("princess"));
 $("curtsyBtn").addEventListener("click",()=>playPose("curtsy"));
@@ -856,6 +768,5 @@ $("winkBtn").addEventListener("click",()=>playFace("wink"));
 $("laughBtn").addEventListener("click",()=>playFace("laugh"));
 $("kissBtn").addEventListener("click",()=>playFace("kiss"));
 if($("surpriseBtn"))$("surpriseBtn").addEventListener("click",()=>playFace("surprise"));
-$("realisticBtn").addEventListener("click",()=>{if(realisticReady)toggleRealisticCharacter();else loadRealisticCharacter();});
 $("resetViewBtn").addEventListener("click",()=>{if(avatarRoot)avatarRoot.rotation.y=0;if(camera){camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);}});
 start();
