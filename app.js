@@ -213,13 +213,7 @@ function drawLivingMapRoute(){
 window.addEventListener("resize",()=>drawLivingMapRoute());
 
 
-const gardenBeds = [
-  {title:"Les premiers pas",subtitle:"La graine de votre complicité",start:0,end:4,flower:"🌷",name:"Tulipe de l’amitié"},
-  {title:"La forêt des secrets",subtitle:"La douceur prend racine",start:5,end:8,flower:"🌻",name:"Tournesol de lumière"},
-  {title:"Le château mystérieux",subtitle:"Les souvenirs s’épanouissent",start:9,end:12,flower:"🌹",name:"Rose des souvenirs"},
-  {title:"Les cristaux enchantés",subtitle:"La magie fleurit",start:13,end:16,flower:"🌼",name:"Marguerite enchantée"},
-  {title:"Le trésor des Besties",subtitle:"Votre belle légende",start:17,end:20,flower:"🌸",name:"Fleur du cœur"}
-];
+const gardenBeds = [{"title":"Les premiers pas","subtitle":"La graine de votre complicité","start":0,"end":9,"flower":"🌷","name":"Tulipe de l’amitié"},{"title":"La forêt des secrets","subtitle":"Les lucioles vous guident","start":10,"end":19,"flower":"🌻","name":"Tournesol de lumière"},{"title":"Le sentier des murmures","subtitle":"Les secrets prennent racine","start":20,"end":29,"flower":"🍃","name":"Feuille des secrets"},{"title":"Les jardins enchantés","subtitle":"Un bouquet de merveilles","start":30,"end":39,"flower":"🌹","name":"Rose des souvenirs"},{"title":"La roseraie magique","subtitle":"La beauté des découvertes","start":40,"end":49,"flower":"🌼","name":"Marguerite enchantée"},{"title":"Le château mystérieux","subtitle":"Les portes du royaume","start":50,"end":59,"flower":"🏵️","name":"Fleur du château"},{"title":"La galerie des énigmes","subtitle":"La curiosité vous éclaire","start":60,"end":69,"flower":"💠","name":"Fleur de cristal"},{"title":"Le royaume des cristaux","subtitle":"La magie scintille","start":70,"end":79,"flower":"🔮","name":"Orchidée de cristal"},{"title":"Le sanctuaire des Besties","subtitle":"Votre complicité grandit","start":80,"end":89,"flower":"💗","name":"Fleur du cœur"},{"title":"La légende des Besties","subtitle":"La dernière page de votre quête","start":90,"end":99,"flower":"👑","name":"Couronne des Besties"}];
 function buildAdventureEvents(beforePlayers,afterPlayers,role,stageIndex){
   const now=Date.now();
   const roleName=role==="BUBULLE"?"Bubulle":"Blybly";
@@ -266,13 +260,7 @@ function renderBestiesGarden(players){
 function renderRealmAtlas(completed){
   const atlas=$("realmAtlas");
   if(!atlas)return;
-  const regions=[
-    {name:"La forêt enchantée",subtitle:"Le réveil des lucioles",emoji:"🌳",start:0,end:4,theme:"forest",guardian:"🦉",guardianName:"Luna",title:"Gardienne des lucioles",friends:["🧚","🦋","🦌"],whisper:"Chut… les lucioles connaissent le chemin des cœurs courageux. Suis leur lumière, et la forêt te révélera ses secrets."},
-    {name:"La vallée des fleurs",subtitle:"Le jardin des merveilles",emoji:"🌷",start:5,end:8,theme:"flowers",guardian:"🦄",guardianName:"Pétalia",title:"Gardienne des pétales",friends:["🧚","🐇","🐝"],whisper:"Chaque fleur garde un souvenir heureux. Offre-lui un sourire, et elle s'épanouira un peu plus."},
-    {name:"Le château mystérieux",subtitle:"Les portes du royaume",emoji:"🏰",start:9,end:12,theme:"castle",guardian:"🦊",guardianName:"Auréline",title:"Gardienne des clés",friends:["🐈","🕊️","🧚"],whisper:"Les plus belles portes ne s'ouvrent pas avec une clé… mais avec la curiosité et un soupçon d'audace !"},
-    {name:"Le royaume des étoiles",subtitle:"Le sanctuaire des cristaux",emoji:"🌙",start:13,end:16,theme:"stars",guardian:"🐉",guardianName:"Astréa",title:"Gardienne des cristaux",friends:["🧚","🦋","🦉"],whisper:"Une étoile brille toujours pour celles et ceux qui n'abandonnent pas. Garde confiance en ta magie."},
-    {name:"Le sanctuaire des Besties",subtitle:"Le cœur de votre légende",emoji:"💗",start:17,end:20,theme:"heart",guardian:"🦢",guardianName:"Célestine",title:"Gardienne du cœur",friends:["🧚","🕊️","🦄"],whisper:"Votre amitié est le plus précieux des sortilèges. Deux chemins, deux lumières… et une légende qui ne demande qu'à grandir."}
-  ];
+  const regions=[{"name":"La forêt enchantée","subtitle":"Le réveil des lucioles","emoji":"🌳","start":0,"end":35,"theme":"forest","guardian":"🦉","guardianName":"Luna","title":"Gardienne des lucioles","friends":["🧚","🦋","🦌"],"whisper":"Les lucioles connaissent le chemin des cœurs courageux."},{"name":"Les jardins enchantés","subtitle":"Le jardin des merveilles","emoji":"🌷","start":36,"end":51,"theme":"flowers","guardian":"🦄","guardianName":"Pétalia","title":"Gardienne des pétales","friends":["🧚","🐇","🐝"],"whisper":"Chaque fleur garde un souvenir heureux."},{"name":"Le château mystérieux","subtitle":"Les portes du royaume","emoji":"🏰","start":52,"end":67,"theme":"castle","guardian":"🦊","guardianName":"Auréline","title":"Gardienne des clés","friends":["🐈","🕊️","🧚"],"whisper":"Les plus belles portes s'ouvrent avec la curiosité."},{"name":"Le royaume des cristaux","subtitle":"Le sanctuaire des étoiles","emoji":"🌙","start":68,"end":83,"theme":"stars","guardian":"🐉","guardianName":"Astréa","title":"Gardienne des cristaux","friends":["🧚","🦋","🦉"],"whisper":"Une étoile brille pour celles et ceux qui n'abandonnent pas."},{"name":"Le sanctuaire des Besties","subtitle":"Le cœur de votre légende","emoji":"💗","start":84,"end":99,"theme":"heart","guardian":"🦢","guardianName":"Célestine","title":"Gardienne du cœur","friends":["🧚","🕊️","🦄"],"whisper":"Votre amitié est le plus précieux des sortilèges."}];
   const found=new Set(completed);
   let previousComplete=true;
   atlas.innerHTML=regions.map((region,index)=>{
@@ -402,13 +390,7 @@ function openFinale(preview=false){
 
 $("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
 $("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
-const albumGroups = [
-  {title:"Les premiers pas",subtitle:"Les cinq premières découvertes",start:0,end:4},
-  {title:"Chapitre 1 · La forêt des secrets",subtitle:"Là où la magie commence",start:5,end:8},
-  {title:"Chapitre 2 · Le château mystérieux",subtitle:"Les secrets derrière les portes",start:9,end:12},
-  {title:"Chapitre 3 · Les cristaux enchantés",subtitle:"Quatre éclats à réunir",start:13,end:16},
-  {title:"Chapitre 4 · Le trésor des besties",subtitle:"Le dernier chemin vers la couronne",start:17,end:20}
-];
+const albumGroups = [{"title":"Les premiers pas","subtitle":"Les dix premières découvertes","start":0,"end":9},{"title":"La forêt des secrets","subtitle":"Les murmures et les lucioles","start":10,"end":19},{"title":"Le sentier des merveilles","subtitle":"Les secrets de la forêt profonde","start":20,"end":29},{"title":"Les jardins enchantés","subtitle":"Les fleurs et les surprises","start":30,"end":39},{"title":"La roseraie magique","subtitle":"Les couleurs du royaume","start":40,"end":49},{"title":"Le château mystérieux","subtitle":"Les portes et les énigmes","start":50,"end":59},{"title":"La galerie des mystères","subtitle":"Les salles secrètes du château","start":60,"end":69},{"title":"Le royaume des cristaux","subtitle":"Les défis de la lumière","start":70,"end":79},{"title":"Le sanctuaire des Besties","subtitle":"La force du duo","start":80,"end":89},{"title":"La légende des Besties","subtitle":"Le chemin vers la couronne","start":90,"end":99}];
 function openAlbum(){
   if(!roomData) return;
   const players=roomData.players;
