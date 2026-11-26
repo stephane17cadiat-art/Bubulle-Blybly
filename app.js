@@ -267,11 +267,11 @@ function renderRealmAtlas(completed){
   const atlas=$("realmAtlas");
   if(!atlas)return;
   const regions=[
-    {name:"La forêt enchantée",subtitle:"Le réveil des lucioles",emoji:"🌳",start:0,end:4,theme:"forest"},
-    {name:"La vallée des fleurs",subtitle:"Le jardin des merveilles",emoji:"🌷",start:5,end:8,theme:"flowers"},
-    {name:"Le château mystérieux",subtitle:"Les portes du royaume",emoji:"🏰",start:9,end:12,theme:"castle"},
-    {name:"Le royaume des étoiles",subtitle:"Le sanctuaire des cristaux",emoji:"🌙",start:13,end:16,theme:"stars"},
-    {name:"Le sanctuaire des Besties",subtitle:"Le cœur de votre légende",emoji:"💗",start:17,end:20,theme:"heart"}
+    {name:"La forêt enchantée",subtitle:"Le réveil des lucioles",emoji:"🌳",start:0,end:4,theme:"forest",guardian:"🦉",guardianName:"Luna",title:"Gardienne des lucioles",friends:["🧚","🦋","🦌"],whisper:"Chut… les lucioles connaissent le chemin des cœurs courageux. Suis leur lumière, et la forêt te révélera ses secrets."},
+    {name:"La vallée des fleurs",subtitle:"Le jardin des merveilles",emoji:"🌷",start:5,end:8,theme:"flowers",guardian:"🦄",guardianName:"Pétalia",title:"Gardienne des pétales",friends:["🧚","🐇","🐝"],whisper:"Chaque fleur garde un souvenir heureux. Offre-lui un sourire, et elle s'épanouira un peu plus."},
+    {name:"Le château mystérieux",subtitle:"Les portes du royaume",emoji:"🏰",start:9,end:12,theme:"castle",guardian:"🦊",guardianName:"Auréline",title:"Gardienne des clés",friends:["🐈","🕊️","🧚"],whisper:"Les plus belles portes ne s'ouvrent pas avec une clé… mais avec la curiosité et un soupçon d'audace !"},
+    {name:"Le royaume des étoiles",subtitle:"Le sanctuaire des cristaux",emoji:"🌙",start:13,end:16,theme:"stars",guardian:"🐉",guardianName:"Astréa",title:"Gardienne des cristaux",friends:["🧚","🦋","🦉"],whisper:"Une étoile brille toujours pour celles et ceux qui n'abandonnent pas. Garde confiance en ta magie."},
+    {name:"Le sanctuaire des Besties",subtitle:"Le cœur de votre légende",emoji:"💗",start:17,end:20,theme:"heart",guardian:"🦢",guardianName:"Célestine",title:"Gardienne du cœur",friends:["🧚","🕊️","🦄"],whisper:"Votre amitié est le plus précieux des sortilèges. Deux chemins, deux lumières… et une légende qui ne demande qu'à grandir."}
   ];
   const found=new Set(completed);
   let previousComplete=true;
@@ -281,19 +281,31 @@ function renderRealmAtlas(completed){
     const complete=count===total;
     const unlocked=previousComplete;
     const state=complete?"COMPLÈTE":unlocked?(count?"EN ÉVEIL":"À EXPLORER"):"SCELLÉE";
+    const inhabitants=unlocked
+      ? '<div class="realm-inhabitants"><div class="realm-friends" aria-label="Les petits habitants">'+region.friends.map((friend,i)=>'<span class="realm-friend friend-'+i+'">'+friend+'</span>').join("")+'</div><button type="button" class="realm-guardian" data-whisper="'+region.whisper+'" aria-label="Écouter '+region.guardianName+', '+region.title+'"><span class="guardian-creature">'+region.guardian+'</span><span><b>'+region.guardianName+'</b><small>'+region.title+'</small></span><i>✦</i></button><p class="realm-whisper" aria-live="polite"></p></div>'
+      : '<div class="realm-sleeping">✧ Les habitants dorment encore… ✧</div>';
     const card='<article class="realm-card '+region.theme+' '+(complete?"realm-complete":unlocked?"realm-open":"realm-locked")+'">'+
       '<div class="realm-art" aria-hidden="true"><span class="realm-orbit"></span><span class="realm-symbol">'+(unlocked?region.emoji:"🔒")+'</span><span class="realm-spark">✦</span></div>'+
       '<div class="realm-copy"><span class="realm-state">'+state+'</span><h4>'+region.name+'</h4><p>'+region.subtitle+'</p>'+
       '<div class="realm-meter"><i style="width:'+(count/total*100)+'%"></i></div><small>'+count+' / '+total+' trésors découverts</small></div>'+
-      (complete?'<span class="realm-seal">✧ Éclose ✧</span>':"")+'</article>';
+      inhabitants+(complete?'<span class="realm-seal">✧ Éclose ✧</span>':"")+'</article>';
     previousComplete=previousComplete&&complete;
     return card;
   }).join("");
+  atlas.onclick=event=>{
+    const button=event.target.closest(".realm-guardian");
+    if(!button||!atlas.contains(button))return;
+    const note=button.parentElement.querySelector(".realm-whisper");
+    if(!note)return;
+    note.textContent=button.dataset.whisper;
+    note.classList.remove("whisper-visible");
+    void note.offsetWidth;
+    note.classList.add("whisper-visible");
+  };
   const finished=regions.filter(r=>Array.from({length:r.end-r.start+1},(_,n)=>r.start+n).every(i=>found.has(i))).length;
   const status=$("realmAtlasStatus");
   if(status)status.textContent=finished+" / 5 régions éveillées";
 }
-
 function render(){
   const p=roomData.players;
   if(!$("kingdomsModal").classList.contains("hidden")) renderKingdoms();
