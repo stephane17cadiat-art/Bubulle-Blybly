@@ -114,6 +114,28 @@ function buildAvatar() {
     for(const x of [-.22,.22]) sphere(avatarRoot,accent,[x,1.66,0],[.09,.07,.11]);
   }
   const bodice=sphere(avatarRoot,dress,[0,1.48,0],[.245,.36,.19]);
+  // Finitions délicates de la robe royale : taille satinée, ourlet doré et broche perlée.
+  if(state.outfit==="princess"){
+    const satin=material("#f4c3df",.38,{metalness:.12,clearcoat:.3});
+    const pearl=material("#fff3fa",.24,{metalness:.18});
+    const trim=material("#e8c77f",.28,{metalness:.55});
+    const waist=addMesh(avatarRoot,new THREE.TorusGeometry(.184,.018,12,80),satin,[0,1.30,.012]);
+    waist.rotation.x=Math.PI/2;
+    const hem=addMesh(avatarRoot,new THREE.TorusGeometry(.342,.009,8,96),trim,[0,.48,0]);
+    hem.rotation.x=Math.PI/2;
+    // Petit nœud central et broche en forme de fleur.
+    sphere(avatarRoot,satin,[0,1.30,.194],[.055,.035,.018]);
+    sphere(avatarRoot,trim,[0,1.52,.191],[.035,.043,.018]);
+    for(let petal=0;petal<5;petal++){
+      const a=petal*Math.PI*2/5;
+      sphere(avatarRoot,pearl,[Math.cos(a)*.034,1.52+Math.sin(a)*.034,.205],[.018,.023,.009]);
+    }
+    sphere(avatarRoot,trim,[0,1.52,.218],[.012,.014,.008]);
+    // Perles discrètes sur le devant de la jupe.
+    for(let bead=0;bead<5;bead++){
+      sphere(avatarRoot,pearl,[0,.72+bead*.105,.275-bead*.018],[.012,.012,.008]);
+    }
+  }
   sphere(avatarRoot,skin,[0,1.78,0],[.095,.13,.09]);
   // Robe volontairement épurée : pas de broderies, galons ou détails scintillants.
   // Bras fins, épaules et mains
