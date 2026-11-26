@@ -996,7 +996,7 @@ $("goConnectionBtn").addEventListener("click",()=>{
     document.body.classList.remove("portal-leaving");
     hide("portalTransition");
     window.setTimeout(()=>$("connection").classList.remove("portal-entering"),520);
-  },1350);
+  },3400);
 });
 $("backHomeBtn").addEventListener("click",()=>{hide("connection");show("welcome");});
 $("createBtn").addEventListener("click",createRoom);
