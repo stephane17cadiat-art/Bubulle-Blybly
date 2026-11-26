@@ -984,3 +984,85 @@ body.avatar-workshop-open{overflow:hidden}
   100%{transform:translate3d(24px,115vh,0) rotate(28deg) scale(1.08);opacity:0}
 }
 @media(prefers-reduced-motion:reduce){.finale-heart{animation-duration:12s;opacity:.75}}
+
+
+/* Finition propre du grand final — cœurs réguliers et coffre dégagé */
+.finale-modal{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  isolation:isolate;
+}
+.finale-hearts{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+}
+.finale-heart{
+  position:absolute;
+  top:-28px;
+  display:block;
+  width:22px;
+  height:26px;
+  line-height:26px;
+  text-align:center;
+  font-family:Arial,sans-serif;
+  font-size:22px !important;
+  font-weight:700;
+  opacity:0;
+  filter:drop-shadow(0 2px 4px #f6a8d755);
+  animation:finaleHeartFallClean 6s linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes finaleHeartFallClean{
+  0%{transform:translate3d(0,-4vh,0) rotate(-12deg);opacity:0}
+  9%{opacity:.96}
+  88%{opacity:.92}
+  100%{transform:translate3d(var(--heart-drift,18px),112vh,0) rotate(18deg);opacity:0}
+}
+.finale-card{
+  position:relative;
+  z-index:2;
+  width:min(100%,490px);
+}
+.finale-chest{
+  position:relative;
+  z-index:1;
+  flex:none;
+  width:100%;
+  max-width:290px;
+  height:clamp(145px,20vh,175px);
+  margin:10px auto 19px;
+  overflow:visible;
+}
+.treasure-illustration{
+  position:relative;
+  z-index:1;
+  display:block;
+}
+.treasure-pop{
+  z-index:2;
+  top:22px;
+  width:138px;
+  height:96px;
+}
+.finale-card h2{
+  position:relative;
+  z-index:3;
+  margin-top:0;
+}
+.finale-card>.finale-intro,
+.finale-card>.royal-titles,
+.finale-card>.finale-message,
+.finale-card>.finale-preview-note,
+.finale-card>button{
+  position:relative;
+  z-index:3;
+}
+@media(max-width:430px){
+  .finale-card{width:100%;max-height:calc(100dvh - 16px)}
+  .finale-chest{height:clamp(138px,19vh,158px);max-width:250px;margin:8px auto 17px}
+  .treasure-pop{top:22px;width:122px;height:86px}
+}
