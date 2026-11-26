@@ -366,12 +366,12 @@ function openAlbum(){
   if(!roomData) return;
   const players=roomData.players;
   $("albumProgress").innerHTML=[
-    {key:"BUBULLE",name:"Bubulle",symbol:"🧭"},
-    {key:"BLYBLY",name:"Blybly",symbol:"🌷"}
+    {key:"BUBULLE",name:"Bubulle",portrait:"./assets/bubulle.jpg"},
+    {key:"BLYBLY",name:"Blybly",portrait:"./assets/blybly.jpg"}
   ].map(player=>{
     const data=players[player.key];
     const count=(data.completed||[]).length;
-    return `<article class="album-stat"><span>${player.symbol}</span><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/21*100)}%"></i></div></article>`;
+    return `<article class="album-stat"><img class="album-stat-portrait" src="${player.portrait}" alt="Portrait de ${player.name}"><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/21*100)}%"></i></div></article>`;
   }).join("");
   const bubulleDone=new Set(players.BUBULLE.completed||[]);
   const blyblyDone=new Set(players.BLYBLY.completed||[]);
