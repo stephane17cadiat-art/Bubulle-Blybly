@@ -1794,12 +1794,12 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 .portal-gate-inner:before{
   left:0;transform-origin:left center;
   border-right:3px solid #ffe8c5;
-  border-radius:inherit 0 0 inherit;
+  border-radius:48% 0 0 0;
 }
 .portal-gate-inner:after{
   right:0;transform-origin:right center;
   border-left:3px solid #ffe8c5;
-  border-radius:0 inherit inherit 0;
+  border-radius:0 48% 0 0;
   animation-name:portalDoorOpenRight;
 }
 .portal-gate-inner .portal-vortex{z-index:0}
