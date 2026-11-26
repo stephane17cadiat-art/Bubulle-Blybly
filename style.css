@@ -1186,3 +1186,113 @@ body.avatar-workshop-open{overflow:hidden}
   .command-center .song-player{padding:10px 8px}
   .command-center .song-status{text-align:center;line-height:1.4}
 }
+
+
+/* Identité royale — Château des Besties (habillage uniquement) */
+:root{
+  --night:#1b1425;
+  --panel:#302238;
+  --panel2:#49304b;
+  --pink:#f3a8ca;
+  --lav:#d7b8dc;
+  --gold:#e9c77f;
+  --white:#fff9f5;
+  --muted:#d8c8d5;
+}
+body{
+  background:
+    radial-gradient(ellipse at 12% 4%,#74465f 0,transparent 34%),
+    radial-gradient(ellipse at 92% 22%,#60445e 0,transparent 30%),
+    linear-gradient(145deg,#1b1425,#2b1c32 55%,#211829);
+}
+.stars{opacity:.38;background-image:radial-gradient(#fff5e9 1px,transparent 1px),radial-gradient(#f3a8ca 1px,transparent 1px)}
+.shell{max-width:1080px}
+.topbar{position:relative;padding:10px 13px;border:1px solid #e9c77f55;border-radius:20px;background:linear-gradient(110deg,#3b273dce,#251a30d9);box-shadow:0 12px 32px #100a183d}
+.brand-mark{background:linear-gradient(145deg,#fff0d0,#e9c77f 58%,#c58b73);color:#482b3e;box-shadow:0 5px 18px #e9c77f35}
+.topbar h1 span{color:#e9c77f}
+.top-gem{filter:drop-shadow(0 0 9px #f3a8ca88)}
+.panel{
+  border:1px solid #e9c77f55;
+  background:linear-gradient(145deg,#49334cF2,#2c2038F5 72%);
+  box-shadow:0 17px 44px #10091866, inset 0 1px #fff8e911;
+}
+.eyebrow{color:#f3b4d0}
+.game-heading h2,.challenge h3,.map-head h3,.treasure h3,.garden-heading h3{color:#fff0df}
+.primary{
+  color:#42283a;
+  background:linear-gradient(105deg,#f7c3d9,#f1d9dc 48%,#e9c77f);
+  box-shadow:0 7px 22px #e9c77f2b;
+}
+.secondary,.icon-button{
+  border-color:#e9c77f55;
+  background:linear-gradient(130deg,#ffffff13,#e9c77f0c);
+}
+.text-button{color:#f1bfd5}
+.player-card{
+  border-color:#e9c77f55;
+  background:linear-gradient(125deg,#5a3a55aa,#302239dd);
+  box-shadow:inset 0 1px #fff8e911;
+}
+.player-card strong{color:#f2d89d}
+.command-center{
+  border-color:#e9c77f77;
+  background:linear-gradient(135deg,#493149e8,#2b2038f2);
+  box-shadow:0 12px 30px #120b1b44,inset 0 1px #fff8e918;
+}
+.command-button{
+  border-color:#e9c77f55;
+  background:linear-gradient(145deg,#ffffff14,#f3a8ca0b);
+}
+.command-save{
+  color:#42283a;
+  border-color:#f6d9df;
+  background:linear-gradient(110deg,#f6bfd7,#f7e2df 55%,#e9c77f);
+  box-shadow:0 6px 18px #e9c77f35;
+}
+.more-options summary{
+  color:#f5dba6;
+  border:1px solid #e9c77f3d;
+  background:linear-gradient(110deg,#e9c77f16,#f3a8ca12);
+}
+.more-options summary::after{color:#f3a8ca}
+.song-player{border-color:#e9c77f55;background:#e9c77f0c}
+.song-toggle{border-color:#e9c77f77;background:#e9c77f16;color:#ffe6c9}
+.challenge,.treasure{border-color:#e9c77f55}
+.pill{color:#ffd8e7;border-color:#f3a8ca77;background:#f3a8ca20}
+.answer{
+  border-color:#e9c77f3d;
+  background:linear-gradient(110deg,#ffffff10,#f3a8ca08);
+}
+.answer:hover{border-color:#e9c77f;background:#e9c77f16}
+.answer:focus-visible{outline-color:#e9c77f}
+.hint{color:#ffe5b5;background:#e9c77f16}
+.map-panel,.besties-garden{border-color:#e9c77f55}
+.map-stop{border-color:#e9c77f3d;background:#ffffff0b}
+.map-stop.current{border-color:#e9c77f;box-shadow:0 0 0 2px #e9c77f24,0 0 18px #e9c77f20}
+.map-stop.done{background:#f3a8ca20;border-color:#f3a8ca88}
+.map-sparkle,.garden-counter{color:#f2d89d}
+.realm-card{border-color:#e9c77f35;background:linear-gradient(155deg,#f3a8ca13,#e9c77f08)}
+.realm-card.realm-open,.realm-card.realm-complete{border-color:#e9c77f88}
+.realm-copy h4,.realm-guardian b{color:#ffe4b5}
+.realm-meter i{background:linear-gradient(90deg,#f3a8ca,#e9c77f)}
+.garden-counter{border-color:#e9c77f55;background:#e9c77f12}
+.game-footer{color:#e8c987}
+.site-footer{color:#d5bdce}
+.command-button:focus-visible,.primary:focus-visible,.secondary:focus-visible,.text-button:focus-visible,.more-options summary:focus-visible{
+  outline:2px solid #f4d99d;outline-offset:3px;
+}
+@keyframes royalGlimmer{
+  0%,100%{opacity:.35;transform:scale(.85)}
+  50%{opacity:.9;transform:scale(1.12)}
+}
+.brand-mark::after{
+  content:"✧";position:absolute;margin:0 0 34px 34px;color:#fff0c8;font-size:12px;
+  animation:royalGlimmer 2.8s ease-in-out infinite;
+}
+@media(max-width:650px){
+  .topbar{padding:9px 10px;border-radius:17px}
+  .command-center{border-color:#e9c77f66}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand-mark::after{animation:none}
+}
