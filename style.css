@@ -1066,3 +1066,30 @@ body.avatar-workshop-open{overflow:hidden}
   .finale-chest{height:clamp(138px,19vh,158px);max-width:250px;margin:8px auto 17px}
   .treasure-pop{top:22px;width:122px;height:86px}
 }
+
+
+/* Feu d'artifice de cœurs — explosion au-dessus du décor, sous les textes */
+.finale-modal{isolation:isolate}
+.finale-hearts{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none}
+.finale-card{z-index:auto}
+.finale-heart{
+  position:absolute;top:48%;left:50%;
+  display:block;width:22px;height:26px;line-height:26px;
+  margin:-13px 0 0 -11px;text-align:center;
+  font-family:Arial,sans-serif;font-size:22px!important;font-weight:700;
+  opacity:0;filter:drop-shadow(0 2px 6px #f6a8d799);
+  animation:finaleHeartBurst 1.9s cubic-bezier(.12,.72,.24,1) both;
+  will-change:transform,opacity
+}
+@keyframes finaleHeartBurst{
+  0%{transform:translate3d(0,0,0) scale(.15) rotate(0);opacity:0}
+  12%{opacity:1;transform:translate3d(0,0,0) scale(1.15) rotate(0)}
+  78%{opacity:.95}
+  100%{transform:translate3d(var(--burst-x),var(--burst-y),0) scale(var(--burst-size,.8)) rotate(var(--burst-rotate,30deg));opacity:0}
+}
+.finale-card h2,.finale-card>.eyebrow,.finale-card>.finale-intro,
+.finale-card>.royal-titles,.finale-card>.finale-message,
+.finale-card>.finale-preview-note,.finale-card>button{
+  position:relative;z-index:4
+}
+@media(prefers-reduced-motion:reduce){.finale-heart{animation-duration:.01ms!important;opacity:0}}
