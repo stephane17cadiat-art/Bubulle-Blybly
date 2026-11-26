@@ -221,9 +221,20 @@ async function joinRoom(code){
       const data=snap.data();
       if(data.players.BUBULLE.uid===user.uid){myRole="BUBULLE";return;}
       if(data.players.BLYBLY.uid===user.uid){myRole="BLYBLY";return;}
+
+      // Récupération d'un profil existant si le navigateur a créé une nouvelle identité anonyme.
+      if(data.players.BUBULLE.joined && data.players.BUBULLE.uid!==user.uid) {
+        const recoverBubulle = window.confirm("Ce navigateur n'est plus reconnu.\n\nVeux-tu retrouver le profil BUBULLE et sa progression ?\n\nOK = retrouver BUBULLE. Annuler = choisir BLYBLY.");
+        if(recoverBubulle) {
+          myRole="BUBULLE";
+          tx.update(roomRef,{"players.BUBULLE.uid":user.uid,"players.BUBULLE.joined":true});
+          return;
+        }
+      }
+
       if(data.players.BLYBLY.joined && data.players.BLYBLY.uid!==user.uid) {
-        const takeover = window.confirm("Le profil Blybly est déjà associé à un autre appareil. Pour les tests, veux-tu connecter cette tablette au profil Blybly ?\n\nSes points et sa progression seront conservés. L'autre appareil ne doit pas jouer en même temps.");
-        if(!takeover) throw new Error("Connexion annulée. Le profil Blybly reste sur son appareil actuel.");
+        const takeover = window.confirm("Veux-tu retrouver le profil BLYBLY et sa progression sur cet appareil ?\n\nSes points seront conservés. L'autre appareil ne doit pas jouer en même temps.");
+        if(!takeover) throw new Error("Connexion annulée. Aucun profil n'a été modifié.");
       }
       myRole="BLYBLY";
       tx.update(roomRef,{"players.BLYBLY.uid":user.uid,"players.BLYBLY.joined":true});
