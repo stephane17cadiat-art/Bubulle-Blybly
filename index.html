@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-badges-v1">
+  <link rel="stylesheet" href="./style.css?v=20261126-pause-save-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -81,7 +81,7 @@
     <section id="game" class="hidden">
       <div class="game-heading">
         <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
-        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="kingdomsOpenBtn" class="secondary">🏰 Mes royaumes</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="albumOpenBtn" class="secondary album-open-btn">📖 Album secret</button></div>
+        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="kingdomsOpenBtn" class="secondary">🏰 Mes royaumes</button><button id="saveGameBtn" class="secondary" type="button">💾 Sauvegarder</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="albumOpenBtn" class="secondary album-open-btn">📖 Album secret</button></div>
       </div>
       <div class="song-player"><div class="song-controls"><button id="songChooseBtn" class="song-choose" type="button">🎵 Choisir notre chanson</button><input id="songFileInput" type="file" accept="audio/mpeg,audio/mp3,audio/*" hidden><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Choisis d’abord le MP3</button></div><span id="songStatus" class="song-status" role="status">Sélectionne le fichier audio sur cet appareil. Il reste privé et n’est pas envoyé sur le site.</span><audio id="bestiesSong" preload="none"></audio></div>
       <div class="player-strip">
@@ -296,6 +296,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261126-badges-v1"></script>
+  <script type="module" src="./app.js?v=20261126-pause-save-v1"></script>
 </body>
 </html>
