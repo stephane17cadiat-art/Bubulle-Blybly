@@ -309,7 +309,7 @@ function buildAdventureEvents(beforePlayers,afterPlayers,role,stageIndex){
   });
   const wasLegend=stages.every((stage,i)=>beforeBub.has(i)&&beforeBly.has(i));
   const isLegend=stages.every((stage,i)=>afterBub.has(i)&&afterBly.has(i));
-  if(!wasLegend&&isLegend)events.push({type:"crown",icon:"👑",title:"La légende des Besties est complète",detail:"Les 21 énigmes ont été résolues par Bubulle et Blybly.",at:now+3});
+  if(!wasLegend&&isLegend)events.push({type:"crown",icon:"👑",title:"La légende des Besties est complète",detail:"Les 100 épreuves ont été résolues par Bubulle et Blybly.",at:now+3});
   return events;
 }
 
@@ -447,10 +447,14 @@ const surpriseMessages = [
   "Chaque énigme révèle un peu plus ta magie. 🔮"
 ];
 const milestoneMessages = {
-  5: "Premier grand cap franchi ! La forêt entière célèbre ta persévérance. 🌟",
-  10: "Dix trésors déjà ! Le château ouvre un nouveau passage secret. 🏰",
-  15: "Tu approches du grand secret… Les étoiles sont de ton côté. 💫",
-  21: "Le trésor légendaire est à portée de main : quelle belle aventure ! 👑"
+  5:"Premier grand cap franchi ! La forêt entière célèbre ta persévérance. 🌟",
+  10:"Dix trésors déjà ! Ton courage fait fleurir le royaume. 🌷",
+  15:"Quinze découvertes ! Les gardiennes t'ouvrent un nouveau passage. 🏰",
+  21:"Les 21 premières épreuves sont derrière toi : la grande quête commence ! 👑",
+  40:"Quarante trésors ! Les jardins enchantés brillent de mille couleurs. 🌸",
+  60:"Soixante épreuves ! Le château reconnaît ta bravoure. 🏰",
+  80:"Quatre-vingts découvertes ! Les cristaux chantent ton nom. 💎",
+  100:"CENT ÉPREUVES ACCOMPLIES ! La légende des Besties est éternelle. 👑💗"
 };
 
 let finalePreview = false;
@@ -480,7 +484,7 @@ function openAlbum(){
   ].map(player=>{
     const data=players[player.key];
     const count=(data.completed||[]).length;
-    return `<article class="album-stat"><img class="album-stat-portrait" src="${player.portrait}" alt="Portrait de ${player.name}"><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/21*100)}%"></i></div></article>`;
+    return `<article class="album-stat"><img class="album-stat-portrait" src="${player.portrait}" alt="Portrait de ${player.name}"><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/100*100)}%"></i></div></article>`;
   }).join("");
   const bubulleDone=new Set(players.BUBULLE.completed||[]);
   const blyblyDone=new Set(players.BLYBLY.completed||[]);
@@ -494,8 +498,8 @@ function openAlbum(){
     {symbol:"✧",value:soloCount,label:"Défis en solo"},
     {symbol:"◇",value:waitingCount,label:"Secrets à découvrir"}
   ].map(item=>`<article class="album-duo-stat"><span>${item.symbol}</span><strong>${item.value}</strong><small>${item.label}</small></article>`).join("");
-  $("albumDuoPhrase").textContent=discoveredCount===21
-    ?"Les 21 secrets ont été révélés : votre légende est complète !"
+  $("albumDuoPhrase").textContent=discoveredCount===100
+    ?"Les 100 secrets ont été révélés : votre légende est complète !"
     :sharedCount>0
       ? "Chaque énigme partagée ajoute une nouvelle page à votre belle histoire."
       : "Votre album attend ses premiers souvenirs : l’aventure ne fait que commencer.";
@@ -508,7 +512,7 @@ function openAlbum(){
   });
   memoryCards.push({icon:"💗",title:"Le cœur des Besties",detail:sharedCount>0?sharedCount+" énigme(s) réussie(s) ensemble":"À débloquer avec votre première énigme commune",unlocked:sharedCount>0,kind:"heart",count:sharedCount});
   const crownUnlocked=stages.every((stage,index)=>bubulleDone.has(index)&&blyblyDone.has(index));
-  memoryCards.push({icon:"👑",title:"La couronne légendaire",detail:crownUnlocked?"Les 21 énigmes terminées par vous deux !":"Le trésor ultime : les 21 énigmes terminées à deux",unlocked:crownUnlocked,kind:"crown"});
+  memoryCards.push({icon:"👑",title:"La couronne légendaire",detail:crownUnlocked?"Les 100 épreuves terminées par vous deux !":"Le trésor ultime : les 100 épreuves terminées à deux",unlocked:crownUnlocked,kind:"crown"});
   $("albumMemories").innerHTML=memoryCards.map(memory=>`<article class="album-memory ${memory.unlocked?"unlocked":"locked"} ${memory.kind}">
     <div class="album-memory-icon">${memory.icon}</div><div class="album-memory-copy"><b>${memory.title}</b><small>${memory.detail}</small></div>
     <span class="album-memory-state">${memory.unlocked?"Souvenir débloqué":"À découvrir"}</span>
@@ -519,7 +523,7 @@ function openAlbum(){
     {key:"flower",icon:"🌷",title:"Le jardin s'éveille",detail:"Vos chapitres terminés font fleurir le royaume.",unlocked:officialChapters.some((group,index)=>Array.from({length:group.end-group.start+1},(_,n)=>group.start+n).every(i=>bubulleDone.has(i)&&blyblyDone.has(i))),art:"flower"},
     {key:"heart",icon:"♡",title:"Le cœur des Besties",detail:"Chaque énigme partagée rapproche vos deux chemins.",unlocked:sharedCount>0,art:"heart"},
     {key:"castle",icon:"🏰",title:"Les portes du château",detail:"Les secrets du royaume se dévoilent chapitre après chapitre.",unlocked:officialChapters.slice(0,2).every(group=>Array.from({length:group.end-group.start+1},(_,n)=>group.start+n).every(i=>bubulleDone.has(i)&&blyblyDone.has(i))),art:"castle"},
-    {key:"crown",icon:"👑",title:"La couronne légendaire",detail:"Le grand trésor apparaît lorsque les 21 énigmes sont terminées à deux.",unlocked:crownUnlocked,art:"crown"}
+    {key:"crown",icon:"👑",title:"La couronne légendaire",detail:"Le grand trésor apparaît lorsque les 100 épreuves sont terminées à deux.",unlocked:crownUnlocked,art:"crown"}
   ];
   const illustrationSvg={
     flower:'<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M60 54 Q57 76 61 94" fill="none" stroke="#57966d" stroke-width="5" stroke-linecap="round"/><path d="M59 77 Q35 60 32 79 Q45 91 59 77 M62 84 Q82 62 91 79 Q78 94 62 84" fill="#91c99b"/><g fill="#f39bc9" stroke="#fff0f8" stroke-width="2"><ellipse cx="60" cy="26" rx="12" ry="22"/><ellipse cx="60" cy="26" rx="12" ry="22" transform="rotate(72 60 38)"/><ellipse cx="60" cy="26" rx="12" ry="22" transform="rotate(144 60 38)"/><ellipse cx="60" cy="26" rx="12" ry="22" transform="rotate(216 60 38)"/><ellipse cx="60" cy="26" rx="12" ry="22" transform="rotate(288 60 38)"/></g><circle cx="60" cy="38" r="9" fill="#f7d58b"/></svg>',
@@ -589,7 +593,7 @@ function renderKingdoms(){
       {at:5,icon:"🌱",label:"Première floraison",detail:"Réussir 5 énigmes"},
       {at:10,icon:"🏰",label:"Gardienne du château",detail:"Réussir 10 énigmes"},
       {at:15,icon:"💎",label:"Maîtresse des cristaux",detail:"Réussir 15 énigmes"},
-      {at:21,icon:"👑",label:"Légende du royaume",detail:"Réussir les 21 énigmes"}
+      {at:21,icon:"👑",label:"Légende du royaume",detail:"Réussir les 100 épreuves"}
     ];
     const earned=milestones.filter(m=>count>=m.at);
     const treasures=completed.length
@@ -600,7 +604,7 @@ function renderKingdoms(){
         <img src="${profile.portrait}" alt="Portrait de ${profile.name}">
         <div><span class="kingdom-role">${profile.symbol} GARDIENNE DU ROYAUME</span><h3>${profile.name}</h3><p>${profile.realm}</p></div>
       </div>
-      <div class="kingdom-scoreline"><strong>${score}</strong><span>points gagnés</span><b>${count} / 21</b></div>
+      <div class="kingdom-scoreline"><strong>${score}</strong><span>points gagnés</span><b>${count} / 100</b></div>
       <div class="kingdom-progress"><i style="width:${percent}%"></i></div>
       <p class="kingdom-next">${next}</p>
       <div class="kingdom-achievements"><b>Ses badges personnels · ${earned.length}/${milestones.length}</b><div class="kingdom-badge-grid">${milestones.map(m=>'<article class="kingdom-badge '+(count>=m.at?'earned':'locked')+'"><span>'+m.icon+'</span><b>'+m.label+'</b><small>'+(count>=m.at?'Débloqué':m.detail)+'</small></article>').join("")}</div></div>
@@ -615,7 +619,7 @@ function renderKingdoms(){
     {at:5,icon:"🌷",title:"Duo en fleurs",detail:"Réussir 5 énigmes ensemble"},
     {at:10,icon:"🦋",title:"Complices légendaires",detail:"Réussir 10 énigmes ensemble"},
     {at:15,icon:"🌟",title:"Étoiles jumelles",detail:"Réussir 15 énigmes ensemble"},
-    {at:21,icon:"👑",title:"Légende des Besties",detail:"Terminer les 21 énigmes toutes les deux"}
+    {at:21,icon:"👑",title:"Légende des Besties",detail:"Terminer les 100 épreuves toutes les deux"}
   ];
   const sharedRoot=$("kingdomSharedBadges");
   if(sharedRoot) sharedRoot.innerHTML='<div class="kingdom-shared-heading"><span>♡</span><div><b>Les badges du duo</b><small>'+sharedCount+' énigme(s) réussie(s) ensemble</small></div><span>♡</span></div><div class="kingdom-shared-grid">'+sharedBadges.map(b=>'<article class="kingdom-badge '+(sharedCount>=b.at?'earned':'locked')+'"><span>'+b.icon+'</span><b>'+b.title+'</b><small>'+(sharedCount>=b.at?'Débloqué à deux':b.detail)+'</small></article>').join("")+'</div>';
@@ -720,7 +724,7 @@ function getUnlockedMemories(players){
   });
   const shared=[...bubulle].filter(index=>blybly.has(index)).length;
   if(shared>0) unlocked.push({id:"heart",title:"Le cœur des Besties s’illumine !",message:"Une nouvelle énigme réussie ensemble… Votre complicité fait battre le cœur enchanté. 💗"});
-  if(stages.every((stage,index)=>bubulle.has(index)&&blybly.has(index))) unlocked.push({id:"crown",title:"Votre légende est complète !",message:"Les 21 énigmes sont terminées par vous deux. La couronne légendaire vous appartient ! 👑"});
+  if(stages.every((stage,index)=>bubulle.has(index)&&blybly.has(index))) unlocked.push({id:"crown",title:"Votre légende est complète !",message:"Les 100 épreuves sont terminées par vous deux. La couronne légendaire vous appartient ! 👑"});
   return unlocked;
 }
 
@@ -728,7 +732,12 @@ const chapterGateways = {
   5:{icon:"🌲",message:"Les lucioles éclairent le sentier et les arbres murmurent vos premiers secrets. Ouvrez grand les yeux : la forêt vous attend."},
   9:{icon:"🏰",message:"Au bout du sentier, les portes du château s’entrouvrent. De nouveaux mystères et de belles surprises vous attendent derrière ses murs."},
   13:{icon:"🔮",message:"Une lueur rose et violette traverse le royaume. Les cristaux enchantés vous appellent : suivez leur lumière pour poursuivre votre quête."},
-  17:{icon:"👑",message:"Le dernier chemin s’illumine. Le trésor des Besties se rapproche… Encore quelques énigmes avant votre grande légende."}
+  17:{icon:"👑",message:"Le dernier chemin s’illumine. Le trésor des Besties se rapproche… Encore quelques énigmes avant votre grande légende."},
+  21:{icon:"🌲",message:"La forêt profonde vous ouvre ses chemins secrets. Soixante-dix-neuf nouvelles épreuves vous attendent !"},
+  36:{icon:"🌷",message:"Les jardins enchantés s'éveillent. Écoutez les fleurs et suivez les papillons !"},
+  52:{icon:"🏰",message:"Les portes du château des mystères s'ouvrent devant vous. À vous les énigmes royales !"},
+  68:{icon:"🔮",message:"Le royaume des cristaux vous appelle. Les défis deviennent étincelants !"},
+  84:{icon:"💗",message:"Bienvenue au sanctuaire des Besties. Votre grande légende approche !"}
 };
 let pendingChapterTransition=null;
 function showChapterTransition(){
@@ -833,7 +842,8 @@ async function answer(choice,stageIndex,button){
     pendingMemoryCelebrations.push(...newlyUnlocked);
     const nextStage=stageIndex+1;
     if(chapterGateways[nextStage]){
-      const groupEnd=nextStage+3;
+      const gatewayEnds={5:8,9:12,13:16,17:20,21:35,36:51,52:67,68:83,84:99};
+      const groupEnd=gatewayEnds[nextStage]??Math.min(nextStage+9,stages.length-1);
       pendingChapterTransition={...chapterGateways[nextStage],title:stages[nextStage].chapter,start:nextStage,end:groupEnd};
     }
     showReward(stageIndex);
