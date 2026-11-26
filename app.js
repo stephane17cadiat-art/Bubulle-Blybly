@@ -830,17 +830,25 @@ async function answer(choice,stageIndex,button){
   try{
     let newlyUnlocked=[];
     await runTransaction(db,async tx=>{
-      const snap=await tx.get(roomRef);const data=snap.data();const player={...data.players[myRole]};
+      const snap=await tx.get(roomRef);
+      if(!snap.exists()) throw new Error("La partie est introuvable.");
+      const data=snap.data();
+      const beforePlayers=data.players||{};
+      const player={...(beforePlayers[myRole]||{})};
+      player.completed=Array.isArray(player.completed)?player.completed:[];
+      player.score=Number(player.score)||0;
+      player.stage=Number(player.stage)||0;
       if(player.completed.includes(stageIndex))return;
-      const before=getUnlockedMemories(data.players);
-      const beforePlayers=data.players;
-      player.completed=[...player.completed,stageIndex];player.score+=10;player.stage=Math.max(player.stage,stageIndex+1);
-      const updatedPlayers={...data.players,[myRole]:player};
+      const before=getUnlockedMemories(beforePlayers);
+      player.completed=[...player.completed,stageIndex];
+      player.score+=10;
+      player.stage=Math.max(player.stage,stageIndex+1);
+      const updatedPlayers={...beforePlayers,[myRole]:player};
       const after=getUnlockedMemories(updatedPlayers);
       newlyUnlocked=after.filter(item=>!before.some(old=>old.id===item.id));
       const newEvents=buildAdventureEvents(beforePlayers,updatedPlayers,myRole,stageIndex);
       const adventureLog=[...(data.adventureLog||[]),...newEvents].slice(-100);
-      tx.update(roomRef,{[`players.${myRole}`]:player,adventureLog});
+      tx.update(roomRef,{players:updatedPlayers,adventureLog});
     });
     pendingMemoryCelebrations.push(...newlyUnlocked);
     const nextStage=stageIndex+1;
@@ -889,13 +897,17 @@ async function saveGame(){
   button.disabled=true;
   button.textContent="⏳ Sauvegarde…";
   try{
-    await runTransaction(db,async tx=>{
+    const verified=await runTransaction(db,async tx=>{
       const snap=await tx.get(roomRef);
       if(!snap.exists())throw new Error("La partie est introuvable.");
+      const data=snap.data();
+      const player=data.players?.[myRole];
+      if(!player)throw new Error("Le profil de cette partie est introuvable.");
       tx.update(roomRef,{lastSavedAt:serverTimestamp(),lastSavedBy:myRole});
+      return {score:Number(player.score)||0,stage:Number(player.stage)||0,completed:Array.isArray(player.completed)?player.completed.length:0};
     });
-    button.textContent="✓ Partie sauvegardée";
-    say("syncStatus","● Progression sauvegardée et synchronisée 💗");
+    button.textContent="✓ Progression vérifiée";
+    say("syncStatus","● Progression confirmée : "+verified.score+" points · "+verified.completed+" épreuve(s) validée(s) 💗");
   }catch(e){
     button.textContent=original;
     say("syncStatus","● Sauvegarde impossible : "+friendlyError(e));
