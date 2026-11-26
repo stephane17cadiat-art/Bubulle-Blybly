@@ -56,20 +56,40 @@ const show = (id) => $(id).classList.remove("hidden");
 const hide = (id) => $(id).classList.add("hidden");
 
 
-/* Lecture de la chanson locale dans le jeu, sans ouvrir de site externe. */
+/* Lecture locale : le fichier choisi reste sur l'appareil et n'est pas téléversé. */
 const songAudio = $("bestiesSong");
 const songButton = $("songToggleBtn");
 const songStatus = $("songStatus");
-if (songAudio && songButton) {
+const songChooseButton = $("songChooseBtn");
+const songFileInput = $("songFileInput");
+let localSongUrl = null;
+if (songAudio && songButton && songChooseButton && songFileInput) {
+  songChooseButton.addEventListener("click", () => songFileInput.click());
+  songFileInput.addEventListener("change", () => {
+    const file = songFileInput.files && songFileInput.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("audio/")) {
+      songStatus.textContent = "Choisis un fichier audio, de préférence au format MP3.";
+      return;
+    }
+    if (localSongUrl) URL.revokeObjectURL(localSongUrl);
+    localSongUrl = URL.createObjectURL(file);
+    songAudio.src = localSongUrl;
+    songAudio.load();
+    songButton.disabled = true;
+    songButton.textContent = "⏳ Préparation de la chanson…";
+    songStatus.textContent = "« " + file.name + " » est sélectionné sur cet appareil.";
+  });
   songAudio.addEventListener("canplay", () => {
     songButton.disabled = false;
     songButton.textContent = "▶️ Écouter notre chanson";
     songStatus.textContent = "Votre chanson est prête 💗";
-  }, { once: true });
+  });
   songAudio.addEventListener("error", () => {
+    if (!songAudio.src) return;
     songButton.disabled = true;
-    songButton.textContent = "💗 Notre chanson — bientôt";
-    songStatus.textContent = "Le fichier audio sera ajouté dès que tu pourras nous l’envoyer.";
+    songButton.textContent = "💗 Choisis d’abord le MP3";
+    songStatus.textContent = "Impossible de lire ce fichier. Essaie de sélectionner à nouveau le MP3.";
   });
   songButton.addEventListener("click", async () => {
     if (songAudio.paused) {
@@ -87,7 +107,7 @@ if (songAudio && songButton) {
     }
   });
   songAudio.addEventListener("ended", () => {
-    songButton.textContent = "▶️ Réécouter notre chanson";
+    songButton.textContent = "▶️ Réécouter la chanson";
     songStatus.textContent = "À vous de rejouer 💗";
   });
 }
