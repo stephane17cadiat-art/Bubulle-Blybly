@@ -297,11 +297,11 @@ const gardenBeds = [{"title":"Les premiers pas","subtitle":"La graine de votre c
 function buildAdventureEvents(beforePlayers,afterPlayers,role,stageIndex){
   const now=Date.now();
   const roleName=role==="BUBULLE"?"Bubulle":"Blybly";
-  const events=[{type:"riddle",icon:role==="BUBULLE"?"🧭":"🌷",title:roleName+" a résolu une énigme",detail:"Épreuve "+(stageIndex+1)+" · "+stages[stageIndex].place,at:now}];
+  const events=[{type:"riddle",icon:role==="BUBULLE"?"🧭":"🌷",title:roleName+" a résolu une épreuve",detail:"Épreuve "+(stageIndex+1)+" · "+stages[stageIndex].place,at:now}];
   const beforeBub=new Set(beforePlayers.BUBULLE.completed||[]),beforeBly=new Set(beforePlayers.BLYBLY.completed||[]);
   const afterBub=new Set(afterPlayers.BUBULLE.completed||[]),afterBly=new Set(afterPlayers.BLYBLY.completed||[]);
   if(!(beforeBub.has(stageIndex)&&beforeBly.has(stageIndex))&&afterBub.has(stageIndex)&&afterBly.has(stageIndex))
-    events.push({type:"shared",icon:"💗",title:"Une énigme réussie à deux",detail:"Vous avez découvert ensemble : "+stages[stageIndex].place,at:now+1});
+    events.push({type:"shared",icon:"💗",title:"Une épreuve réussie à deux",detail:"Vous avez découvert ensemble : "+stages[stageIndex].place,at:now+1});
   gardenBeds.forEach(bed=>{
     const ids=Array.from({length:bed.end-bed.start+1},(_,n)=>bed.start+n);
     const was=ids.every(i=>beforeBub.has(i)&&beforeBly.has(i)),is=ids.every(i=>afterBub.has(i)&&afterBly.has(i));
@@ -388,8 +388,8 @@ function render(){
   $("blyblyCard").classList.toggle("active",myRole==="BLYBLY");
   const mine=p[myRole], stage=Math.min(mine.stage,stages.length-1), s=stages[stage];
   // Le décor suit le chapitre actuellement découvert par le joueur.
-  const realm=stage>=17?"treasure":stage>=13?"crystals":stage>=9?"castle":"forest";
-  document.body.classList.remove("realm-forest","realm-castle","realm-crystals","realm-treasure");
+  const realm=stage>=84?"treasure":stage>=68?"crystals":stage>=52?"castle":stage>=36?"flowers":"forest";
+  document.body.classList.remove("realm-forest","realm-flowers","realm-castle","realm-crystals","realm-treasure");
   document.body.classList.add("realm-"+realm);
   $("stageLabel").textContent=`${s.chapter || "Premiers pas"} · ÉPREUVE ${stage+1} / ${stages.length}`;
   $("stagePlace").textContent=s.emoji+" "+s.place.toUpperCase();
@@ -507,7 +507,7 @@ function openAlbum(){
   const memoryCards=officialChapters.map((group,index)=>{
     const complete=Array.from({length:group.end-group.start+1},(_,offset)=>group.start+offset)
       .every(stageIndex=>bubulleDone.has(stageIndex)&&blyblyDone.has(stageIndex));
-    const flowers=["🌸","🌷","🌼","🌺"];
+    const flowers=["🌸","🌷","🌼","🌺","🌹","🏵️","💠","🔮","💗"];
     return {icon:flowers[index],title:group.title.replace(/^Chapitre \d+ · /,""),detail:complete?"Souvenir révélé à deux":"À révéler en terminant ce chapitre ensemble",unlocked:complete,kind:"flower"};
   });
   memoryCards.push({icon:"💗",title:"Le cœur des Besties",detail:sharedCount>0?sharedCount+" énigme(s) réussie(s) ensemble":"À débloquer avec votre première énigme commune",unlocked:sharedCount>0,kind:"heart",count:sharedCount});
