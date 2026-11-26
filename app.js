@@ -448,8 +448,13 @@ function openAlbum(){
         ? `<button type="button" class="album-firefly firefly-${i%6} album-secret-firefly" style="${style}" data-secret-firefly aria-label="Découvrir un message secret"></button>`
         : `<i class="album-firefly firefly-${i%6}" style="${style}" aria-hidden="true"></i>`;
     }).join("")+
-      '<span class="album-orbit-glow" aria-hidden="true"></span><span class="album-floating-petal petal-one" aria-hidden="true">✿</span><span class="album-floating-petal petal-two" aria-hidden="true">✧</span><span class="album-floating-petal petal-three" aria-hidden="true">✿</span><div class="album-secret-note" role="status" aria-live="polite"></div>';
+      '<span class="album-orbit-glow" aria-hidden="true"></span><span class="album-floating-petal petal-one" aria-hidden="true">✿</span><span class="album-floating-petal petal-two" aria-hidden="true">✧</span><span class="album-floating-petal petal-three" aria-hidden="true">✿</span>';
     album.prepend(sky);
+    const secretNote=document.createElement("div");
+    secretNote.className="album-secret-note";
+    secretNote.setAttribute("role","status");
+    secretNote.setAttribute("aria-live","polite");
+    album.append(secretNote);
   }
   album.classList.remove("is-opening");
   album.classList.remove("hidden");
