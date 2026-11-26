@@ -801,3 +801,12 @@ body.avatar-workshop-open{overflow:hidden}
 @keyframes albumPortraitFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
 @keyframes albumGlimmer{0%,100%{opacity:.35;letter-spacing:7px}50%{opacity:1;letter-spacing:10px}}
 @media(prefers-reduced-motion:reduce){.album-living-sky *,.album-book,.album-cover,.album-emblem,.album-flower,.album-stat-portrait,.album-duo-stat>span,.album-illustration-card.revealed svg,.album-photo-frame,.album-duo-portraits img{animation:none!important}}
+
+
+/* Lucioles secrètes à découvrir dans le grimoire */
+.album-secret-firefly{z-index:3;padding:0;border:0;cursor:pointer;pointer-events:auto;appearance:none;transition:filter .2s,scale .2s}
+.album-secret-firefly:focus-visible{outline:2px solid #fff1bd;outline-offset:7px}
+.album-secret-firefly:hover,.album-secret-firefly:active{scale:1.9;filter:brightness(1.7)}
+.album-secret-note{position:fixed;z-index:5;left:50%;bottom:max(22px,env(safe-area-inset-bottom));width:min(88vw,420px);padding:14px 18px;border:1px solid #f5d69c;border-radius:18px;background:linear-gradient(145deg,#fff4e9f5,#f8dff0f5);color:#71466c;text-align:center;font:italic 14px/1.5 Georgia,serif;box-shadow:0 10px 38px #0007,0 0 25px #f5c5e977;opacity:0;transform:translate(-50%,18px) scale(.94);pointer-events:none;transition:opacity .35s,transform .35s}
+.album-secret-note.visible{opacity:1;transform:translate(-50%,0) scale(1)}
+@media(prefers-reduced-motion:reduce){.album-secret-firefly,.album-secret-note{transition:none!important}}
