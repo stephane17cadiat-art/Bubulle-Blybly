@@ -46,11 +46,11 @@ function addMesh(parent, geometry, mat, position, scale, rotation) {
   mesh.castShadow = true; mesh.receiveShadow = true; parent.add(mesh); return mesh;
 }
 function sphere(parent, mat, pos, scale) {
-  return addMesh(parent,new THREE.SphereGeometry(1,24,18),mat,pos,scale);
+  return addMesh(parent,new THREE.SphereGeometry(1,48,32),mat,pos,scale);
 }
 function cylinderBetween(parent, mat, start, end, radiusTop, radiusBottom) {
   const a=new THREE.Vector3(...start), b=new THREE.Vector3(...end), direction=new THREE.Vector3().subVectors(b,a);
-  const mesh=addMesh(parent,new THREE.CylinderGeometry(radiusTop,radiusBottom,direction.length(),16),mat);
+  const mesh=addMesh(parent,new THREE.CylinderGeometry(radiusTop,radiusBottom,direction.length(),32),mat);
   mesh.position.copy(a).add(b).multiplyScalar(.5);
   mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction.normalize());
   return mesh;
@@ -60,15 +60,15 @@ function buildAvatar() {
   if(avatarRoot) scene.remove(avatarRoot);
   avatarRoot = new THREE.Group(); scene.add(avatarRoot);
   const skin=material(state.skinColor,.68,{sheen:.28,sheenColor:"#f6cbb9",sheenRoughness:.82});
-  const hair=material(state.hairColor,.38,{metalness:.025,clearcoat:.32,clearcoatRoughness:.36});
-  const dress=material(state.outfitColor,.42,{metalness:.035,sheen:.32,sheenColor:"#fff0f5",sheenRoughness:.58});
+  const hair=material(state.hairColor,.52,{metalness:.01,clearcoat:.16,clearcoatRoughness:.48});
+  const dress=material(state.outfitColor,.62,{metalness:.01,sheen:.18,sheenColor:"#fff0f5",sheenRoughness:.72});
   const dark=material("#342536");
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
   const lip=material(state.lipColor||"#b96e78",.48), blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72);
   const smooth=(g)=>{g.computeVertexNormals();return g;};
   const curveTube=(points,mat,r=.025)=>{
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
-    return addMesh(avatarRoot,new THREE.TubeGeometry(curve,32,r,8,false),mat);
+    return addMesh(avatarRoot,new THREE.TubeGeometry(curve,48,r,12,false),mat);
   };
   // Silhouette plus élancée et proportions proches d'un personnage de jeu vidéo
   cylinderBetween(avatarRoot,skin,[-.105,.25,.015],[-.13,.91,.015],.075,.095);
@@ -83,7 +83,7 @@ function buildAvatar() {
     new THREE.Vector2(.165,.82),new THREE.Vector2(.15,.98),new THREE.Vector2(.16,1.12),
     new THREE.Vector2(.19,1.27),new THREE.Vector2(.205,1.34)
   ];
-  const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,64)),dress,[0,.43,0]);
+  const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,96)),dress,[0,.43,0]);
   gown.scale.z=.78;
   // Chaque univers possède maintenant sa propre silhouette et ses accessoires.
   const accent=material(state.outfit==="forest"?"#8dbb83":state.outfit==="boho"?"#e8c69b":state.outfit==="magic"?"#b7a4ed":state.outfit==="modern"?"#6f7892":"#f4d7e8",.42,{metalness:.12});
@@ -140,25 +140,25 @@ function buildAvatar() {
     facePositions.setX(i,facePositions.getX(i)*taper);
   }
   faceGeometry.computeVertexNormals();
-  addMesh(avatarRoot,faceGeometry,skin,[0,2.12,.015],[.285,.355,.255]);
+  addMesh(headGroup,faceGeometry,skin,[0,2.12,.015],[.285,.355,.255]);
 
   for(const side of [-1,1]){
-    sphere(avatarRoot,skin,[side*.275,2.1,.005],[.045,.075,.052]);
-    sphere(avatarRoot,material("#c88978",.78),[side*.292,2.1,.043],[.018,.038,.012]);
+    sphere(headGroup,skin,[side*.275,2.1,.005],[.045,.075,.052]);
+    sphere(headGroup,material("#c88978",.78),[side*.292,2.1,.043],[.018,.038,.012]);
   }
   // Yeux brillants en plusieurs couches : iris, anneau, pupille et reflets.
   const irisMat=material(state.eyeColor||"#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
-  const eyeY=state.eyeShape==="round"?1.14:state.eyeShape==="soft"?0.92:1;
+  const eyeY=state.eyeShape==="round"?1.05:state.eyeShape==="soft"?0.94:1;
   for(const side of [-1,1]){
-    const eyeWhite=sphere(avatarRoot,white,[side*.105,2.15,.245],[.073,.076*eyeY,.031]);
-    eyeWhite.userData.baseScaleY=.076*eyeY;
+    const eyeWhite=sphere(headGroup,white,[side*.105,2.15,.245],[.057,.054*eyeY,.025]);
+    eyeWhite.userData.baseScaleY=.054*eyeY;
     faceBlinkMeshes.push(eyeWhite);
-    const iris=sphere(avatarRoot,irisRing,[side*.105,2.15,.271],[.041,.052*eyeY,.015]);
-    const irisCore=sphere(avatarRoot,irisMat,[side*.105,2.15,.281],[.034,.045*eyeY,.012]);
-    const pupil=sphere(avatarRoot,pupilMat,[side*.105,2.15,.291],[.018,.031*eyeY,.008]);
+    const iris=sphere(headGroup,irisRing,[side*.105,2.15,.271],[.033,.039*eyeY,.012]);
+    const irisCore=sphere(headGroup,irisMat,[side*.105,2.15,.281],[.028,.034*eyeY,.010]);
+    const pupil=sphere(headGroup,pupilMat,[side*.105,2.15,.291],[.015,.025*eyeY,.007]);
     faceGazeMeshes.push(iris,irisCore,pupil);
-    sphere(avatarRoot,white,[side*.105-.012,2.17,.299],[.011,.014,.006]);
-    sphere(avatarRoot,white,[side*.105+.014,2.135,.299],[.005,.007,.004]);
+    sphere(headGroup,white,[side*.105-.012,2.17,.299],[.011,.014,.006]);
+    sphere(headGroup,white,[side*.105+.014,2.135,.299],[.005,.007,.004]);
     // Paupière supérieure et cils fins.
     curveTube([[side*.18,2.15,.259],[side*.14,2.205,.27],[side*.105,2.218,.27],[side*.07,2.205,.27],[side*.03,2.15,.259]],dark,.008);
     for(let k=0;k<3;k++){
@@ -169,35 +169,35 @@ function buildAvatar() {
     faceBrowMeshes.push(brow);
     curveTube([[side*.17,2.105,.257],[side*.135,2.085,.27],[side*.105,2.081,.274],[side*.075,2.085,.27],[side*.04,2.105,.257]],material("#b98578",.72),.0045);
     // Reflet doux sur la pommette.
-    sphere(avatarRoot,material("#f7d8c9",.7),[side*.19,2.075,.218],[.035,.012,.009]);
+    sphere(headGroup,material("#f7d8c9",.7),[side*.19,2.075,.218],[.035,.012,.009]);
   }
   // Nez délicat et sourire discret, plutôt qu'une simple pastille.
-  sphere(avatarRoot,skin,[0,2.09,.268],[.018,.052,.028]);
-  sphere(avatarRoot,material("#d99a91",.65),[-.014,2.055,.294],[.008,.006,.005]);
-  sphere(avatarRoot,material("#d99a91",.65),[.014,2.055,.294],[.008,.006,.005]);
+  sphere(headGroup,skin,[0,2.09,.268],[.018,.052,.028]);
+  sphere(headGroup,material("#d99a91",.65),[-.014,2.055,.294],[.008,.006,.005]);
+  sphere(headGroup,material("#d99a91",.65),[.014,2.055,.294],[.008,.006,.005]);
   faceSmileMesh=curveTube([[-.052,1.995,.259],[-.028,1.982,.269],[0,1.98,.271],[.028,1.982,.269],[.052,1.995,.259]],lip,.009);
-  kissPucker=sphere(avatarRoot,lip,[0,1.985,.278],[.001,.001,.001]);
-  surpriseMouth=sphere(avatarRoot,material("#713d4b",.55),[0,1.985,.277],[.001,.001,.001]);
+  kissPucker=sphere(headGroup,lip,[0,1.985,.278],[.001,.001,.001]);
+  surpriseMouth=sphere(headGroup,material("#713d4b",.55),[0,1.985,.277],[.001,.001,.001]);
   curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
   if(state.makeup!=="none"){
     const blushSize=state.makeup==="fairy"?1.35:1;
-    sphere(avatarRoot,blush,[-.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
-    sphere(avatarRoot,blush,[.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
+    sphere(headGroup,blush,[-.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
+    sphere(headGroup,blush,[.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
   }
   if(state.makeup==="fairy"){
     const shimmer=material("#d8a9e8",.3,{metalness:.18,emissive:"#8e5ca8",emissiveIntensity:.12});
-    for(const side of [-1,1])sphere(avatarRoot,shimmer,[side*.105,2.225,.249],[.061,.012,.009]);
+    for(const side of [-1,1])sphere(headGroup,shimmer,[side*.105,2.225,.249],[.061,.012,.009]);
   }
   if(state.freckles==="light"||state.freckles==="many"){
     const freckle=material("#a86f58",.9);
     const dots=state.freckles==="many"?5:3;
     for(const side of [-1,1])for(let i=0;i<dots;i++){
       const x=side*(.145+(i%3)*.025),y=2.045-Math.floor(i/3)*.018;
-      sphere(avatarRoot,freckle,[x,y,.224],[.005,.005,.003]);
+      sphere(headGroup,freckle,[x,y,.224],[.005,.005,.003]);
     }
   }
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
-  hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); avatarRoot.add(hairMotionMesh);
+  hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); headGroup.add(hairMotionMesh);
   const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.305,.205,.285]);
   // The crown pivots at the top of the head for a very subtle sway.
   // Reflets fins qui donnent du relief aux mèches sans changer les coiffures choisies.
@@ -217,7 +217,7 @@ function buildAvatar() {
   }
   // Masse arrière pour donner une vraie épaisseur aux coiffures longues.
   if(!["bob","doublebun","curly"].includes(state.hairStyle)){
-    sphere(avatarRoot,hair,[0,2.12,-.205],[.265,.39,.115]);
+    sphere(headGroup,hair,[0,2.12,-.205],[.265,.39,.115]);
   }
   if(state.hairStyle==="long"){
     // Grandes mèches ondulées, de longueurs légèrement différentes.
@@ -232,37 +232,37 @@ function buildAvatar() {
     curveTube([[.19,2.28,-.18],[.28,2.12,-.12],[.34,1.98,.015],[.34,1.78,.08]],hair,.055);
     for(let i=0;i<10;i++){
       const y=2.12-i*.075, x=.29+Math.sin(i*.9)*.055, z=.105+Math.cos(i*.9)*.018;
-      sphere(avatarRoot,hair,[x,y,z],[.065,.075,.052]);
+      sphere(headGroup,hair,[x,y,z],[.065,.075,.052]);
     }
-    sphere(avatarRoot,gold,[.34,1.39,.10],[.045,.035,.035]);
+    sphere(headGroup,gold,[.34,1.39,.10],[.045,.035,.035]);
   }else if(state.hairStyle==="bun"){
     for(const side of [-1,1]){
-      sphere(avatarRoot,hair,[side*.17,2.49,-.04],[.145,.15,.14]);
+      sphere(headGroup,hair,[side*.17,2.49,-.04],[.145,.15,.14]);
       curveTube([[side*.12,2.48,.06],[side*.23,2.39,.12],[side*.26,2.29,.08]],hair,.035);
     }
   }else if(state.hairStyle==="bob"){
-    sphere(avatarRoot,hair,[0,2.22,-.035],[.31,.27,.28]);
+    sphere(headGroup,hair,[0,2.22,-.035],[.31,.27,.28]);
     for(const side of [-1,1]){
       curveTube([[side*.24,2.37,.11],[side*.30,2.20,.15],[side*.29,2.02,.12],[side*.22,1.94,.09]],hair,.062);
-      sphere(avatarRoot,hair,[side*.245,1.98,.09],[.065,.085,.06]);
+      sphere(headGroup,hair,[side*.245,1.98,.09],[.065,.085,.06]);
     }
   }else if(state.hairStyle==="ponytail"){
-    sphere(avatarRoot,hair,[0,2.37,-.27],[.16,.14,.13]);
-    sphere(avatarRoot,gold,[0,2.32,-.35],[.085,.045,.045]);
+    sphere(headGroup,hair,[0,2.37,-.27],[.16,.14,.13]);
+    sphere(headGroup,gold,[0,2.32,-.35],[.085,.045,.045]);
     for(let k=0;k<4;k++){
       curveTube([[.02,2.30,-.34],[.07+k*.018,2.12,-.43],[.02+k*.025,1.91,-.48],[.10-k*.025,1.68,-.43],[.04,1.48+k*.025,-.36]],hair,.04);
     }
   }else if(state.hairStyle==="doublebun"){
     for(const side of [-1,1]){
-      sphere(avatarRoot,hair,[side*.235,2.48,-.035],[.145,.15,.14]);
+      sphere(headGroup,hair,[side*.235,2.48,-.035],[.145,.15,.14]);
       for(let k=0;k<3;k++){
         const a=k*Math.PI*2/3;
-        sphere(avatarRoot,hair,[side*.235+Math.cos(a)*.09,2.48+Math.sin(a)*.075,.045],[.065,.07,.06]);
+        sphere(headGroup,hair,[side*.235+Math.cos(a)*.09,2.48+Math.sin(a)*.075,.045],[.065,.07,.06]);
       }
     }
   }else if(state.hairStyle==="halfup"){
-    sphere(avatarRoot,hair,[0,2.49,-.17],[.17,.13,.13]);
-    sphere(avatarRoot,gold,[0,2.43,-.285],[.075,.045,.035]);
+    sphere(headGroup,hair,[0,2.49,-.17],[.17,.13,.13]);
+    sphere(headGroup,gold,[0,2.43,-.285],[.075,.045,.035]);
     for(const side of [-1,1]){
       curveTube([[side*.19,2.28,-.18],[side*.25,2.05,-.22],[side*.27,1.82,-.20],[side*.22,1.62,-.16]],hair,.042);
     }
@@ -284,22 +284,22 @@ function buildAvatar() {
   if(state.hairAccessory==="flower"){
     for(const x of [-.19,0,.19]){
       const center=[x,2.47,.205];
-      sphere(avatarRoot,material("#e6a2c5",.3),center,[.035,.035,.025]);
+      sphere(headGroup,material("#e6a2c5",.3),center,[.035,.035,.025]);
       for(let k=0;k<5;k++){
         const a=k*Math.PI*2/5;
-        sphere(avatarRoot,material("#f7dce8",.35),[x+Math.cos(a)*.045,2.47+Math.sin(a)*.045,.205],[.028,.035,.018]);
+        sphere(headGroup,material("#f7dce8",.35),[x+Math.cos(a)*.045,2.47+Math.sin(a)*.045,.205],[.028,.035,.018]);
       }
     }
   }else if(state.hairAccessory==="bow"){
-    sphere(avatarRoot,material("#d879a9",.35),[-.2,2.44,.19],[.075,.045,.025]);
-    sphere(avatarRoot,material("#d879a9",.35),[-.29,2.47,.19],[.065,.045,.025],[0,0,-.45]);
-    sphere(avatarRoot,material("#d879a9",.35),[-.11,2.47,.19],[.065,.045,.025],[0,0,.45]);
+    sphere(headGroup,material("#d879a9",.35),[-.2,2.44,.19],[.075,.045,.025]);
+    sphere(headGroup,material("#d879a9",.35),[-.29,2.47,.19],[.065,.045,.025],[0,0,-.45]);
+    sphere(headGroup,material("#d879a9",.35),[-.11,2.47,.19],[.065,.045,.025],[0,0,.45]);
   }else if(state.hairAccessory==="crown"){
     curveTube([[-.25,2.42,.13],[-.18,2.52,.17],[0,2.57,.2],[.18,2.52,.17],[.25,2.42,.13]],gold,.025);
-    for(const x of [-.18,0,.18])sphere(avatarRoot,material("#e6a2c5",.25),[x,2.54+(.18-Math.abs(x))*.15,.2],[.025,.04,.02]);
+    for(const x of [-.18,0,.18])sphere(headGroup,material("#e6a2c5",.25),[x,2.54+(.18-Math.abs(x))*.15,.2],[.025,.04,.02]);
   }else{
     curveTube([[-.23,2.43,.13],[0,2.51,.22],[.23,2.43,.13]],gold,.018);
-    sphere(avatarRoot,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
+    sphere(headGroup,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
   }
   // Corsage et détails précieux
   for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
