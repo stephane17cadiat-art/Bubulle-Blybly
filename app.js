@@ -481,6 +481,11 @@ function startFinaleHearts(){
   const layer=$("finaleHearts");
   if(!layer) return;
   layer.innerHTML="";
+  const love=document.createElement("div");
+  love.className="finale-love-message";
+  love.setAttribute("aria-hidden","true");
+  love.innerHTML='<span class="love-pink">L’AMOUR</span> <span class="love-white">DE</span> <span class="love-pink">MA</span> <span class="love-white">VIE</span>';
+  layer.appendChild(love);
   for(let i=0;i<156;i++){
     const heart=document.createElement("span");
     const wave=Math.floor(i/26);
