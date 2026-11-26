@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-pause-save-v1">
+  <link rel="stylesheet" href="./style.css?v=20261126-100-epreuves-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -51,7 +51,7 @@
       <div class="home-copy">
         <p class="eyebrow"><span>✧</span> UN SECRET SE CACHE DANS LA FORÊT <span>✧</span></p>
         <h2>La Forêt des <em>Trésors</em></h2>
-        <p class="intro">Au bout du sentier, un royaume vous attend…<br>À deux, faites éclore la magie, résolvez 21 énigmes et découvrez votre trésor légendaire.</p>
+        <p class="intro">Au bout du sentier, un royaume vous attend…<br>À deux, faites éclore la magie, résolvez 100 épreuves et découvrez votre trésor légendaire.</p>
         <div class="home-chapter-tease"><span>🌲 La forêt</span><i>✦</i><span>🏰 Le château</span><i>✦</i><span>👑 Le trésor</span></div>
       </div>
       <div class="welcome-actions home-actions">
@@ -89,7 +89,7 @@
         <article class="player-card" id="blyblyCard"><img class="avatar player-portrait" src="./assets/blybly.jpg" alt="Portrait de Blybly"><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
       </div>
       <div class="map-panel panel">
-        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 21 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 21 trésors</b></div></div>
+        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 100 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 100 trésors</b></div></div>
         <div class="realm-atlas-heading"><div><p class="eyebrow">LES CINQ TERRES MAGIQUES</p><h4>Votre royaume évolutif</h4><p>Chaque victoire réveille une nouvelle merveille.</p></div><b id="realmAtlasStatus">0 / 5 régions éveillées</b></div>
         <div id="realmAtlas" class="realm-atlas" aria-live="polite"></div>
         <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
@@ -105,7 +105,7 @@
       </section>
       <div class="play-layout">
         <section class="panel challenge">
-          <div class="challenge-top"><span id="stageLabel" class="pill">ÉPREUVE 1 / 21</span><span class="chest">🎁</span></div>
+          <div class="challenge-top"><span id="stageLabel" class="pill">ÉPREUVE 1 / 100</span><span class="chest">🎁</span></div>
           <p class="eyebrow" id="stagePlace">FORÊT DES MURMURES</p>
           <h3 id="question">Quel animal hulule la nuit ?</h3>
           <div id="answers" class="answers"></div>
@@ -122,7 +122,7 @@
           <div id="treasures" class="treasures"><p class="muted">Vos trésors apparaîtront ici…</p></div>
           
           <div class="crown">👑</div>
-          <p class="muted small">Résolvez les 21 énigmes pour découvrir le trésor final.</p>
+          <p class="muted small">Résolvez les 100 épreuves pour découvrir le trésor final.</p>
         </aside>
       </div>
       <footer class="game-footer"><span id="syncStatus">● Connexion en cours…</span><button id="leaveBtn" class="text-button">Quitter la partie</button></footer>
@@ -197,7 +197,7 @@
         </div>
       </div>
       <h2 id="finaleTitle">La Couronne des Besties !</h2>
-      <p class="finale-intro">Vous avez traversé les quatre chapitres et relevé les 21 énigmes. Le coffre légendaire s’ouvre enfin…</p>
+      <p class="finale-intro">Vous avez traversé les cinq terres magiques et relevé les 100 épreuves. Le coffre légendaire s’ouvre enfin…</p>
       <div class="royal-titles">
         <div class="royal-title"><span>🧭</span><div><b>Bubulle</b><small>Gardien du cœur enchanté</small></div></div>
         <div class="royal-title"><span>🌷</span><div><b>Blybly</b><small>Reine des étoiles et des fous rires</small></div></div>
@@ -296,6 +296,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261126-pause-save-v1"></script>
+  <script type="module" src="./app.js?v=20261126-100-epreuves-v1"></script>
 </body>
 </html>
