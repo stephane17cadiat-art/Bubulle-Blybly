@@ -438,7 +438,11 @@ function openAlbum(){
     }).join("");
     return `<section class="album-chapter"><header><div><h3>${group.title}</h3><p>${group.subtitle}</p></div><span>${doneCount}/${groupStages.length} découvertes</span></header><div class="album-chapter-track"><i style="width:${doneCount/groupStages.length*100}%"></i></div><ol>${items}</ol></section>`;
   }).join("");
-  $("albumModal").classList.remove("hidden");
+  const album=$("albumModal");
+  album.classList.remove("is-opening");
+  album.classList.remove("hidden");
+  void album.offsetWidth;
+  album.classList.add("is-opening");
 }
 $("albumOpenBtn").addEventListener("click",openAlbum);
 $("albumCloseBtn").addEventListener("click",()=>hide("albumModal"));
