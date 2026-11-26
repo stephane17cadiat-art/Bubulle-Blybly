@@ -1527,3 +1527,48 @@ body{
 @media(prefers-reduced-motion:reduce){
   .map-panel .living-map .map-stop.current{animation:none!important}
 }
+
+
+/* Cinq terres illustrées — harmonisation avec la carte au parchemin */
+.realm-atlas-heading{margin:24px 0 13px;padding:13px 15px;border:1px solid #a97945aa;border-radius:15px;background:linear-gradient(135deg,#f6e8c9,#ead4aa);box-shadow:inset 0 0 0 3px #fff8e6aa;color:#65452d}
+.realm-atlas-heading .eyebrow{color:#9a633b}
+.realm-atlas-heading h4{color:#68452c;font-size:19px}
+.realm-atlas-heading p:not(.eyebrow){color:#8a6749;font-size:11px}
+.realm-atlas-heading>b{color:#80552e;font-size:10px}
+.realm-atlas{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.realm-card{min-height:285px;padding:14px 12px 12px;border:1px solid #b58a58aa;border-radius:18px;background:linear-gradient(155deg,#fff4d9,#ead5ae 75%,#dfc49a);box-shadow:0 7px 16px #5b3d211c,inset 0 0 0 3px #fff8e477;color:#68472f}
+.realm-card::before{content:"";position:absolute;inset:5px;border:1px solid #a77b4d55;border-radius:13px;pointer-events:none}
+.realm-card::after{content:"✧  ✦  ✧";position:absolute;right:13px;top:9px;color:#a87948aa;font-size:10px;letter-spacing:4px;pointer-events:none}
+.realm-card.realm-open{border-color:#ad7a43;background:linear-gradient(155deg,#fff3d5,#ead2a4 78%,#d9bd8d);box-shadow:0 8px 20px #68451e24,inset 0 0 0 3px #fff8e477}
+.realm-card.realm-complete{border-color:#a47a37;background:linear-gradient(155deg,#fff4cf,#f0d89e 70%,#e4c17b);box-shadow:0 0 0 2px #d3a34c44,0 9px 22px #8d642733,inset 0 0 0 3px #fff8df}
+.realm-card.realm-locked{filter:saturate(.55);opacity:.78}
+.realm-art{width:76px;height:76px;margin:3px 0 1px;background:radial-gradient(circle,#fff8e9 0 35%,#d9b77d 36% 39%,#f5e5c5 41% 62%,#b58a58 64% 66%,transparent 68%);box-shadow:0 4px 12px #76502b22}
+.realm-symbol{font-size:39px;filter:drop-shadow(0 3px 3px #76502b55)}
+.realm-orbit{inset:2px;border-color:#9e744b99}
+.realm-spark{color:#98672e;text-shadow:0 0 7px #fff4ce}
+.realm-copy{position:relative;z-index:1}
+.realm-state{color:#96632f;font-size:8px}
+.realm-copy h4{color:#593b28;font-size:14px;line-height:1.2}
+.realm-copy p{color:#8a6749;font-size:10px;min-height:25px}
+.realm-meter{background:#8d6a4829}
+.realm-meter i{background:linear-gradient(90deg,#b47a46,#e0b95e);box-shadow:0 0 8px #b47a4655}
+.realm-copy small{color:#76573a;font-size:9px}
+.realm-inhabitants{border-top:1px solid #a77b4d55;position:relative;z-index:1}
+.realm-friend{filter:drop-shadow(0 2px 3px #8c603355)}
+.realm-guardian{border-color:#a77b4d88;background:linear-gradient(120deg,#fff8e8,#f0dfc1);color:#68452c}
+.realm-guardian b{color:#7b4f2c}
+.realm-guardian small{color:#8c6a4b}
+.realm-guardian>i{color:#a06b32}
+.realm-whisper{background:#fff8e8;color:#765136;border:1px solid #c39b6c88}
+.realm-sleeping{border-color:#a77b4d55;color:#987c5c}
+.realm-complete .realm-guardian{border-color:#c0913e;background:linear-gradient(120deg,#fff2cb,#f3d99c)}
+.realm-seal{position:relative;z-index:1;color:#875b27;font-size:10px;font-weight:800}
+.realm-card.forest .realm-art{background:radial-gradient(circle,#dff0ca 0 34%,#a2bc7b 36% 40%,#f4e5c4 42% 62%,#9b8050 64% 66%,transparent 68%)}
+.realm-card.flowers .realm-art{background:radial-gradient(circle,#ffe1ed 0 34%,#d98aaa 36% 40%,#f7e7ca 42% 62%,#b47a62 64% 66%,transparent 68%)}
+.realm-card.castle .realm-art{background:radial-gradient(circle,#e9dcf5 0 34%,#ad91bd 36% 40%,#f7e8c9 42% 62%,#98744f 64% 66%,transparent 68%)}
+.realm-card.stars .realm-art{background:radial-gradient(circle,#d9e5fa 0 34%,#879dcb 36% 40%,#f5e8cc 42% 62%,#90734e 64% 66%,transparent 68%)}
+.realm-card.heart .realm-art{background:radial-gradient(circle,#ffdce9 0 34%,#dc8eac 36% 40%,#f8e5ca 42% 62%,#a8755c 64% 66%,transparent 68%)}
+.realm-card.realm-complete::after{content:"✦ RÉGION ÉVEILLÉE ✦";top:12px;right:10px;font-size:7px;letter-spacing:1px;color:#946a2f}
+@media(max-width:760px){.realm-atlas{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.realm-card{min-height:275px}}
+@media(max-width:430px){.realm-atlas{grid-template-columns:1fr}.realm-card{min-height:0}.realm-card::after{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.realm-card,.realm-meter i{transition:none!important}}
