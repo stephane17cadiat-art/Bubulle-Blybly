@@ -668,3 +668,24 @@ body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphe
 .album-timeline-entry p{margin:3px 0;color:#92717e;font-size:10px;line-height:1.4}
 .album-timeline-entry time{color:#ad8991;font-size:9px}
 .album-timeline-empty{margin:0;padding:14px 8px;text-align:center;color:#936f7b;font:italic 12px/1.6 Georgia,serif}
+
+
+/* Tableaux illustrés et page photo à personnaliser dans l'album */
+.album-illustrations-section{margin:22px 0;padding:15px 13px;border:1px solid #d7ad81;border-radius:17px;background:linear-gradient(145deg,#fff9f0,#f2e4f0);box-shadow:inset 0 0 0 3px #fffaf2,0 5px 14px #69465b10}
+.album-illustrations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.album-illustration-card{min-width:0;padding:11px 8px 10px;border:1px solid #ead4d8;border-radius:14px;background:linear-gradient(155deg,#fffdf9,#f8edf4);text-align:center;transition:transform .25s,box-shadow .25s}
+.album-illustration-card.revealed{border-color:#d6b17c;box-shadow:0 4px 13px #b77a9b18}
+.album-illustration-card.sealed{opacity:.66;filter:saturate(.55)}
+.album-illustration-art{height:92px;display:grid;place-items:center;margin-bottom:5px;border-radius:10px;background:radial-gradient(circle,#f7dcec 0,transparent 72%)}
+.album-illustration-art svg{width:100%;height:88px;max-width:130px;filter:drop-shadow(0 4px 5px #8b5c7b22)}
+.album-illustration-card b{display:block;color:#70466c;font:700 12px/1.3 Georgia,serif}
+.album-illustration-card p{min-height:32px;margin:5px 0;color:#92717e;font-size:9px;line-height:1.4}
+.album-illustration-card small{color:#ad8294;font-size:8px}
+.album-illustration-card.revealed small{color:#9a6b39}
+.album-photo-page{display:flex;align-items:center;gap:13px;margin-top:14px;padding:12px;border:1px dashed #cda8b8;border-radius:15px;background:linear-gradient(120deg,#f9eaf2,#fff8ec)}
+.album-photo-frame{flex:none;width:116px;padding:5px;border:3px solid #c99a68;border-radius:11px;background:#fff8e9;box-shadow:0 3px 9px #6d4c5c20;transform:rotate(-2deg)}
+.album-photo-frame svg{display:block;width:100%;height:auto}
+.album-photo-copy b{color:#70466c;font:700 12px/1.3 Georgia,serif}
+.album-photo-copy p{margin:5px 0;color:#92717e;font-size:9px;line-height:1.5}
+.album-photo-copy span{color:#a87591;font-size:9px;font-style:italic}
+@media(max-width:420px){.album-photo-page{align-items:flex-start;gap:9px}.album-photo-frame{width:98px}.album-illustration-art{height:82px}.album-illustration-art svg{height:78px}}
