@@ -947,3 +947,27 @@ body.avatar-workshop-open{overflow:hidden}
 .kingdom-shared-grid .kingdom-badge>b{font-size:9px}
 .kingdom-shared-grid .kingdom-badge>small{font-size:8px}
 @media(max-width:620px){.kingdom-shared-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kingdom-shared-grid .kingdom-badge:last-child{grid-column:1/-1}}
+
+
+/* Réponses plus confortables au toucher sur mobile */
+.answers{gap:12px}
+.answer{
+  min-height:52px;
+  padding:15px 17px;
+  border-radius:15px;
+  font-size:15px;
+  line-height:1.45;
+  transition:background .18s,border-color .18s,transform .18s,box-shadow .18s;
+  -webkit-tap-highlight-color:transparent;
+}
+.answer:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+  border-color:var(--gold);
+}
+.answer:active:not(:disabled){transform:scale(.985);background:#c7b2ff24}
+@media(max-width:650px){
+  .answers{gap:13px}
+  .answer{min-height:58px;padding:16px 17px;font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){.answer{transition:none}}
