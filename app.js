@@ -804,6 +804,32 @@ async function resetGame(){
     say("syncStatus","Réinitialisation impossible : "+friendlyError(e));
   }
 }
+async function saveGame(){
+  const button=$("saveGameBtn");
+  if(!user||!roomRef||!myRole){
+    say("syncStatus","● Aucune partie active à sauvegarder");
+    return;
+  }
+  const original=button.textContent;
+  button.disabled=true;
+  button.textContent="⏳ Sauvegarde…";
+  try{
+    await runTransaction(db,async tx=>{
+      const snap=await tx.get(roomRef);
+      if(!snap.exists())throw new Error("La partie est introuvable.");
+      tx.update(roomRef,{lastSavedAt:serverTimestamp(),lastSavedBy:myRole});
+    });
+    button.textContent="✓ Partie sauvegardée";
+    say("syncStatus","● Progression sauvegardée et synchronisée 💗");
+  }catch(e){
+    button.textContent=original;
+    say("syncStatus","● Sauvegarde impossible : "+friendlyError(e));
+  }finally{
+    button.disabled=false;
+  }
+}
+$("saveGameBtn").addEventListener("click",saveGame);
+
 $("resetGameBtn").addEventListener("click",resetGame);
 
 const avatarOverlay = $("avatarWorkshopOverlay");
