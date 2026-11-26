@@ -200,6 +200,25 @@ const gardenBeds = [
   {title:"Les cristaux enchantés",subtitle:"La magie fleurit",start:13,end:16,flower:"🌼",name:"Marguerite enchantée"},
   {title:"Le trésor des Besties",subtitle:"Votre belle légende",start:17,end:20,flower:"🌸",name:"Fleur du cœur"}
 ];
+function buildAdventureEvents(beforePlayers,afterPlayers,role,stageIndex){
+  const now=Date.now();
+  const roleName=role==="BUBULLE"?"Bubulle":"Blybly";
+  const events=[{type:"riddle",icon:role==="BUBULLE"?"🧭":"🌷",title:roleName+" a résolu une énigme",detail:"Épreuve "+(stageIndex+1)+" · "+stages[stageIndex].place,at:now}];
+  const beforeBub=new Set(beforePlayers.BUBULLE.completed||[]),beforeBly=new Set(beforePlayers.BLYBLY.completed||[]);
+  const afterBub=new Set(afterPlayers.BUBULLE.completed||[]),afterBly=new Set(afterPlayers.BLYBLY.completed||[]);
+  if(!(beforeBub.has(stageIndex)&&beforeBly.has(stageIndex))&&afterBub.has(stageIndex)&&afterBly.has(stageIndex))
+    events.push({type:"shared",icon:"💗",title:"Une énigme réussie à deux",detail:"Vous avez découvert ensemble : "+stages[stageIndex].place,at:now+1});
+  gardenBeds.forEach(bed=>{
+    const ids=Array.from({length:bed.end-bed.start+1},(_,n)=>bed.start+n);
+    const was=ids.every(i=>beforeBub.has(i)&&beforeBly.has(i)),is=ids.every(i=>afterBub.has(i)&&afterBly.has(i));
+    if(!was&&is)events.push({type:"flower",icon:bed.flower,title:bed.name+" a éclos",detail:"Vous avez terminé « "+bed.title+" » toutes les deux.",at:now+2});
+  });
+  const wasLegend=stages.every((stage,i)=>beforeBub.has(i)&&beforeBly.has(i));
+  const isLegend=stages.every((stage,i)=>afterBub.has(i)&&afterBly.has(i));
+  if(!wasLegend&&isLegend)events.push({type:"crown",icon:"👑",title:"La légende des Besties est complète",detail:"Les 21 énigmes ont été résolues par Bubulle et Blybly.",at:now+3});
+  return events;
+}
+
 function renderBestiesGarden(players){
   const garden=$("bestiesGarden");
   if(!garden||!players)return;
@@ -366,6 +385,13 @@ function openAlbum(){
     <span class="album-memory-state">${memory.unlocked?"Souvenir débloqué":"À découvrir"}</span>
     ${memory.kind==="heart"&&memory.unlocked?`<span class="album-heart-count">${memory.count} ♥</span>`:""}
   </article>`).join("");
+  const adventureLog=[...(roomData.adventureLog||[])].sort((a,b)=>(b.at||0)-(a.at||0));
+  $("albumTimeline").innerHTML=adventureLog.length
+    ? adventureLog.map(event=>{
+        const date=event.at?new Date(event.at).toLocaleString("fr-FR",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Souvenir";
+        return `<article class="album-timeline-entry"><span class="album-timeline-icon">${event.icon||"✦"}</span><div><b>${event.title}</b><p>${event.detail}</p><time>${date}</time></div></article>`;
+      }).join("")
+    : '<p class="album-timeline-empty">Votre chronique commence ici… La prochaine énigme résolue écrira sa première page. 💗</p>';
   $("albumChapters").innerHTML=albumGroups.map(group=>{
     const groupStages=stages.slice(group.start,group.end+1);
     const doneCount=groupStages.filter((stage,offset)=>bubulleDone.has(group.start+offset)||blyblyDone.has(group.start+offset)).length;
@@ -535,11 +561,14 @@ async function answer(choice,stageIndex,button){
       const snap=await tx.get(roomRef);const data=snap.data();const player={...data.players[myRole]};
       if(player.completed.includes(stageIndex))return;
       const before=getUnlockedMemories(data.players);
+      const beforePlayers=data.players;
       player.completed=[...player.completed,stageIndex];player.score+=10;player.stage=Math.max(player.stage,stageIndex+1);
       const updatedPlayers={...data.players,[myRole]:player};
       const after=getUnlockedMemories(updatedPlayers);
       newlyUnlocked=after.filter(item=>!before.some(old=>old.id===item.id));
-      tx.update(roomRef,{[`players.${myRole}`]:player});
+      const newEvents=buildAdventureEvents(beforePlayers,updatedPlayers,myRole,stageIndex);
+      const adventureLog=[...(data.adventureLog||[]),...newEvents].slice(-100);
+      tx.update(roomRef,{[`players.${myRole}`]:player,adventureLog});
     });
     pendingMemoryCelebrations.push(...newlyUnlocked);
     const nextStage=stageIndex+1;
