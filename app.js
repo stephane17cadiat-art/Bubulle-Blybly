@@ -484,7 +484,7 @@ function openAlbum(){
   ].map(player=>{
     const data=players[player.key];
     const count=(data.completed||[]).length;
-    return `<article class="album-stat"><img class="album-stat-portrait" src="${player.portrait}" alt="Portrait de ${player.name}"><div><b>${player.name}</b><strong>${count} <small>/ 21</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/100*100)}%"></i></div></article>`;
+    return `<article class="album-stat"><img class="album-stat-portrait" src="${player.portrait}" alt="Portrait de ${player.name}"><div><b>${player.name}</b><strong>${count} <small>/ 100</small></strong><em>${data.score||0} points</em></div><div class="album-progress-track"><i style="width:${Math.min(100,count/100*100)}%"></i></div></article>`;
   }).join("");
   const bubulleDone=new Set(players.BUBULLE.completed||[]);
   const blyblyDone=new Set(players.BLYBLY.completed||[]);
