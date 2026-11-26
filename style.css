@@ -1624,3 +1624,9 @@ body{
 .home-hero-halo img{
   background:linear-gradient(145deg,#fff5f7 0%,#f7e2ec 52%,#fff1df 100%) !important;
 }
+
+/* Remplir entièrement les médaillons : ne plus laisser apparaître le fond autour des photos */
+.home-hero-halo{background:linear-gradient(145deg,#fff4f7 0%,#f6dce9 48%,#fff0dc 100%) !important}
+.home-hero-halo img{object-fit:cover !important;background:transparent !important}
+.home-hero-bubulle .home-hero-halo img{object-position:center 27%}
+.home-hero-blybly .home-hero-halo img{object-position:center 27%}
