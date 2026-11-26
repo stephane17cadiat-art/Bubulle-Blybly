@@ -329,7 +329,7 @@ function renderBestiesGarden(players){
     </article>`;
   }).join("");
   $("gardenProgress").textContent=bloomed+" / "+gardenBeds.length;
-  $("gardenMessage").textContent=bloomed===5
+  $("gardenMessage").textContent=bloomed===gardenBeds.length
     ?"Votre jardin est en pleine floraison… tout comme votre belle complicité. 👑💗"
     :bloomed===0
       ?"Votre jardin attend vos premières victoires partagées… 💗"
@@ -952,7 +952,7 @@ $("copyInviteBtn").addEventListener("click",async()=>{
   try{await navigator.clipboard.writeText(url);say("syncStatus","Invitation copiée ! Envoie-la à Blybly.");}
   catch{prompt("Copie ce lien et envoie-le à Blybly :",url);}
 });
-$("hintBtn").addEventListener("click",()=>{const stage=Math.min(roomData.players[myRole].stage,4);$("hint").textContent="💡 "+stages[stage].hint;show("hint")});
+$("hintBtn").addEventListener("click",()=>{const stage=Math.min(roomData.players[myRole].stage,stages.length-1);$("hint").textContent="💡 "+stages[stage].hint;show("hint")});
 $("nextBtn").addEventListener("click",()=>render());
 $("leaveBtn").addEventListener("click",()=>{if(unsubscribe)unsubscribe();history.replaceState({},"",location.pathname);location.reload()});
 $("closeModal").addEventListener("click",()=>hide("modal"));
