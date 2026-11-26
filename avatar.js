@@ -132,7 +132,7 @@ function buildAvatar() {
   // Cou délicat pour une transition plus naturelle entre la tête et le buste.
   cylinderBetween(avatarRoot,skin,[0,1.68,.005],[0,1.91,.005],.075,.082);
   // Tête proportionnée, séparée du corps pour une silhouette moins poupée.
-  const headGroup=new THREE.Group();headGroup.position.y=.25;headGroup.scale.set(.88,.88,.88);avatarRoot.add(headGroup);curveParent=headGroup;
+  const headGroup=new THREE.Group();headGroup.position.y=.34;headGroup.scale.set(.82,.86,.84);avatarRoot.add(headGroup);curveParent=headGroup;
   // Visage sculpté : mâchoire plus fine et pommettes douces
   const faceGeometry = new THREE.SphereGeometry(1,48,40);
   const facePositions = faceGeometry.attributes.position;
@@ -142,7 +142,7 @@ function buildAvatar() {
     facePositions.setX(i,facePositions.getX(i)*taper);
   }
   faceGeometry.computeVertexNormals();
-  addMesh(headGroup,faceGeometry,skin,[0,2.12,.015],[.285,.355,.255]);
+  addMesh(headGroup,faceGeometry,skin,[0,2.12,.015],[.275,.35,.245]);
 
   for(const side of [-1,1]){
     sphere(headGroup,skin,[side*.275,2.1,.005],[.045,.075,.052]);
@@ -152,15 +152,15 @@ function buildAvatar() {
   const irisMat=material(state.eyeColor||"#8b6049",.24), irisRing=material("#c99a6b",.3), pupilMat=material("#211923",.16);
   const eyeY=state.eyeShape==="round"?1.05:state.eyeShape==="soft"?0.94:1;
   for(const side of [-1,1]){
-    const eyeWhite=sphere(headGroup,white,[side*.105,2.15,.245],[.057,.054*eyeY,.025]);
+    const eyeWhite=sphere(headGroup,white,[side*.105,2.15,.245],[.049,.047*eyeY,.021]);
     eyeWhite.userData.baseScaleY=.054*eyeY;
     faceBlinkMeshes.push(eyeWhite);
-    const iris=sphere(headGroup,irisRing,[side*.105,2.15,.271],[.033,.039*eyeY,.012]);
-    const irisCore=sphere(headGroup,irisMat,[side*.105,2.15,.281],[.028,.034*eyeY,.010]);
+    const iris=sphere(headGroup,irisRing,[side*.105,2.15,.271],[.029,.034*eyeY,.010]);
+    const irisCore=sphere(headGroup,irisMat,[side*.105,2.15,.281],[.025,.030*eyeY,.009]);
     const pupil=sphere(headGroup,pupilMat,[side*.105,2.15,.291],[.015,.025*eyeY,.007]);
     faceGazeMeshes.push(iris,irisCore,pupil);
-    sphere(headGroup,white,[side*.105-.012,2.17,.299],[.011,.014,.006]);
-    sphere(headGroup,white,[side*.105+.014,2.135,.299],[.005,.007,.004]);
+    sphere(headGroup,white,[side*.105-.012,2.17,.299],[.008,.010,.005]);
+    sphere(headGroup,white,[side*.105+.014,2.135,.299],[.004,.005,.003]);
     // Paupière supérieure et cils fins.
     curveTube([[side*.18,2.15,.259],[side*.14,2.205,.27],[side*.105,2.218,.27],[side*.07,2.205,.27],[side*.03,2.15,.259]],dark,.008);
     for(let k=0;k<3;k++){
@@ -183,7 +183,7 @@ function buildAvatar() {
   curveTube([[-.035,1.977,.268],[0,1.972,.273],[.035,1.977,.268]],material("#f3c2b8",.6),.004);
   if(state.makeup!=="none"){
     const blushSize=state.makeup==="fairy"?1.35:1;
-    sphere(headGroup,blush,[-.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
+    sphere(headGroup,blush,[-.19,2.04,.205],[.032*blushSize,.014*blushSize,.008]);
     sphere(headGroup,blush,[.19,2.04,.205],[.045*blushSize,.022*blushSize,.012]);
   }
   if(state.makeup==="fairy"){
@@ -200,7 +200,7 @@ function buildAvatar() {
   }
   // Chevelure sculptée : volume doux, mèches séparées et silhouettes propres à chaque coiffure.
   hairMotionMesh = new THREE.Group(); hairMotionMesh.position.set(0,2.2,0); headGroup.add(hairMotionMesh);
-  const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.305,.205,.285]);
+  const crownCap=sphere(hairMotionMesh,hair,[0,.18,-.005],[.285,.19,.255]);
   // The crown pivots at the top of the head for a very subtle sway.
   // Reflets fins qui donnent du relief aux mèches sans changer les coiffures choisies.
   const hairShine=material("#f0c99b",.42,{metalness:.08});
@@ -215,7 +215,7 @@ function buildAvatar() {
   for(let i=0;i<9;i++){
     const x=-.205+i*.051;
     const y=2.405-Math.abs(x)*.19;
-    curveTube([[x*.72,2.49,.17],[x*.94,2.445,.245],[x*1.04,y,.275],[x*1.02,y-.045,.255]],hair,.025);
+    curveTube([[x*.72,2.49,.17],[x*.94,2.445,.245],[x*1.04,y,.275],[x*1.02,y-.045,.255]],hair,.018);
   }
   // Masse arrière pour donner une vraie épaisseur aux coiffures longues.
   if(!["bob","doublebun","curly"].includes(state.hairStyle)){
