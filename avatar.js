@@ -695,6 +695,44 @@ function animate(){
   }
   renderer.render(scene,camera);
 }
+function setupWardrobeCategories(){
+  const grid=$("hairStyle")?.closest(".control-grid");
+  const tabs=$("wardrobeTabs"),hint=$("categoryHint");
+  if(!grid||!tabs)return;
+  const groups=[
+    {id:"hair",label:"💇‍♀️ Coiffures",hint:"Choisis ta coiffure et sa couleur.",keys:["hairStyle","hairColor"]},
+    {id:"face",label:"🌸 Visage",hint:"Personnalise les traits et le maquillage.",keys:["skinColor","eyeColor","eyeShape","lipColor","makeup","freckles"]},
+    {id:"outfit",label:"👗 Tenues",hint:"Change de tenue et choisis ses couleurs.",keys:["outfit","outfitColor"]},
+    {id:"accessories",label:"👑 Accessoires",hint:"Ajoute des ornements, des ailes et un compagnon.",keys:["hairAccessory","wings","accessoryStyle","companion"]},
+    {id:"magic",label:"✨ Magie",hint:"Compose ton ambiance et tes effets magiques.",keys:["magicEffect","magicColor","magicMotion","magicPower","theme"]}
+  ];
+  const panels=new Map();
+  for(const group of groups){
+    const panel=document.createElement("div");
+    panel.className="category-panel";panel.dataset.category=group.id;
+    for(const key of group.keys){
+      const control=$(key);
+      const label=control?.closest("label");
+      if(label)panel.appendChild(label);
+    }
+    grid.appendChild(panel);panels.set(group.id,panel);
+    const tab=document.createElement("button");
+    tab.type="button";tab.className="wardrobe-tab";tab.textContent=group.label;
+    tab.setAttribute("aria-pressed","false");
+    tab.addEventListener("click",()=>{
+      for(const [id,node] of panels){node.hidden=id!==group.id;}
+      for(const button of tabs.children){button.classList.toggle("active",button===tab);button.setAttribute("aria-pressed",String(button===tab));}
+      hint.textContent=group.hint;
+    });
+    tabs.appendChild(tab);
+  }
+  tabs.firstElementChild?.click();
+  for(const select of grid.querySelectorAll("select")){
+    const update=()=>select.closest("label")?.classList.add("recently-changed");
+    select.addEventListener("change",update);
+  }
+}
+
 function readControls(){
   for(const key of Object.keys(defaults)) state[key]=$(key).value;
 }
@@ -741,6 +779,7 @@ async function start(){
     $("avatarView").innerHTML='<div class="loading">🌙 Ouvre cet atelier depuis ta partie pour retrouver ton personnage.</div>';
   }
 }
+setupWardrobeCategories();
 for(const key of Object.keys(defaults)) $(key).addEventListener("change",changed);
 $("saveBtn").addEventListener("click",saveAvatar);
 function playPose(mode){
