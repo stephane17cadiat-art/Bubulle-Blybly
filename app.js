@@ -589,11 +589,13 @@ function renderKingdoms(){
     const percent=Math.round(count/stages.length*100);
     const next=data.stage>=stages.length?"Toutes les épreuves sont terminées !":"Prochaine épreuve : "+(Math.max(0,Number(data.stage)||0)+1)+" / "+stages.length;
     const milestones=[
-      {at:1,icon:"✨",label:"Première étincelle",detail:"Réussir une première énigme"},
-      {at:5,icon:"🌱",label:"Première floraison",detail:"Réussir 5 énigmes"},
-      {at:10,icon:"🏰",label:"Gardienne du château",detail:"Réussir 10 énigmes"},
-      {at:15,icon:"💎",label:"Maîtresse des cristaux",detail:"Réussir 15 énigmes"},
-      {at:21,icon:"👑",label:"Légende du royaume",detail:"Réussir les 100 épreuves"}
+      {at:1,icon:"✨",label:"Première étincelle",detail:"Réussir une première épreuve"},
+      {at:10,icon:"🌱",label:"Première floraison",detail:"Réussir 10 épreuves"},
+      {at:21,icon:"🌲",label:"Exploratrice",detail:"Réussir 21 épreuves"},
+      {at:40,icon:"🌷",label:"Jardinière royale",detail:"Réussir 40 épreuves"},
+      {at:60,icon:"🏰",label:"Gardienne du château",detail:"Réussir 60 épreuves"},
+      {at:80,icon:"💎",label:"Maîtresse des cristaux",detail:"Réussir 80 épreuves"},
+      {at:100,icon:"👑",label:"Légende du royaume",detail:"Réussir les 100 épreuves"}
     ];
     const earned=milestones.filter(m=>count>=m.at);
     const treasures=completed.length
@@ -615,11 +617,12 @@ function renderKingdoms(){
   const sharedCompleted=[...(roomData.players.BUBULLE.completed||[])].filter(i=>(roomData.players.BLYBLY.completed||[]).includes(i));
   const sharedCount=sharedCompleted.length;
   const sharedBadges=[
-    {at:1,icon:"💗",title:"Premier secret à deux",detail:"Réussir ensemble une même énigme"},
-    {at:5,icon:"🌷",title:"Duo en fleurs",detail:"Réussir 5 énigmes ensemble"},
-    {at:10,icon:"🦋",title:"Complices légendaires",detail:"Réussir 10 énigmes ensemble"},
-    {at:15,icon:"🌟",title:"Étoiles jumelles",detail:"Réussir 15 énigmes ensemble"},
-    {at:21,icon:"👑",title:"Légende des Besties",detail:"Terminer les 100 épreuves toutes les deux"}
+    {at:1,icon:"💗",title:"Premier secret à deux",detail:"Réussir ensemble une même épreuve"},
+    {at:10,icon:"🌷",title:"Duo en fleurs",detail:"Réussir 10 épreuves ensemble"},
+    {at:25,icon:"🦋",title:"Complices légendaires",detail:"Réussir 25 épreuves ensemble"},
+    {at:50,icon:"🌟",title:"Étoiles jumelles",detail:"Réussir 50 épreuves ensemble"},
+    {at:75,icon:"💎",title:"Âmes aventurières",detail:"Réussir 75 épreuves ensemble"},
+    {at:100,icon:"👑",title:"Légende des Besties",detail:"Terminer les 100 épreuves toutes les deux"}
   ];
   const sharedRoot=$("kingdomSharedBadges");
   if(sharedRoot) sharedRoot.innerHTML='<div class="kingdom-shared-heading"><span>♡</span><div><b>Les badges du duo</b><small>'+sharedCount+' énigme(s) réussie(s) ensemble</small></div><span>♡</span></div><div class="kingdom-shared-grid">'+sharedBadges.map(b=>'<article class="kingdom-badge '+(sharedCount>=b.at?'earned':'locked')+'"><span>'+b.icon+'</span><b>'+b.title+'</b><small>'+(sharedCount>=b.at?'Débloqué à deux':b.detail)+'</small></article>').join("")+'</div>';
