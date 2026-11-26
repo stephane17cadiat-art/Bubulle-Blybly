@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261126-heart-fireworks-v9">
+  <link rel="stylesheet" href="./style.css?v=20261126-command-center-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -81,9 +81,24 @@
     <section id="game" class="hidden">
       <div class="game-heading">
         <div><p class="eyebrow">VOTRE AVENTURE</p><h2 id="roomTitle">La Forêt des Trésors</h2></div>
-        <div class="game-tools"><button id="avatarBtn" class="secondary">✨ Personnaliser mon personnage</button><button id="kingdomsOpenBtn" class="secondary">🏰 Mes royaumes</button><button id="saveGameBtn" class="secondary" type="button">💾 Sauvegarder</button><button id="copyInviteBtn" class="icon-button" title="Copier l’invitation">🔗 Inviter</button><button id="resetGameBtn" class="secondary">↻ Réinitialiser</button><button id="albumOpenBtn" class="secondary album-open-btn">📖 Album secret</button></div>
       </div>
-      <div class="song-player"><div class="song-controls"><button id="songChooseBtn" class="song-choose" type="button">🎵 Choisir notre chanson</button><input id="songFileInput" type="file" accept="audio/mpeg,audio/mp3,audio/*" hidden><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Choisis d’abord le MP3</button></div><span id="songStatus" class="song-status" role="status">Sélectionne le fichier audio sur cet appareil. Il reste privé et n’est pas envoyé sur le site.</span><audio id="bestiesSong" preload="none"></audio></div>
+      <section class="command-center" aria-label="Commandes de votre royaume">
+        <p class="eyebrow command-kicker">VOS COMMANDES</p>
+        <div class="command-main">
+          <button id="saveGameBtn" class="command-button command-save" type="button"><span>💾</span><b>Sauvegarder</b></button>
+          <button id="albumOpenBtn" class="command-button" type="button"><span>📖</span><b>Album secret</b></button>
+          <button id="kingdomsOpenBtn" class="command-button" type="button"><span>🏰</span><b>Mes royaumes</b></button>
+        </div>
+        <div class="song-player"><div class="song-controls"><button id="songChooseBtn" class="song-choose" type="button">🎵 Choisir notre chanson</button><input id="songFileInput" type="file" accept="audio/mpeg,audio/mp3,audio/*" hidden><button id="songToggleBtn" class="song-toggle" type="button" disabled>💗 Choisis d’abord le MP3</button></div><span id="songStatus" class="song-status" role="status">Sélectionne le fichier audio sur cet appareil. Il reste privé et n’est pas envoyé sur le site.</span><audio id="bestiesSong" preload="none"></audio></div>
+        <details class="more-options">
+          <summary>⚙️ Plus d’options</summary>
+          <div class="more-options-actions">
+            <button id="avatarBtn" class="secondary" type="button">✨ Personnaliser mon personnage</button>
+            <button id="copyInviteBtn" class="secondary" type="button" title="Copier l’invitation">🔗 Inviter</button>
+            <button id="resetGameBtn" class="secondary" type="button">↻ Réinitialiser</button>
+          </div>
+        </details>
+      </section>
       <div class="player-strip">
         <article class="player-card" id="bubulleCard"><img class="avatar player-portrait" src="./assets/bubulle.jpg" alt="Portrait de Bubulle"><div><b>BUBULLE</b><small id="bubulleStatus">En attente</small></div><strong id="bubulleScore">0 pts</strong></article>
         <article class="player-card" id="blyblyCard"><img class="avatar player-portrait" src="./assets/blybly.jpg" alt="Portrait de Blybly"><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
