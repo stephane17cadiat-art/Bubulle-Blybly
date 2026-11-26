@@ -515,7 +515,7 @@ function openFinale(preview=false){
 }
 
 $("finaleReplayBtn").addEventListener("click",replayFinaleAnimation);
-$("finalePreviewBtn").addEventListener("click",()=>openFinale(true));
+
 $("finaleCelebrateBtn").addEventListener("click",()=>{$("modal").classList.add("hidden");});
 const albumGroups = [{"title":"Les premiers pas","subtitle":"Les dix premières découvertes","start":0,"end":9},{"title":"La forêt des secrets","subtitle":"Les murmures et les lucioles","start":10,"end":19},{"title":"Le sentier des merveilles","subtitle":"Les secrets de la forêt profonde","start":20,"end":29},{"title":"Les jardins enchantés","subtitle":"Les fleurs et les surprises","start":30,"end":39},{"title":"La roseraie magique","subtitle":"Les couleurs du royaume","start":40,"end":49},{"title":"Le château mystérieux","subtitle":"Les portes et les énigmes","start":50,"end":59},{"title":"La galerie des mystères","subtitle":"Les salles secrètes du château","start":60,"end":69},{"title":"Le royaume des cristaux","subtitle":"Les défis de la lumière","start":70,"end":79},{"title":"Le sanctuaire des Besties","subtitle":"La force du duo","start":80,"end":89},{"title":"La légende des Besties","subtitle":"Le chemin vers la couronne","start":90,"end":99}];
 function openAlbum(){
