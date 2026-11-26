@@ -548,10 +548,10 @@ async function applyRealisticStyle(){
 }
 async function loadRealisticCharacter(){
   if(realisticReady || !scene) return;
-  status("✨ Chargement du modèle humain réaliste…");
+  status("✨ Chargement du modèle humain…");
   const loader=new GLTFLoader();
   try{
-    const gltf=await loader.loadAsync("https://grab3d.com/dl/elf-rigged/elf-rigged.glb");
+    const gltf=await loader.loadAsync("https://grab3d.com/dl/woman-base-character-rigged/woman-base-character-rigged.glb");
     realisticRoot=gltf.scene;
     const bounds=new THREE.Box3().setFromObject(realisticRoot);
     const size=bounds.getSize(new THREE.Vector3());
@@ -570,7 +570,7 @@ async function loadRealisticCharacter(){
     applyRealisticStyle();buildRealisticAccessories();
     if(gltf.animations?.length){realisticMixer=new THREE.AnimationMixer(realisticRoot);realisticAction=realisticMixer.clipAction(gltf.animations[0]);}
     realisticReady=true;
-    status("✓ Modèle humain 3D chargé — tu peux l’essayer dans le miroir.");
+    status("✓ Modèle humain 3D chargé — base de personnalisation prête.");
     $("realisticBtn").disabled=false;
   }catch(error){
     console.warn("Le modèle 3D détaillé n’a pas pu être chargé :",error);
@@ -583,7 +583,7 @@ function toggleRealisticCharacter(){
   realisticVisible=!realisticVisible;
   if(avatarRoot)avatarRoot.visible=!realisticVisible;
   realisticRoot.visible=realisticVisible;
-  $("realisticBtn").textContent=realisticVisible?"🌸 Revenir à mon avatar":"✨ Essayer le modèle humain";
+  $("realisticBtn").textContent=realisticVisible?"🌸 Revenir à mon personnage":"✨ Essayer le modèle humain";
   if(realisticVisible && realisticAction)realisticAction.reset().fadeIn(.25).play();
   else if(realisticAction)realisticAction.fadeOut(.2);
 }
