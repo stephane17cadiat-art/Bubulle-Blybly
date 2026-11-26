@@ -448,7 +448,7 @@
 
 /* Transition magique entre l'accueil et le portail de connexion */
 .portal-transition{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:12px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#765080ee 0%,#332449f5 42%,#17152bf9 100%);opacity:0;pointer-events:none}
-.portal-transition:not(.hidden){animation:portalCurtain 1.5s ease both}
+.portal-transition:not(.hidden){animation:portalCurtain 3.4s ease both}
 .portal-transition p{margin:0;color:#fff0fa;font:700 14px 'Playfair Display',serif;letter-spacing:1.2px;text-shadow:0 0 16px #f5a9d2}
 .portal-heart{font-size:clamp(66px,15vw,104px);filter:drop-shadow(0 0 20px #ffb5df) drop-shadow(0 0 48px #f5a9d2);animation:portalHeartBloom 1.35s cubic-bezier(.18,.9,.25,1.25) both}
 .portal-spark{position:absolute;color:#fff0c9;font-size:clamp(19px,4vw,32px);text-shadow:0 0 12px #fff,0 0 28px #f5a9d2;opacity:0;animation:portalSparkFly 1.35s ease-out both}
@@ -1778,6 +1778,40 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
   border-radius:inherit;
   background:#21162f;
   box-shadow:inset 0 0 30px #100c1c, inset 0 0 75px #8e559c;
+}
+/* Deux véritables vantaux qui s'ouvrent au milieu du portail */
+.portal-gate-inner{perspective:1100px}
+.portal-gate-inner:before,.portal-gate-inner:after{
+  content:"";position:absolute;z-index:2;top:0;bottom:0;width:50%;
+  background:
+    radial-gradient(ellipse at 50% 42%,#f7d9ed33 0 16%,transparent 17%),
+    linear-gradient(90deg,#382447 0%,#8c5b86 13%,#e8c99d 17%,#765079 23%,#4b315f 78%,#d9b783 94%,#51365d 100%);
+  border:2px solid #f8e2b8;
+  box-shadow:inset 0 0 18px #f8d8ee66,0 0 18px #f6c7e477;
+  backface-visibility:hidden;
+  animation:portalDoorOpen 3.4s cubic-bezier(.45,.05,.2,1) both;
+}
+.portal-gate-inner:before{
+  left:0;transform-origin:left center;
+  border-right:3px solid #ffe8c5;
+  border-radius:inherit 0 0 inherit;
+}
+.portal-gate-inner:after{
+  right:0;transform-origin:right center;
+  border-left:3px solid #ffe8c5;
+  border-radius:0 inherit inherit 0;
+  animation-name:portalDoorOpenRight;
+}
+.portal-gate-inner .portal-vortex{z-index:0}
+.portal-gate-glint{z-index:4}
+.portal-heart{z-index:5}
+@keyframes portalDoorOpen{
+  0%,38%{transform:rotateY(0deg);filter:brightness(1)}
+  78%,100%{transform:rotateY(-78deg);filter:brightness(1.25)}
+}
+@keyframes portalDoorOpenRight{
+  0%,38%{transform:rotateY(0deg);filter:brightness(1)}
+  78%,100%{transform:rotateY(78deg);filter:brightness(1.25)}
 }
 .portal-vortex{
   position:absolute;inset:-22%;
