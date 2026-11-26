@@ -66,9 +66,10 @@ function buildAvatar() {
   const gold=material("#e8c77f",.28,{metalness:.55}), eye=material("#49302d",.22), white=material("#fffaf5",.25);
   const lip=material(state.lipColor||"#b96e78",.48), blush=material(state.makeup==="none"?"#d99a91":state.makeup==="fairy"?"#d98cb8":"#d88c91",.72);
   const smooth=(g)=>{g.computeVertexNormals();return g;};
+  let curveParent=avatarRoot;
   const curveTube=(points,mat,r=.025)=>{
     const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
-    return addMesh(avatarRoot,new THREE.TubeGeometry(curve,48,r,12,false),mat);
+    return addMesh(curveParent,new THREE.TubeGeometry(curve,48,r,12,false),mat);
   };
   // Silhouette plus élancée et proportions proches d'un personnage de jeu vidéo
   cylinderBetween(avatarRoot,skin,[-.105,.25,.015],[-.13,.91,.015],.075,.095);
@@ -130,7 +131,8 @@ function buildAvatar() {
   for(let finger=0;finger<3;finger++)cylinderBetween(rightArm,skin,[.14+finger*.018,-.75,.105],[.13+finger*.018,-.79,.105],.009,.007);
   // Cou délicat pour une transition plus naturelle entre la tête et le buste.
   cylinderBetween(avatarRoot,skin,[0,1.68,.005],[0,1.91,.005],.075,.082);
-  // Visage plus fin : yeux détaillés, nez, bouche, sourcils et oreilles
+  // Tête proportionnée, séparée du corps pour une silhouette moins poupée.
+  const headGroup=new THREE.Group();headGroup.position.y=.25;headGroup.scale.set(.88,.88,.88);avatarRoot.add(headGroup);curveParent=headGroup;
   // Visage sculpté : mâchoire plus fine et pommettes douces
   const faceGeometry = new THREE.SphereGeometry(1,48,40);
   const facePositions = faceGeometry.attributes.position;
@@ -301,6 +303,7 @@ function buildAvatar() {
     curveTube([[-.23,2.43,.13],[0,2.51,.22],[.23,2.43,.13]],gold,.018);
     sphere(headGroup,material("#e6a2c5",.25),[0,2.52,.22],[.035,.05,.025]);
   }
+  curveParent=avatarRoot;
   // Corsage et détails précieux
   for(const x of [-.16,.16]) sphere(avatarRoot,gold,[x,1.54,.16],[.025,.025,.018]);
   // Ailes féeriques sculptées, avec contours et nervures visibles.
