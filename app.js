@@ -483,11 +483,12 @@ function startFinaleHearts(){
   for(let i=0;i<42;i++){
     const heart=document.createElement("span");
     heart.className="finale-heart";
-    heart.textContent=i%2===0?"🩷":"🤍";
+    heart.textContent="♥";
+    heart.style.color=i%2===0?"#f3a4cf":"#ffffff";
     heart.style.left=(Math.random()*100)+"%";
-    heart.style.animationDelay=(Math.random()*3)+"s";
-    heart.style.animationDuration=(4.5+Math.random()*3)+"s";
-    heart.style.fontSize=(15+Math.random()*17)+"px";
+    heart.style.animationDelay=(-Math.random()*6)+"s";
+    heart.style.animationDuration=(5.5+Math.random()*1.5)+"s";
+    heart.style.setProperty("--heart-drift",(Math.random()*54-27)+"px");
     layer.appendChild(heart);
   }
 }
