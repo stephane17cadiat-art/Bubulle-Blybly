@@ -367,7 +367,7 @@ function openAlbum(){
   const players=roomData.players;
   $("albumProgress").innerHTML=[
     {key:"BUBULLE",name:"Bubulle",portrait:"./assets/bubulle.jpg"},
-    {key:"BLYBLY",name:"Blybly",portrait:"./assets/blybly.jpg"}
+    {key:"BLYBLY",name:"Blybly",portrait:"./assets/blybly.jpg?v=20261126-blybly-princess"}
   ].map(player=>{
     const data=players[player.key];
     const count=(data.completed||[]).length;
