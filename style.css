@@ -751,3 +751,53 @@ body.avatar-workshop-open{overflow:hidden}
 @keyframes albumPortraitLeft{from{opacity:0;transform:translateX(-22px) rotate(-9deg) scale(.82)}to{opacity:1;transform:translateX(0) rotate(-3deg) scale(1)}}
 @keyframes albumPortraitRight{from{opacity:0;transform:translateX(22px) rotate(9deg) scale(.82)}to{opacity:1;transform:translateX(0) rotate(3deg) scale(1)}}
 @media(prefers-reduced-motion:reduce){.album-modal.is-opening,.album-modal.is-opening *{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+
+/* Une atmosphere vraiment vivante autour du grimoire */
+.album-modal{isolation:isolate;background:radial-gradient(ellipse at 15% 18%,#a34d9a44,transparent 35%),radial-gradient(ellipse at 85% 78%,#7654c044,transparent 38%),#090817ed}
+.album-living-sky{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#b45caa12,transparent 55%)}
+.album-living-sky:before,.album-living-sky:after{content:"";position:absolute;width:65vw;height:65vw;max-width:650px;max-height:650px;border:1px solid #f4c4f522;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 70px #d78bda12,inset 0 0 70px #d78bda0d;animation:albumAuraPulse 7s ease-in-out infinite}
+.album-living-sky:after{width:85vw;height:85vw;animation-delay:-3.5s;opacity:.55}
+.album-firefly{position:absolute;left:var(--x);top:var(--y);width:5px;height:5px;border-radius:50%;background:#ffe9ad;box-shadow:0 0 7px 2px #ffe9adbb,0 0 19px 5px #e6a9ff77;opacity:0;animation:albumFirefly var(--duration) var(--delay) ease-in-out infinite}
+.album-firefly.firefly-1{width:3px;height:3px;background:#ffd8ef;box-shadow:0 0 8px 3px #ffb9e8aa}
+.album-firefly.firefly-2{width:4px;height:4px;background:#d9c5ff;box-shadow:0 0 10px 3px #c6a2ff99}
+.album-firefly.firefly-3{width:2px;height:2px}
+.album-orbit-glow{position:absolute;left:50%;top:50%;width:min(92vw,850px);aspect-ratio:1;border:1px dashed #f4c8ec18;border-radius:50%;transform:translate(-50%,-50%);animation:albumOrbit 65s linear infinite}
+.album-floating-petal{position:absolute;color:#f6c5e7aa;font-size:22px;filter:drop-shadow(0 0 9px #ffb6dc66);animation:albumPetalFloat 11s ease-in-out infinite}
+.petal-one{left:8%;top:24%}.petal-two{right:9%;top:64%;animation-delay:-4s;font-size:28px;color:#ffe8ad99}.petal-three{left:18%;bottom:12%;animation-delay:-7s;font-size:17px}
+.album-book{border-color:#f1d08a;box-shadow:0 24px 90px #000b,0 0 0 1px #ffe8b166,0 0 65px #dc8bd866;animation:albumBookBreath 6s 1.2s ease-in-out infinite}
+.album-cover{background:radial-gradient(ellipse at 50% 5%,#d18bb8,#97618f 34%,#704b78 67%,#40304d);background-size:180% 180%;animation:albumCoverWaves 12s ease-in-out infinite}
+.album-cover:before{border:1px solid #ffe8b199;box-shadow:0 0 25px #ffe8b155,inset 0 0 28px #ffe8b122}
+.album-cover:after{inset:0;border:0;border-radius:0;background:linear-gradient(115deg,transparent 20%,#fff2 42%,transparent 58%);background-size:220% 100%;animation:albumCoverSweep 7s ease-in-out infinite}
+.album-emblem{animation:albumHeartBeat 3.2s ease-in-out infinite;filter:drop-shadow(0 0 13px #ffb6dcaa)}
+.album-flower{animation:albumFlowerSway 5s ease-in-out infinite;transform-origin:center}
+.album-flower-right{animation-delay:-2.5s}
+.album-stat,.album-duo-stat,.album-memory,.album-illustration-card,.album-chapter{transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+.album-stat:hover,.album-duo-stat:hover,.album-memory:hover,.album-illustration-card:hover,.album-chapter:hover{transform:translateY(-4px);box-shadow:0 9px 24px #a96a9b28;border-color:#d7a7ca}
+.album-stat-portrait{animation:albumPortraitGlow 4s ease-in-out infinite}
+.album-stat:nth-child(2) .album-stat-portrait{animation-delay:-2s}
+.album-duo-stat>span{display:inline-block;animation:albumSymbolDance 4s ease-in-out infinite}
+.album-duo-stat:nth-child(even)>span{animation-delay:-2s}
+.album-illustration-card.revealed .album-illustration-art svg{animation:albumArtFloat 4.5s ease-in-out infinite;filter:drop-shadow(0 5px 9px #c77fb044)}
+.album-illustration-card.revealed:nth-child(even) .album-illustration-art svg{animation-delay:-2.25s}
+.album-photo-frame{animation:albumFrameFloat 5s ease-in-out infinite}
+.album-duo-portraits img:first-child{animation:albumPortraitFloat 5.5s ease-in-out infinite}
+.album-duo-portraits img:last-child{animation:albumPortraitFloat 5.5s -2.75s ease-in-out infinite}
+.album-dedication{position:relative;overflow:hidden}
+.album-dedication:after{content:"✧　✦　✧　✦　✧";position:absolute;left:0;right:0;bottom:7px;text-align:center;color:#c89cba66;font-size:12px;letter-spacing:7px;animation:albumGlimmer 4s ease-in-out infinite}
+@keyframes albumFirefly{0%{opacity:0;transform:translate3d(0,18px,0) scale(.4)}22%{opacity:.9}52%{opacity:.45;transform:translate3d(15px,-30px,0) scale(1.25)}82%{opacity:.85}100%{opacity:0;transform:translate3d(-12px,-65px,0) scale(.3)}}
+@keyframes albumAuraPulse{0%,100%{opacity:.35;scale:.94}50%{opacity:.9;scale:1.06}}
+@keyframes albumOrbit{to{rotate:360deg}}
+@keyframes albumPetalFloat{0%,100%{transform:translate3d(0,0,0) rotate(-12deg)}50%{transform:translate3d(12px,-25px,0) rotate(18deg)}}
+@keyframes albumBookBreath{0%,100%{box-shadow:0 24px 90px #000b,0 0 0 1px #ffe8b166,0 0 48px #dc8bd844}50%{box-shadow:0 24px 90px #000b,0 0 0 1px #ffe8b199,0 0 72px #dc8bd877}}
+@keyframes albumCoverWaves{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes albumCoverSweep{0%,35%{background-position:150% 0}70%,100%{background-position:-120% 0}}
+@keyframes albumHeartBeat{0%,82%,100%{transform:scale(1)}88%{transform:scale(1.12)}94%{transform:scale(.98)}}
+@keyframes albumFlowerSway{0%,100%{rotate:-5deg;scale:1}50%{rotate:7deg;scale:1.08}}
+@keyframes albumPortraitGlow{0%,100%{box-shadow:0 0 0 3px #ffffff14,0 0 10px #f3b6df33}50%{box-shadow:0 0 0 4px #f8d7ed55,0 0 20px #f3b6df99}}
+@keyframes albumSymbolDance{0%,100%{transform:translateY(0) rotate(0) scale(1)}50%{transform:translateY(-4px) rotate(8deg) scale(1.14)}}
+@keyframes albumArtFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes albumFrameFloat{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(1deg) translateY(-5px)}}
+@keyframes albumPortraitFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes albumGlimmer{0%,100%{opacity:.35;letter-spacing:7px}50%{opacity:1;letter-spacing:10px}}
+@media(prefers-reduced-motion:reduce){.album-living-sky *,.album-book,.album-cover,.album-emblem,.album-flower,.album-stat-portrait,.album-duo-stat>span,.album-illustration-card.revealed svg,.album-photo-frame,.album-duo-portraits img{animation:none!important}}
