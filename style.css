@@ -1117,3 +1117,72 @@ body.avatar-workshop-open{overflow:hidden}
   100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}
 }
 @media(max-width:380px){.finale-love-message{font-size:clamp(20px,6vw,27px);letter-spacing:0}}
+
+
+/* Centre de commandes — interface rangée pour Bubulle & Blybly */
+.command-center{
+  margin:0 0 18px;
+  padding:14px;
+  border:1px solid #ffffff22;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffffff0d,#f5a9d20b);
+  box-shadow:0 10px 28px #09081725;
+}
+.command-kicker{margin:0 0 10px 3px}
+.command-main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.command-button{
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:12px 10px;
+  border:1px solid #ffffff28;
+  border-radius:15px;
+  background:#ffffff12;
+  color:var(--white);
+  font:600 13px 'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:transform .15s,filter .15s,background .15s;
+}
+.command-button span{font-size:21px}
+.command-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.command-save{
+  color:#38233e;
+  border-color:#f8c6df;
+  background:linear-gradient(110deg,#f7b8d8,#f3d2e9);
+  box-shadow:0 6px 18px #f5a9d233;
+}
+.command-save:disabled{opacity:.75;cursor:wait;transform:none}
+.command-center .song-player{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#ffffff09;
+}
+.more-options{margin-top:10px;border-top:1px solid #ffffff1c;padding-top:9px}
+.more-options summary{
+  width:max-content;
+  max-width:100%;
+  padding:7px 10px;
+  color:#d9caff;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  list-style:none;
+  border-radius:10px;
+  background:#c7b2ff12;
+}
+.more-options summary::-webkit-details-marker{display:none}
+.more-options summary::after{content:"＋";margin-left:9px;color:var(--pink)}
+.more-options[open] summary::after{content:"−"}
+.more-options-actions{display:flex;flex-wrap:wrap;gap:8px;padding:11px 2px 2px}
+.more-options-actions .secondary{flex:1 1 155px;padding:11px 12px;font-size:12px}
+@media(max-width:520px){
+  .command-center{padding:11px;border-radius:17px}
+  .command-main{grid-template-columns:1fr 1fr;gap:8px}
+  .command-button{min-height:62px;font-size:12px;flex-direction:column;gap:4px;padding:9px 6px}
+  .command-save{grid-column:1 / -1;min-height:56px;flex-direction:row}
+  .command-center .song-player{padding:10px 8px}
+  .command-center .song-status{text-align:center;line-height:1.4}
+}
