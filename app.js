@@ -495,8 +495,8 @@ function startFinaleHearts(){
     heart.style.setProperty("--burst-y",(Math.sin(angle)*distance)+"px");
     heart.style.setProperty("--burst-rotate",(Math.random()*120-60)+"deg");
     heart.style.setProperty("--burst-size",(0.82+Math.random()*.58).toFixed(2));
-    heart.style.animationDelay=(wave*.38+Math.random()*.18)+"s";
-    heart.style.animationDuration=(3.1+Math.random()*.8)+"s";
+    heart.style.animationDelay=(wave*.92+Math.random()*.16)+"s";
+    heart.style.animationDuration=(5+Math.random()*.4)+"s";
     layer.appendChild(heart);
   }
 }
