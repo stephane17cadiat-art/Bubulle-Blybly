@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#211b3d">
   <title>Atelier féerique — Bubulle & Blybly</title>
-  <link rel="stylesheet" href="./avatar.css?v=20261126-natural-shape-v2">
+  <link rel="stylesheet" href="./avatar.css?v=20261126-workshop-tabs-v1">
 </head>
 <body>
   <main class="workshop">
@@ -39,6 +39,8 @@
       </div>
       <section class="wardrobe">
         <div class="wardrobe-heading"><span>🪄</span><div><p class="eyebrow">TA GARDE-ROBE</p><h2>À toi de choisir !</h2></div></div>
+        <nav class="wardrobe-tabs" id="wardrobeTabs" aria-label="Catégories de personnalisation"></nav>
+        <p class="category-hint" id="categoryHint">Choisis une catégorie pour personnaliser ton personnage ✨</p>
         <div class="control-grid">
           <label>Coiffure
             <select id="hairStyle"><option value="long">Longue et ondulée</option><option value="braid">Tresse romantique</option><option value="bun">Chignon de princesse</option><option value="bob">Carré magique</option><option value="ponytail">Queue-de-cheval haute</option><option value="doublebun">Deux petits chignons</option><option value="halfup">Demi-attachée</option><option value="curly">Boucles volumineuses</option></select>
@@ -107,6 +109,6 @@
   <script type="importmap">
     {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
   </script>
-  <script type="module" src="./avatar.js?v=20261126-royal-gown-v2"></script>
+  <script type="module" src="./avatar.js?v=20261126-workshop-tabs-v1"></script>
 </body>
 </html>
