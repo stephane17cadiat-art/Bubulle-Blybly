@@ -79,10 +79,10 @@ function buildAvatar() {
   // Robe longue : ourlet arrondi et évasé, hanches douces, taille marquée, buste ajusté.
   // LatheGeometry lit le profil du bas vers le haut : l'ourlet doit donc être le plus large.
   const profile=[
-    new THREE.Vector2(.39,0),new THREE.Vector2(.395,.07),new THREE.Vector2(.37,.16),
-    new THREE.Vector2(.32,.30),new THREE.Vector2(.255,.48),new THREE.Vector2(.205,.66),
-    new THREE.Vector2(.165,.82),new THREE.Vector2(.15,.98),new THREE.Vector2(.16,1.12),
-    new THREE.Vector2(.19,1.27),new THREE.Vector2(.205,1.34)
+    new THREE.Vector2(.34,0),new THREE.Vector2(.355,.055),new THREE.Vector2(.335,.14),
+    new THREE.Vector2(.295,.28),new THREE.Vector2(.235,.45),new THREE.Vector2(.185,.62),
+    new THREE.Vector2(.155,.78),new THREE.Vector2(.145,.94),new THREE.Vector2(.15,1.08),
+    new THREE.Vector2(.175,1.22),new THREE.Vector2(.19,1.30)
   ];
   const gown=addMesh(avatarRoot,smooth(new THREE.LatheGeometry(profile,96)),dress,[0,.43,0]);
   gown.scale.z=.78;
