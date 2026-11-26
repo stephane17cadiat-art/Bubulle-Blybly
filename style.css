@@ -657,3 +657,14 @@ body.realm-castle .forest-atmosphere:before,body.realm-crystals .forest-atmosphe
  .garden-bed-copy em{font-size:7px}
 }
 @media(prefers-reduced-motion:reduce){.garden-flowerbed.bloomed .garden-blossom{animation:none!important}}
+
+/* Chronique vivante de l'aventure des Besties */
+.album-timeline-section{margin:22px 0;padding:15px 13px;border:1px solid #d7ad81;border-radius:17px;background:linear-gradient(145deg,#fff8ed,#f4e3e9);box-shadow:inset 0 0 0 3px #fffaf2,0 5px 14px #69465b10}
+.album-timeline{display:grid;gap:0}
+.album-timeline-entry{display:grid;grid-template-columns:35px 1fr;gap:9px;padding:10px 2px;border-bottom:1px solid #ead8d3}
+.album-timeline-entry:last-child{border-bottom:0}
+.album-timeline-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:#f5e2eb;font-size:18px;box-shadow:0 2px 8px #bd75a022}
+.album-timeline-entry b{display:block;color:#70466c;font:700 12px/1.35 Georgia,serif}
+.album-timeline-entry p{margin:3px 0;color:#92717e;font-size:10px;line-height:1.4}
+.album-timeline-entry time{color:#ad8991;font-size:9px}
+.album-timeline-empty{margin:0;padding:14px 8px;text-align:center;color:#936f7b;font:italic 12px/1.6 Georgia,serif}
