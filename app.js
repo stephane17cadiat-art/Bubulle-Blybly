@@ -448,7 +448,7 @@ function openAlbum(){
         ? `<button type="button" class="album-firefly firefly-${i%6} album-secret-firefly" style="${style}" data-secret-firefly aria-label="Découvrir un message secret"></button>`
         : `<i class="album-firefly firefly-${i%6}" style="${style}" aria-hidden="true"></i>`;
     }).join("")+
-      '<span class="album-orbit-glow" aria-hidden="true"></span><span class="album-floating-petal petal-one" aria-hidden="true">✿</span><span class="album-floating-petal petal-two" aria-hidden="true">✧</span><span class="album-floating-petal petal-three" aria-hidden="true">✿</span>';
+      '<span class="album-orbit-glow" aria-hidden="true"></span><span class="album-floating-petal petal-one" aria-hidden="true">✿</span><span class="album-floating-petal petal-two" aria-hidden="true">✧</span><span class="album-floating-petal petal-three" aria-hidden="true">✿</span><button type="button" class="album-hidden-chest chest-one" data-secret-chest="0" aria-label="Ouvrir le coffre rose">🎁</button><button type="button" class="album-hidden-chest chest-two" data-secret-chest="1" aria-label="Ouvrir le coffre doré">🧰</button><button type="button" class="album-hidden-chest chest-three" data-secret-chest="2" aria-label="Ouvrir le coffre violet">🎁</button>';
     album.prepend(sky);
     const secretNote=document.createElement("div");
     secretNote.className="album-secret-note";
@@ -477,17 +477,32 @@ const albumSecretMessages=[
 ];
 let albumSecretIndex=0;
 $("albumModal").addEventListener("click",event=>{
+  const chest=event.target.closest("[data-secret-chest]");
   const firefly=event.target.closest("[data-secret-firefly]");
-  if(!firefly)return;
+  if(!chest&&!firefly)return;
   const note=$("albumModal").querySelector(".album-secret-note");
   if(!note)return;
-  note.textContent=albumSecretMessages[albumSecretIndex%albumSecretMessages.length];
-  albumSecretIndex++;
+  if(chest){
+    if(chest.dataset.opened==="true")return;
+    const rewards=[
+      {title:"Badge : Gardienne des lucioles",message:"Vous avez trouvé le trésor des lumières ! Un badge imaginaire scintillant rejoint votre collection. ✨"},
+      {title:"Poussière d’étoiles",message:"Une pluie de poussière d’étoiles pour Bubulle & Blybly : que vos prochaines aventures brillent encore plus fort. 🌟"},
+      {title:"Le vœu des Besties",message:"Votre coffre renfermait un vœu précieux : que votre complicité continue de faire fleurir ce royaume. 💗"}
+    ];
+    const reward=rewards[Number(chest.dataset.secretChest)]||rewards[0];
+    chest.dataset.opened="true";
+    chest.classList.add("opened");
+    chest.textContent="✨";
+    note.innerHTML="<strong>"+reward.title+"</strong><br>"+reward.message;
+  }else{
+    note.textContent=albumSecretMessages[albumSecretIndex%albumSecretMessages.length];
+    albumSecretIndex++;
+  }
   note.classList.remove("visible");
   void note.offsetWidth;
   note.classList.add("visible");
   window.clearTimeout(window.albumSecretNoteTimer);
-  window.albumSecretNoteTimer=window.setTimeout(()=>note.classList.remove("visible"),4800);
+  window.albumSecretNoteTimer=window.setTimeout(()=>note.classList.remove("visible"),5200);
 });
 
 
