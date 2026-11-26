@@ -262,6 +262,38 @@ function renderBestiesGarden(players){
       :bloomed+" jolie"+(bloomed>1?"s fleurs":" fleur")+" a"+(bloomed>1?"nt":"")+" déjà éclos grâce à vous deux. Continuez à faire grandir votre jardin ! ✨";
 }
 
+
+function renderRealmAtlas(completed){
+  const atlas=$("realmAtlas");
+  if(!atlas)return;
+  const regions=[
+    {name:"La forêt enchantée",subtitle:"Le réveil des lucioles",emoji:"🌳",start:0,end:4,theme:"forest"},
+    {name:"La vallée des fleurs",subtitle:"Le jardin des merveilles",emoji:"🌷",start:5,end:8,theme:"flowers"},
+    {name:"Le château mystérieux",subtitle:"Les portes du royaume",emoji:"🏰",start:9,end:12,theme:"castle"},
+    {name:"Le royaume des étoiles",subtitle:"Le sanctuaire des cristaux",emoji:"🌙",start:13,end:16,theme:"stars"},
+    {name:"Le sanctuaire des Besties",subtitle:"Le cœur de votre légende",emoji:"💗",start:17,end:20,theme:"heart"}
+  ];
+  const found=new Set(completed);
+  let previousComplete=true;
+  atlas.innerHTML=regions.map((region,index)=>{
+    const total=region.end-region.start+1;
+    const count=Array.from({length:total},(_,n)=>region.start+n).filter(i=>found.has(i)).length;
+    const complete=count===total;
+    const unlocked=previousComplete;
+    const state=complete?"COMPLÈTE":unlocked?(count?"EN ÉVEIL":"À EXPLORER"):"SCELLÉE";
+    const card='<article class="realm-card '+region.theme+' '+(complete?"realm-complete":unlocked?"realm-open":"realm-locked")+'">'+
+      '<div class="realm-art" aria-hidden="true"><span class="realm-orbit"></span><span class="realm-symbol">'+(unlocked?region.emoji:"🔒")+'</span><span class="realm-spark">✦</span></div>'+
+      '<div class="realm-copy"><span class="realm-state">'+state+'</span><h4>'+region.name+'</h4><p>'+region.subtitle+'</p>'+
+      '<div class="realm-meter"><i style="width:'+(count/total*100)+'%"></i></div><small>'+count+' / '+total+' trésors découverts</small></div>'+
+      (complete?'<span class="realm-seal">✧ Éclose ✧</span>':"")+'</article>';
+    previousComplete=previousComplete&&complete;
+    return card;
+  }).join("");
+  const finished=regions.filter(r=>Array.from({length:r.end-r.start+1},(_,n)=>r.start+n).every(i=>found.has(i))).length;
+  const status=$("realmAtlasStatus");
+  if(status)status.textContent=finished+" / 5 régions éveillées";
+}
+
 function render(){
   const p=roomData.players;
   if(!$("kingdomsModal").classList.contains("hidden")) renderKingdoms();
@@ -313,6 +345,8 @@ function render(){
   });
   drawLivingMapRoute();
   renderBestiesGarden(p);
+  renderRealmAtlas(mine.completed||[]);
+
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
   if(mine.stage>=stages.length) openFinale(false);
