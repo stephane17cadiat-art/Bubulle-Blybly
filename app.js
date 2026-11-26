@@ -264,6 +264,7 @@ function renderBestiesGarden(players){
 
 function render(){
   const p=roomData.players;
+  if(!$("kingdomsModal").classList.contains("hidden")) renderKingdoms();
   // Chaque appareil affiche uniquement le profil de la joueuse connectée.
   $("bubulleCard").style.display = myRole === "BUBULLE" ? "" : "none";
   $("blyblyCard").style.display = myRole === "BLYBLY" ? "" : "none";
@@ -462,6 +463,51 @@ function openAlbum(){
   album.classList.add("is-opening");
   window.setTimeout(()=>album.classList.remove("is-opening"),3600);
 }
+function renderKingdoms(){
+  if(!roomData?.players)return;
+  const profiles=[
+    {key:"BUBULLE",name:"Bubulle",portrait:"./assets/bubulle.jpg",realm:"Le royaume des lucioles",accent:"rose",symbol:"🌷"},
+    {key:"BLYBLY",name:"Blybly",portrait:"./assets/blybly.jpg?v=20261126-blybly-princess",realm:"Le château des fleurs",accent:"lilac",symbol:"🦋"}
+  ];
+  $("kingdomProfiles").innerHTML=profiles.map(profile=>{
+    const data=roomData.players[profile.key]||{};
+    const completed=[...new Set((data.completed||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<stages.length))].sort((x,y)=>x-y);
+    const count=completed.length;
+    const score=Number(data.score)||0;
+    const percent=Math.round(count/stages.length*100);
+    const next=data.stage>=stages.length?"Toutes les épreuves sont terminées !":"Prochaine épreuve : "+(Math.max(0,Number(data.stage)||0)+1)+" / "+stages.length;
+    const milestones=[
+      {at:5,label:"🌱 Première floraison"},
+      {at:10,label:"🏰 Gardienne du château"},
+      {at:15,label:"💎 Maîtresse des cristaux"},
+      {at:21,label:"👑 Légende des Besties"}
+    ];
+    const earned=milestones.filter(m=>count>=m.at);
+    const treasures=completed.length
+      ?completed.map(i=>'<li><span>'+stages[i].emoji+'</span><span>'+stages[i].reward+'</span><small>Énigme '+(i+1)+'</small></li>').join("")
+      :'<li class="kingdom-empty">Les premiers trésors attendent leur gardienne… ✨</li>';
+    return `<article class="kingdom-profile ${profile.accent}">
+      <div class="kingdom-profile-top">
+        <img src="${profile.portrait}" alt="Portrait de ${profile.name}">
+        <div><span class="kingdom-role">${profile.symbol} GARDIENNE DU ROYAUME</span><h3>${profile.name}</h3><p>${profile.realm}</p></div>
+      </div>
+      <div class="kingdom-scoreline"><strong>${score}</strong><span>points gagnés</span><b>${count} / 21</b></div>
+      <div class="kingdom-progress"><i style="width:${percent}%"></i></div>
+      <p class="kingdom-next">${next}</p>
+      <div class="kingdom-achievements"><b>Ses distinctions</b><div>${earned.length?earned.map(m=>'<span>'+m.label+'</span>').join(""):'<small>Les premiers badges se dévoileront au fil des victoires.</small>'}</div></div>
+      <div class="kingdom-treasures"><b>Sa collection de trésors <small>(${count})</small></b><ul>${treasures}</ul></div>
+      <p class="kingdom-presence">${data.joined?"✦ Présente dans l’aventure":"✧ Attend de rejoindre le royaume"}</p>
+    </article>`;
+  }).join("");
+}
+$("kingdomsOpenBtn").addEventListener("click",()=>{
+  renderKingdoms();
+  $("kingdomsModal").classList.remove("hidden");
+});
+$("kingdomsCloseBtn").addEventListener("click",()=>hide("kingdomsModal"));
+$("kingdomsModal").addEventListener("click",event=>{
+  if(event.target.id==="kingdomsModal")hide("kingdomsModal");
+});
 $("albumOpenBtn").addEventListener("click",openAlbum);
 $("albumCloseBtn").addEventListener("click",()=>hide("albumModal"));
 $("albumModal").addEventListener("click",event=>{if(event.target.id==="albumModal")hide("albumModal");});
