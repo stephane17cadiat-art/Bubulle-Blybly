@@ -1296,3 +1296,53 @@ body{
 @media(prefers-reduced-motion:reduce){
   .brand-mark::after{animation:none}
 }
+
+
+/* Carte du royaume — cinq terres visuellement distinctes, sans toucher à la progression */
+.living-map{
+  padding:10px;
+  border:1px solid #e9c77f35;
+  border-radius:20px;
+  background:
+    radial-gradient(ellipse at 12% 12%,#8bcf9b20 0,transparent 34%),
+    radial-gradient(ellipse at 78% 28%,#f3a8ca19 0,transparent 31%),
+    radial-gradient(ellipse at 22% 70%,#e9c77f17 0,transparent 32%),
+    radial-gradient(ellipse at 86% 88%,#b9a3f51b 0,transparent 30%),
+    linear-gradient(145deg,#1b172c99,#2d203c99);
+  box-shadow:inset 0 0 34px #09081755,0 8px 22px #10091824;
+}
+.living-map .map-stop:not(.current){transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease,filter .28s ease}
+.living-map .map-stop:not(.current):hover{transform:translateY(-3px);filter:brightness(1.12)}
+/* 🌳 La forêt enchantée */
+.living-map .map-stop:nth-child(-n+36):not(.current){
+  border-color:#91d2a044;
+  box-shadow:inset 0 0 19px #82c99b0b;
+}
+/* 🌷 Les jardins enchantés */
+.living-map .map-stop:nth-child(n+37):nth-child(-n+52):not(.current){
+  border-color:#f3a8ca55;
+  box-shadow:inset 0 0 19px #f3a8ca10;
+}
+/* 🏰 Le château mystérieux */
+.living-map .map-stop:nth-child(n+53):nth-child(-n+68):not(.current){
+  border-color:#e9c77f66;
+  box-shadow:inset 0 0 19px #e9c77f10;
+}
+/* 💎 Le royaume des cristaux */
+.living-map .map-stop:nth-child(n+69):nth-child(-n+84):not(.current){
+  border-color:#b9a3f577;
+  box-shadow:inset 0 0 19px #b9a3f511;
+}
+/* 💗 Le sanctuaire des Besties */
+.living-map .map-stop:nth-child(n+85):not(.current){
+  border-color:#f2a9d477;
+  box-shadow:inset 0 0 19px #f2a9d414;
+}
+.living-map .map-stop.done:hover{box-shadow:inset 0 0 22px #a8e6cf18,0 0 18px #9de4c52a}
+@media(max-width:600px){
+  .living-map{padding:7px;border-radius:16px}
+  .living-map .map-stop:not(.current):hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .living-map .map-stop:not(.current){transition:none!important}
+}
