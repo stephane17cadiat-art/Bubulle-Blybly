@@ -813,3 +813,17 @@ body.avatar-workshop-open{overflow:hidden}
 .album-secret-note{position:fixed;z-index:5;left:50%;bottom:max(22px,env(safe-area-inset-bottom));width:min(88vw,420px);padding:14px 18px;border:1px solid #f5d69c;border-radius:18px;background:linear-gradient(145deg,#fff4e9f5,#f8dff0f5);color:#71466c;text-align:center;font:italic 14px/1.5 Georgia,serif;box-shadow:0 10px 38px #0007,0 0 25px #f5c5e977;opacity:0;transform:translate(-50%,18px) scale(.94);pointer-events:none;transition:opacity .35s,transform .35s}
 .album-secret-note.visible{opacity:1;transform:translate(-50%,0) scale(1)}
 @media(prefers-reduced-motion:reduce){.album-secret-firefly,.album-secret-note{transition:none!important}}
+
+
+/* Coffres enchantés dissimulés dans le décor de l'album */
+.album-hidden-chest{position:absolute;z-index:4;display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid #ffe3ad88;border-radius:14px;background:linear-gradient(145deg,#fff0d7dd,#d78abdcc);box-shadow:0 4px 18px #f4b7df66, inset 0 1px 5px #fff9;font-size:23px;cursor:pointer;pointer-events:auto;animation:chestFloat 3.8s ease-in-out infinite;transition:transform .25s,filter .25s,opacity .25s}
+.album-hidden-chest:hover,.album-hidden-chest:focus-visible{transform:scale(1.18) rotate(-5deg);filter:brightness(1.25);outline:2px solid #fff0bd;outline-offset:3px}
+.album-hidden-chest.chest-one{left:8%;top:28%;animation-delay:-.8s}
+.album-hidden-chest.chest-two{right:9%;top:57%;animation-delay:-2s}
+.album-hidden-chest.chest-three{left:18%;bottom:13%;animation-delay:-1.4s}
+.album-hidden-chest.opened{animation:chestPop .55s ease both;filter:grayscale(.2);opacity:.75}
+.album-secret-note strong{display:block;margin-bottom:4px;color:#a04f83;font:700 15px/1.35 Georgia,serif}
+@keyframes chestFloat{0%,100%{translate:0 0}50%{translate:0 -8px}}
+@keyframes chestPop{0%{scale:1}45%{scale:1.45;rotate:10deg}100%{scale:1}}
+@media(max-width:520px){.album-hidden-chest{width:36px;height:36px;font-size:20px}.album-hidden-chest.chest-one{left:4%;top:20%}.album-hidden-chest.chest-two{right:4%;top:50%}.album-hidden-chest.chest-three{left:12%;bottom:9%}}
+@media(prefers-reduced-motion:reduce){.album-hidden-chest{animation:none!important}}
