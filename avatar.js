@@ -31,7 +31,7 @@ const defaults = {
 };
 let state = {...defaults}, role = null, roomRef = null, saveTimer = null, saving = false;
 let companionMotion = null, magicParticles = [], magicAura = null, powerBurstGroup = null, powerStarted = 0, faceBlinkMeshes = [], faceGazeMeshes = [], faceBrowMeshes = [], hairMotionMesh = null, faceSmileMesh = null, kissPucker = null, surpriseMouth = null, faceAction = "smile", faceActionUntil = 0;
-let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticExtras = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
+let scene, camera, renderer, avatarRoot, realisticRoot = null, realisticExtras = null, realisticMixer = null, realisticAction = null, realisticReady = false, realisticLoading = false, realisticVisible = false, leftArm, rightArm, clock, dragging = false, lastX = 0, lastY = 0, danceUntil = 0, poseMode = "idle", poseUntil = 0;
 
 function material(color, roughness=.72, extra={}) {
   return new THREE.MeshPhysicalMaterial({
@@ -547,7 +547,10 @@ async function applyRealisticStyle(){
   });
 }
 async function loadRealisticCharacter(){
-  if(realisticReady || !scene) return;
+  if(realisticReady || realisticLoading || !scene) return;
+  realisticLoading=true;
+  $("realisticBtn").disabled=true;
+  $("realisticBtn").textContent="⏳ Chargement du modèle…";
   status("✨ Chargement du modèle humain…");
   const loader=new GLTFLoader();
   try{
@@ -572,10 +575,14 @@ async function loadRealisticCharacter(){
     realisticReady=true;
     status("✓ Modèle humain 3D chargé — base de personnalisation prête.");
     $("realisticBtn").disabled=false;
+    $("realisticBtn").textContent="✨ Essayer le modèle humain";
   }catch(error){
     console.warn("Le modèle 3D détaillé n’a pas pu être chargé :",error);
-    status("Échec du chargement 3D : "+(error?.message||error?.target?.statusText||"erreur réseau ou CORS")+". Ton avatar actuel reste intact.");
-    $("realisticBtn").disabled=true;
+    status("Échec du chargement 3D : "+(error?.message||error?.target?.statusText||"erreur réseau ou CORS")+". Tu peux réessayer avec le bouton.");
+    $("realisticBtn").disabled=false;
+    $("realisticBtn").textContent="↻ Réessayer le modèle 3D";
+  }finally{
+    realisticLoading=false;
   }
 }
 function toggleRealisticCharacter(){
@@ -849,6 +856,6 @@ $("winkBtn").addEventListener("click",()=>playFace("wink"));
 $("laughBtn").addEventListener("click",()=>playFace("laugh"));
 $("kissBtn").addEventListener("click",()=>playFace("kiss"));
 if($("surpriseBtn"))$("surpriseBtn").addEventListener("click",()=>playFace("surprise"));
-$("realisticBtn").addEventListener("click",toggleRealisticCharacter);
+$("realisticBtn").addEventListener("click",()=>{if(realisticReady)toggleRealisticCharacter();else loadRealisticCharacter();});
 $("resetViewBtn").addEventListener("click",()=>{if(avatarRoot)avatarRoot.rotation.y=0;if(camera){camera.position.set(0,1.55,7.2);camera.lookAt(0,1.45,0);}});
 start();
