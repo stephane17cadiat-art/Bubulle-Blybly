@@ -971,3 +971,16 @@ body.avatar-workshop-open{overflow:hidden}
   .answer{min-height:58px;padding:16px 17px;font-size:15px}
 }
 @media(prefers-reduced-motion:reduce){.answer{transition:none}}
+
+
+/* Pluie de cœurs pour la victoire finale des Besties */
+.finale-modal{overflow:hidden}
+.finale-hearts{position:fixed;inset:0;z-index:31;overflow:hidden;pointer-events:none}
+.finale-heart{position:absolute;top:-48px;display:block;opacity:0;filter:drop-shadow(0 2px 5px #f6a8d755);animation:finaleHeartFall 6s linear infinite;will-change:transform,opacity}
+@keyframes finaleHeartFall{
+  0%{transform:translate3d(0,-8vh,0) rotate(-18deg) scale(.75);opacity:0}
+  10%{opacity:1}
+  85%{opacity:.95}
+  100%{transform:translate3d(24px,115vh,0) rotate(28deg) scale(1.08);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){.finale-heart{animation-duration:12s;opacity:.75}}
