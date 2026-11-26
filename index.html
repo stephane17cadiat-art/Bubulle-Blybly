@@ -88,21 +88,6 @@
         <article class="player-card" id="bubulleCard"><img class="avatar player-portrait" src="./assets/bubulle.jpg" alt="Portrait de Bubulle"><div><b>BUBULLE</b><small id="bubulleStatus">En attente</small></div><strong id="bubulleScore">0 pts</strong></article>
         <article class="player-card" id="blyblyCard"><img class="avatar player-portrait" src="./assets/blybly.jpg" alt="Portrait de Blybly"><div><b>BLYBLY</b><small id="blyblyStatus">En attente</small></div><strong id="blyblyScore">0 pts</strong></article>
       </div>
-      <div class="map-panel panel">
-        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 100 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 100 trésors</b></div></div>
-        <div class="realm-atlas-heading"><div><p class="eyebrow">LES CINQ TERRES MAGIQUES</p><h4>Votre royaume évolutif</h4><p>Chaque victoire réveille une nouvelle merveille.</p></div><b id="realmAtlasStatus">0 / 5 régions éveillées</b></div>
-        <div id="realmAtlas" class="realm-atlas" aria-live="polite"></div>
-        <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
-        <div class="map-legend"><span><i class="legend-dot found"></i> Découvert</span><span><i class="legend-dot next"></i> Prochaine étape</span><span><i class="legend-dot secret"></i> Mystère</span></div>
-      </div>
-      <section class="besties-garden panel" aria-labelledby="gardenTitle">
-        <div class="garden-heading">
-          <div><p class="eyebrow">LE JARDIN SECRET</p><h3 id="gardenTitle">Le Jardin des Besties 🌷</h3><p>Chaque grande étape accomplie à deux fait éclore une nouvelle fleur.</p></div>
-          <div class="garden-counter"><span>🌱</span><b id="gardenProgress">0 / 5</b><small>fleurs écloses</small></div>
-        </div>
-        <div id="bestiesGarden" class="garden-flowerbeds" aria-live="polite"></div>
-        <p id="gardenMessage" class="garden-message">Votre jardin attend vos premières victoires partagées… 💗</p>
-      </section>
       <div class="play-layout">
         <section class="panel challenge">
           <div class="challenge-top"><span id="stageLabel" class="pill">ÉPREUVE 1 / 100</span><span class="chest">🎁</span></div>
@@ -125,6 +110,21 @@
           <p class="muted small">Résolvez les 100 épreuves pour découvrir le trésor final.</p>
         </aside>
       </div>
+      <div class="map-panel panel">
+        <div class="map-head"><div><p class="eyebrow">CARTE DU ROYAUME</p><h3>Le sentier des 100 trésors</h3><p class="map-subtitle">Suis les lumières… chaque victoire fait fleurir le chemin.</p></div><div class="map-journey-status"><span class="map-sparkle">✧</span><b id="mapJourneyStatus">0 / 100 trésors</b></div></div>
+        <div class="realm-atlas-heading"><div><p class="eyebrow">LES CINQ TERRES MAGIQUES</p><h4>Votre royaume évolutif</h4><p>Chaque victoire réveille une nouvelle merveille.</p></div><b id="realmAtlasStatus">0 / 5 régions éveillées</b></div>
+        <div id="realmAtlas" class="realm-atlas" aria-live="polite"></div>
+        <div id="map" class="map living-map" aria-label="Chemin du royaume"></div>
+        <div class="map-legend"><span><i class="legend-dot found"></i> Découvert</span><span><i class="legend-dot next"></i> Prochaine étape</span><span><i class="legend-dot secret"></i> Mystère</span></div>
+      </div>
+      <section class="besties-garden panel" aria-labelledby="gardenTitle">
+        <div class="garden-heading">
+          <div><p class="eyebrow">LE JARDIN SECRET</p><h3 id="gardenTitle">Le Jardin des Besties 🌷</h3><p>Chaque grande étape accomplie à deux fait éclore une nouvelle fleur.</p></div>
+          <div class="garden-counter"><span>🌱</span><b id="gardenProgress">0 / 5</b><small>fleurs écloses</small></div>
+        </div>
+        <div id="bestiesGarden" class="garden-flowerbeds" aria-live="polite"></div>
+        <p id="gardenMessage" class="garden-message">Votre jardin attend vos premières victoires partagées… 💗</p>
+      </section>
       <footer class="game-footer"><span id="syncStatus">● Connexion en cours…</span><button id="leaveBtn" class="text-button">Quitter la partie</button></footer>
     </section>
     <footer class="site-footer">Fait avec ✨ pour Bubulle & Blybly</footer>
