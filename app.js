@@ -813,6 +813,7 @@ observatoryModal.querySelector(".observatory-constellation").addEventListener("c
   const note=observatoryMessages[star.dataset.observatoryNote];
   if(!note)return;
   observatoryModal.querySelectorAll(".constellation-star").forEach(item=>item.classList.toggle("selected",item===star));
+  spawnObservatoryBurst(star, 15);
   $("observatoryNoteIcon").textContent=note.icon;
   $("observatoryNoteTitle").textContent=note.title;
   $("observatoryNoteText").textContent=note.text;
@@ -824,12 +825,32 @@ const observatoryWishes=[
   "Que votre imagination ne manque jamais d’étoiles où accrocher ses rêves. 🌙",
   "Que chaque nouveau chapitre apporte son lot de magie et de merveilleux souvenirs. 🌷"
 ];
+function spawnObservatoryBurst(origin, count=18) {
+  const sky=observatoryModal.querySelector(".observatory-sky");
+  const skyRect=sky.getBoundingClientRect();
+  const rect=origin.getBoundingClientRect();
+  const x=rect.left+rect.width/2-skyRect.left;
+  const y=rect.top+rect.height/2-skyRect.top;
+  for(let i=0;i<count;i++){
+    const particle=document.createElement("span");
+    particle.className="observatory-burst-particle";
+    particle.textContent=["✦","✧","·","♡","✴"][i%5];
+    particle.style.setProperty("--burst-x",(Math.cos(i/count*Math.PI*2)*(24+Math.random()*65))+"px");
+    particle.style.setProperty("--burst-y",(Math.sin(i/count*Math.PI*2)*(24+Math.random()*65))+"px");
+    particle.style.left=x+"px";
+    particle.style.top=y+"px";
+    particle.style.animationDelay=(Math.random()*.18)+"s";
+    sky.appendChild(particle);
+    particle.addEventListener("animationend",()=>particle.remove(),{once:true});
+  }
+}
 $("observatoryWishBtn").addEventListener("click",()=>{
   const message=observatoryWishes[Math.floor(Math.random()*observatoryWishes.length)];
   $("observatoryWishMessage").textContent=message;
   $("observatoryWishMessage").classList.remove("wish-reveal");
   void $("observatoryWishMessage").offsetWidth;
   $("observatoryWishMessage").classList.add("wish-reveal");
+  spawnObservatoryBurst($("observatoryWishBtn"),26);
 });
 
 function playRewardAnimation(){
