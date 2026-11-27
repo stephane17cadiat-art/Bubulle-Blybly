@@ -873,14 +873,25 @@ fountainModal.querySelector(".fountain-intentions").addEventListener("click",eve
 });
 function fountainWishBurst(){
   const scene=$("fountainScene"),rect=scene.getBoundingClientRect(),originX=rect.width/2,originY=rect.height*.68;
-  for(let i=0;i<34;i++){
-    const particle=document.createElement("span");particle.className="fountain-wish-particle";particle.textContent=["✦","✧","♡","✿","·","💫"][i%6];
+  scene.classList.remove("fountain-casting");void scene.offsetWidth;scene.classList.add("fountain-casting");
+  const flash=document.createElement("span");flash.className="fountain-cast-flash";scene.appendChild(flash);
+  flash.addEventListener("animationend",()=>flash.remove(),{once:true});
+  for(let ring=0;ring<5;ring++){
+    const ripple=document.createElement("span");ripple.className="fountain-cast-ring";
+    ripple.style.left=originX+"px";ripple.style.top=originY+"px";ripple.style.animationDelay=(ring*.16)+"s";
+    scene.appendChild(ripple);ripple.addEventListener("animationend",()=>ripple.remove(),{once:true});
+  }
+  const symbols=["✦","✧","♡","✿","·","💫","🌸","✨","❋","⋆"];
+  for(let i=0;i<110;i++){
+    const angle=(i/110)*Math.PI*2+(Math.random()-.5)*.22,distance=65+Math.random()*210;
+    const particle=document.createElement("span");particle.className="fountain-wish-particle";particle.textContent=symbols[i%symbols.length];
     particle.style.left=originX+"px";particle.style.top=originY+"px";
-    particle.style.setProperty("--particle-x",(Math.cos(i/34*Math.PI*2)*(45+Math.random()*145))+"px");
-    particle.style.setProperty("--particle-y",(Math.sin(i/34*Math.PI*2)*(35+Math.random()*135)-35)+"px");
-    particle.style.animationDelay=(Math.random()*.22)+"s";scene.appendChild(particle);
+    particle.style.setProperty("--particle-x",(Math.cos(angle)*distance)+"px");
+    particle.style.setProperty("--particle-y",(Math.sin(angle)*distance*.72-35)+"px");
+    particle.style.animationDelay=(Math.random()*.55)+"s";scene.appendChild(particle);
     particle.addEventListener("animationend",()=>particle.remove(),{once:true});
   }
+  window.setTimeout(()=>scene.classList.remove("fountain-casting"),2600);
 }
 $("fountainWishBtn").addEventListener("click",()=>{
   const options=fountainWishTexts[selectedFountainWish]||fountainWishTexts.duo,message=options[Math.floor(Math.random()*options.length)],reveal=$("fountainWishReveal");
