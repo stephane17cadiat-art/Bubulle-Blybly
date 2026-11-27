@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInAnonymously, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, runTransaction, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 /*
   ÉTAPE OBLIGATOIRE :
@@ -479,6 +479,7 @@ function render(){
   drawLivingMapRoute();
   renderBestiesGarden(p);
   renderRealmAtlas(mine.completed||[]);
+  renderFountainSharedState();
 
   const treasures=mine.completed.map(i=>`<div class="treasure-item">${stages[i].reward}</div>`).join("");
   $("treasures").innerHTML=treasures||'<p class="muted">Tes trésors apparaîtront ici…</p>';
@@ -854,7 +855,7 @@ $("observatoryWishBtn").addEventListener("click",()=>{
 });
 
 
-/* Fontaine des vœux — rituel indépendant, aucune écriture dans la partie */
+/* Fontaine des vœux — choix synchronisés entre les deux profils */
 const fountainModal=$("fountainModal");
 const fountainWishTexts={
   duo:["Que votre complicité garde toujours une place pour les rires, les surprises et les petits bonheurs inattendus. 💗","Que deux chemins continuent de se croiser sous les plus belles étoiles, avec douceur et confiance. ✨","Que votre amitié reste un refuge lumineux, même lorsque les saisons changent. 🌷","Que vos souvenirs deviennent des trésors qui réchauffent le cœur, même à distance. 💞","Que rien n’efface cette magie rare qui rend votre duo si précieux. 🫶"],
@@ -868,9 +869,17 @@ const fountainCategories=[
   {id:"reve",title:"Pour un rêve",icon:"✨",hint:"Ouvrez une porte vers demain"},
   {id:"courage",title:"Pour le courage",icon:"🦋",hint:"Une lumière pour les jours plus difficiles"}
 ];
-const fountainChosen={};
 const fountainChoices=$("fountainWishChoices");
 const fountainReleaseBtn=$("fountainWishBtn");
+const fountainResetBtn=$("fountainResetBtn");
+const fountainOwnCount=$("fountainSelectionCount");
+const fountainReveal=$("fountainWishReveal");
+let fountainRevealing=false;
+function fountainRoleName(role){return role==="BUBULLE"?"Bubulle":"Blybly";}
+function fountainRoleCount(role){
+  const chosen=roomData?.fountainWishes?.[role]||{};
+  return fountainCategories.filter(category=>Number.isInteger(chosen[category.id])&&chosen[category.id]>=0&&chosen[category.id]<fountainWishTexts[category.id].length).length;
+}
 function renderFountainChoices(){
   fountainChoices.innerHTML=fountainCategories.map(category=>`
     <section class="fountain-choice-group" data-category="${category.id}">
@@ -879,22 +888,61 @@ function renderFountainChoices(){
         <button type="button" class="fountain-choice-option" data-wish-kind="${category.id}" data-wish-index="${index}" aria-pressed="false"><span class="choice-star">✧</span><span>${wish}</span></button>
       `).join("")}</div>
     </section>`).join("");
-  fountainReleaseBtn.disabled=true;
 }
 renderFountainChoices();
-$("fountainOpenBtn").addEventListener("click",()=>fountainModal.classList.remove("hidden"));
+function renderFountainSharedState(){
+  if(!roomData||!myRole||!fountainChoices)return;
+  const all=roomData.fountainWishes||{};
+  const mine=all[myRole]||{};
+  const ownCount=fountainRoleCount(myRole);
+  fountainChoices.querySelectorAll("[data-wish-kind]").forEach(button=>{
+    const selected=Number(mine[button.dataset.wishKind])===Number(button.dataset.wishIndex);
+    button.classList.toggle("selected",selected);
+    button.setAttribute("aria-pressed",String(selected));
+  });
+  fountainOwnCount.textContent=ownCount+" / 4 vœux choisis par "+fountainRoleName(myRole);
+  fountainResetBtn.disabled=ownCount===0;
+  const otherRole=myRole==="BUBULLE"?"BLYBLY":"BUBULLE";
+  const bothReady=fountainRoleCount("BUBULLE")===4&&fountainRoleCount("BLYBLY")===4;
+  $("fountainSharedStatus").textContent=bothReady
+    ?"Les huit vœux sont réunis ! La révélation peut commencer. ✨"
+    :fountainRoleName("BUBULLE")+" : "+fountainRoleCount("BUBULLE")+"/4 · "+fountainRoleName("BLYBLY")+" : "+fountainRoleCount("BLYBLY")+"/4";
+  $("fountainSharedPreview").innerHTML=["BUBULLE","BLYBLY"].map(role=>{
+    const chosen=all[role]||{};
+    return '<section class="fountain-player-wishes '+(role===myRole?"is-mine":"")+'"><h4>'+ (role==="BUBULLE"?"💗 Bubulle":"🌷 Blybly")+(role===myRole?" · Moi":"")+'</h4><ul>'+
+      fountainCategories.map(category=>{
+        const index=chosen[category.id];
+        const valid=Number.isInteger(index)&&index>=0&&index<fountainWishTexts[category.id].length;
+        return '<li><b>'+category.icon+' '+category.title+'</b><span>'+(valid?fountainWishTexts[category.id][index]:"En attente de son choix…")+'</span></li>';
+      }).join("")+'</ul></section>';
+  }).join("");
+  fountainReleaseBtn.disabled=!bothReady||fountainRevealing;
+}
+$("fountainOpenBtn").addEventListener("click",()=>{renderFountainSharedState();fountainModal.classList.remove("hidden");});
 $("fountainCloseBtn").addEventListener("click",()=>fountainModal.classList.add("hidden"));
 fountainModal.addEventListener("click",event=>{if(event.target===fountainModal)fountainModal.classList.add("hidden");});
-fountainChoices.addEventListener("click",event=>{
-  const choice=event.target.closest("[data-wish-kind]");if(!choice)return;
+fountainChoices.addEventListener("click",async event=>{
+  const choice=event.target.closest("[data-wish-kind]");if(!choice||!roomRef||!myRole)return;
   const kind=choice.dataset.wishKind,index=Number(choice.dataset.wishIndex);
-  fountainChosen[kind]=index;
   fountainChoices.querySelectorAll(`[data-wish-kind="${kind}"]`).forEach(item=>{
     const active=item===choice;item.classList.toggle("selected",active);item.setAttribute("aria-pressed",String(active));
   });
-  fountainReleaseBtn.disabled=!fountainCategories.every(category=>Number.isInteger(fountainChosen[category.id]));
-  const count=fountainCategories.filter(category=>Number.isInteger(fountainChosen[category.id])).length;
-  $("fountainSelectionCount").textContent=count+" / 4 vœux choisis";
+  fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Un vœu a rejoint la fontaine… La révélation attend les deux cœurs. 💗</p>';
+  fountainRevealing=false;
+  try{
+    await updateDoc(roomRef,{["fountainWishes."+myRole+"."+kind]:index});
+    say("fountainSharedStatus","Vœu transmis à l’autre joueuse… ✨");
+  }catch(error){console.error(error);say("fountainSharedStatus","Synchronisation impossible : "+(error.message||"réessaie."));}
+});
+$("fountainResetBtn").addEventListener("click",async()=>{
+  if(!roomRef||!myRole)return;
+  const reset={};fountainCategories.forEach(category=>reset["fountainWishes."+myRole+"."+category.id]=null);
+  try{
+    await updateDoc(roomRef,reset);
+    fountainRevealing=false;
+    fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Tes quatre choix ont été effacés. Tu peux recommencer quand tu veux. 💗</p>';
+    $("fountainWishBtn").innerHTML='<span>✧</span> Révéler nos huit vœux <span>✧</span>';
+  }catch(error){console.error(error);say("fountainSharedStatus","Impossible de réinitialiser : "+(error.message||"réessaie."));}
 });
 function fountainWishBurst(){
   const scene=$("fountainScene"),rect=scene.getBoundingClientRect(),originX=rect.width/2,originY=rect.height*.68;
@@ -919,24 +967,26 @@ function fountainWishBurst(){
   window.setTimeout(()=>scene.classList.remove("fountain-casting"),3200);
 }
 fountainReleaseBtn.addEventListener("click",()=>{
-  if(!fountainCategories.every(category=>Number.isInteger(fountainChosen[category.id])))return;
-  fountainReleaseBtn.disabled=true;
-  const reveal=$("fountainWishReveal");
-  reveal.innerHTML='<div class="fountain-reveal-heading">✧ VOS QUATRE VŒUX ✧</div><div class="fountain-revealed-list"></div><p class="fountain-final-blessing">Que la fontaine garde précieusement ces quatre souhaits… 💗</p>';
-  const list=reveal.querySelector(".fountain-revealed-list");
-  reveal.classList.remove("revealed");void reveal.offsetWidth;reveal.classList.add("revealed");
+  if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
+  fountainRevealing=true;fountainReleaseBtn.disabled=true;
+  const all=roomData.fountainWishes||{};
+  fountainReveal.innerHTML='<div class="fountain-reveal-heading">✧ LES HUIT VŒUX DES BESTIES ✧</div><div class="fountain-revealed-list"></div><p class="fountain-final-blessing">Deux cœurs, huit souhaits… que la magie vous accompagne. 💗</p>';
+  const list=fountainReveal.querySelector(".fountain-revealed-list");
+  fountainReveal.classList.remove("revealed");void fountainReveal.offsetWidth;fountainReveal.classList.add("revealed");
   fountainWishBurst();
-  fountainCategories.forEach((category,index)=>{
+  const sequence=["BUBULLE","BLYBLY"].flatMap(role=>fountainCategories.map(category=>({role,category,index:all[role][category.id]})));
+  sequence.forEach((entry,index)=>{
     window.setTimeout(()=>{
       const item=document.createElement("article");item.className="fountain-revealed-wish";
       item.innerHTML='<span class="fountain-revealed-category"></span><p></p>';
-      item.querySelector(".fountain-revealed-category").textContent=category.icon+" "+category.title;
-      item.querySelector("p").textContent=fountainWishTexts[category.id][fountainChosen[category.id]];
+      item.querySelector(".fountain-revealed-category").textContent=(entry.role==="BUBULLE"?"💗 Bubulle":"🌷 Blybly")+" · "+entry.category.icon+" "+entry.category.title;
+      item.querySelector("p").textContent=fountainWishTexts[entry.category.id][entry.index];
       list.appendChild(item);
-    },900+index*1250);
+    },650+index*900);
   });
-  window.setTimeout(()=>{fountainReleaseBtn.disabled=false;fountainReleaseBtn.innerHTML='<span>✧</span> Révéler à nouveau nos vœux <span>✧</span>';},6200);
+  window.setTimeout(()=>{fountainRevealing=false;renderFountainSharedState();},8500);
 });
+
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
