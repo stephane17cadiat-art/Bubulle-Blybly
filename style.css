@@ -2596,3 +2596,47 @@ button:not(:disabled):focus-visible{
   .ceremony-date-picker input{min-height:40px;font-size:13px}
   .ceremony-stage-message .ceremony-reveal-date{font-size:13px}
 }
+
+
+/* Feux d'artifice de princesses dans la salle royale */
+.ceremony-firework-burst{
+  position:absolute;
+  z-index:2;
+  left:var(--firework-x);
+  top:var(--firework-y);
+  width:1px;
+  height:1px;
+  opacity:0;
+  animation:ceremonyFireworkFlash 1.65s var(--firework-delay) ease-out both;
+}
+.ceremony-firework-burst span{
+  position:absolute;
+  left:0;
+  top:0;
+  display:block;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:var(--spark-color);
+  box-shadow:0 0 7px 2px var(--spark-color),0 0 15px var(--spark-color);
+  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.12);
+  opacity:0;
+  animation:ceremonyFireworkSpark 1.45s calc(var(--firework-delay) + .08s) cubic-bezier(.15,.7,.25,1) both;
+}
+@keyframes ceremonyFireworkFlash{
+  0%,100%{opacity:0}
+  12%,48%{opacity:1}
+  72%{opacity:.55}
+}
+@keyframes ceremonyFireworkSpark{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.15)}
+  18%{opacity:1;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-.45 * var(--distance))) scale(1.15)}
+  78%{opacity:.9;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.8)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1.22 * var(--distance))) scale(.1)}
+}
+@media(max-width:520px){
+  .ceremony-firework-burst span{width:2.5px;height:2.5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ceremony-firework-burst,.ceremony-firework-burst span{animation:none!important;opacity:0!important}
+}
