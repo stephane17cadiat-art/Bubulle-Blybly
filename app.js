@@ -128,9 +128,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 let user, roomId, roomRef, unsubscribe, myRole, roomData;
+let selectedRole = (() => { const saved=localStorage.getItem("bbSelectedRole"); return saved==="BUBULLE"||saved==="BLYBLY" ? saved : ""; })();
 
 const inviteCode = () => crypto.randomUUID().replaceAll("-","").slice(0,18).toUpperCase();
-const roomFromUrl = new URLSearchParams(location.search).get("room");
+const roomParams = new URLSearchParams(location.search);
+const roomFromUrl = roomParams.get("room");
+const roleFromUrl = roomParams.get("player");
 const say = (id,msg) => $(id).textContent = msg;
 const show = (id) => $(id).classList.remove("hidden");
 const hide = (id) => $(id).classList.add("hidden");
@@ -241,13 +244,26 @@ async function boot(){
     $("createBtn").disabled = true; $("joinBtn").disabled = true; return;
   }
   try { await setPersistence(auth, browserLocalPersistence); const cred = await signInAnonymously(auth); user = cred.user; $("createBtn").disabled = false; $("joinBtn").disabled = false; say("welcomeMessage","Connexion prête ! Tu peux créer ou rejoindre votre aventure."); say("syncStatus","● Connecté"); 
-    if(roomFromUrl) { $("inviteInput").value = roomFromUrl; await joinRoom(roomFromUrl); }
+    if(roomFromUrl) {
+      $("inviteInput").value = roomFromUrl;
+      hide("welcome"); show("connection");
+      if(roleFromUrl==="BUBULLE" || roleFromUrl==="BLYBLY") {
+        selectedRole=roleFromUrl;
+        localStorage.setItem("bbSelectedRole",selectedRole);
+        updateProfileChoice();
+        await joinRoom(roomFromUrl);
+      } else {
+        updateProfileChoice();
+        say("welcomeMessage","Choisis Bubulle ou Blybly pour retrouver le bon profil.");
+      }
+    } else updateProfileChoice();
   } catch(e) { $("createBtn").disabled = true; $("joinBtn").disabled = true; say("welcomeMessage","Connexion impossible pour le moment : "+friendlyError(e)); }
 }
 function friendlyError(e){ console.error(e); return e.code==="auth/operation-not-allowed"?"Active la connexion anonyme dans Firebase.":e.message||"vérifie la configuration Firebase."; }
 
 async function createRoom(){
   if(!user) { say("welcomeMessage","La connexion au royaume se prépare encore. Attends quelques secondes puis réessaie 💗"); return; }
+  if(selectedRole!=="BUBULLE"){say("welcomeMessage","Choisis Bubulle pour créer une nouvelle aventure.");return;}
   const code=inviteCode(); roomId=code; myRole="BUBULLE"; roomRef=doc(db,"rooms",roomId);
   const data={createdAt:serverTimestamp(),players:{
     BUBULLE:{uid:user.uid,score:0,stage:0,completed:[],joined:true},
@@ -269,6 +285,7 @@ async function joinRoom(code){
       return;
     }
   }
+  if(selectedRole!=="BUBULLE" && selectedRole!=="BLYBLY"){say("welcomeMessage","Choisis d’abord ton profil : Bubulle ou Blybly.");return;}
   const rawInvite=String(code||"").trim();
   if(!rawInvite) {say("welcomeMessage","Colle le code ou le lien complet que Bubulle t’a envoyé.");return;}
   let normalizedInvite=rawInvite;
@@ -289,6 +306,8 @@ async function joinRoom(code){
       if(!bubulle || !blybly || !("uid" in bubulle) || !("uid" in blybly)){
         throw new Error("Cette salle existe, mais les profils Bubulle et Blybly sont incomplets. Aucune donnée n'a été modifiée. Vérifions la salle dans Firebase avant toute réparation.");
       }
+      // Le profil est choisi explicitement. Aucun UID, score ou élément de progression n’est remplacé.
+      if(selectedRole==="BUBULLE" || selectedRole==="BLYBLY"){myRole=selectedRole;return;}
       if(bubulle.uid===user.uid){myRole="BUBULLE";return;}
       if(blybly.uid===user.uid){myRole="BLYBLY";return;}
       if(bubulle.joined && bubulle.uid!==user.uid) {
@@ -301,7 +320,7 @@ async function joinRoom(code){
       }
       myRole="BLYBLY";tx.update(roomRef,{"players.BLYBLY.uid":user.uid,"players.BLYBLY.joined":true});
     });
-    history.replaceState({}, "", "?room="+roomId); enterGame(); listen();
+    history.replaceState({}, "", "?room="+roomId+"&player="+myRole); enterGame(); listen();
   }catch(e){say("welcomeMessage",friendlyError(e));}
 }
 function enterGame(){hide("welcome");hide("connection");show("game");}
@@ -1349,14 +1368,41 @@ $("goConnectionBtn").addEventListener("click",()=>{
 $("backHomeBtn").addEventListener("click",()=>{hide("connection");show("welcome");});
 $("createBtn").addEventListener("click",createRoom);
 $("joinBtn").addEventListener("click",()=>joinRoom($("inviteInput").value));
+function updateProfileChoice(){
+  document.querySelectorAll(".profile-choice-button").forEach(button=>{
+    const active=button.dataset.role===selectedRole;
+    button.classList.toggle("selected",active);
+    button.setAttribute("aria-pressed",active?"true":"false");
+  });
+  const status=$("profileChoiceStatus");
+  if(status) status.textContent=selectedRole==="BUBULLE"?"Profil sélectionné : Bubulle.":selectedRole==="BLYBLY"?"Profil sélectionné : Blybly.":"Sélectionne un profil pour continuer.";
+}
+function chooseProfile(role){
+  if(role!=="BUBULLE" && role!=="BLYBLY") return;
+  selectedRole=role;
+  localStorage.setItem("bbSelectedRole",role);
+  updateProfileChoice();
+  if(roomId) joinRoom(roomId);
+  else if(roomFromUrl) joinRoom(roomFromUrl);
+}
+$("chooseBubulle").addEventListener("click",()=>chooseProfile("BUBULLE"));
+$("chooseBlybly").addEventListener("click",()=>chooseProfile("BLYBLY"));
 $("inviteInput").addEventListener("keydown",e=>{if(e.key==="Enter")joinRoom($("inviteInput").value)});
 $("copyInviteBtn").addEventListener("click",async()=>{
-  const url=location.origin+location.pathname+"?room="+roomId;
+  const url=location.origin+location.pathname+"?room="+roomId+"&player="+(myRole||selectedRole||"BUBULLE");
   try{await navigator.clipboard.writeText(url);say("syncStatus","Invitation copiée ! Envoie-la à Blybly.");}
   catch{prompt("Copie ce lien et envoie-le à Blybly :",url);}
 });
 $("hintBtn").addEventListener("click",()=>{const stage=Math.min(roomData.players[myRole].stage,stages.length-1);$("hint").textContent="💡 "+stages[stage].hint;show("hint")});
 $("nextBtn").addEventListener("click",()=>render());
+$("profileSwitchBtn").addEventListener("click",()=>{
+  if(unsubscribe){unsubscribe();unsubscribe=null;}
+  myRole=null;
+  history.replaceState({},"","?room="+roomId);
+  hide("game");show("connection");
+  say("welcomeMessage","Choisis le profil que tu souhaites utiliser sur cet appareil.");
+  updateProfileChoice();
+});
 $("leaveBtn").addEventListener("click",()=>{if(unsubscribe)unsubscribe();history.replaceState({},"",location.pathname);location.reload()});
 $("closeModal").addEventListener("click",()=>hide("modal"));
 $("modal").addEventListener("click",e=>{if(e.target.id==="modal") hide("modal");});
