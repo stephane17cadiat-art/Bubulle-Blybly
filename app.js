@@ -269,7 +269,7 @@ async function createRoom(){
     BUBULLE:{uid:user.uid,score:0,stage:0,completed:[],joined:true},
     BLYBLY:{uid:null,score:0,stage:0,completed:[],joined:false}
   }};
-  try { await setDoc(roomRef,data); history.replaceState({}, "", "?room="+code); enterGame(); listen(); }
+  try { await setDoc(roomRef,data); history.replaceState({}, "", "?room="+code+"&player=BUBULLE"); enterGame(); listen(); }
   catch(e){say("welcomeMessage","Impossible de créer la partie : "+friendlyError(e));}
 }
 async function joinRoom(code){
