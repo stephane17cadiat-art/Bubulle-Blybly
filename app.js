@@ -136,60 +136,77 @@ const show = (id) => $(id).classList.remove("hidden");
 const hide = (id) => $(id).classList.add("hidden");
 
 
-/* Lecture locale : le fichier choisi reste sur l'appareil et n'est pas téléversé. */
+/* Playlist partagée Bubulle & Blybly : fichiers intégrés au site. */
 const songAudio = $("bestiesSong");
 const songButton = $("songToggleBtn");
+const songNextButton = $("songNextBtn");
 const songStatus = $("songStatus");
-const songChooseButton = $("songChooseBtn");
-const songFileInput = $("songFileInput");
-let localSongUrl = null;
-if (songAudio && songButton && songChooseButton && songFileInput) {
-  songChooseButton.addEventListener("click", () => songFileInput.click());
-  songFileInput.addEventListener("change", () => {
-    const file = songFileInput.files && songFileInput.files[0];
-    if (!file) return;
-    if (!file.type.startsWith("audio/")) {
-      songStatus.textContent = "Choisis un fichier audio, de préférence au format MP3.";
-      return;
-    }
-    if (localSongUrl) URL.revokeObjectURL(localSongUrl);
-    localSongUrl = URL.createObjectURL(file);
-    songAudio.src = localSongUrl;
-    songAudio.load();
-    songButton.disabled = true;
-    songButton.textContent = "⏳ Préparation de la chanson…";
-    songStatus.textContent = "« " + file.name + " » est sélectionné sur cet appareil.";
-  });
+const songTitle = $("songTitle");
+const songPlaylist = [
+  { title: "Lorie — Sur un air latino", file: "Lorie - Sur un air Lotino.mp3" },
+  { title: "Britney Spears — Do You Wanna Come Over?", file: "Britney Spears Glory - 07 Do You Wanna Come Over.mp3" },
+  { title: "Fatal Bazooka — J’aime trop ton boule", file: "Fatal Bazooka - Jaime trop ton boule (Clip officiel).mp3" },
+  { title: "Britney Spears — The Answer", file: "Britney Spears - The Answer.mp3" },
+  { title: "Lorie — Je serai (ta meilleure amie)", file: "Lorie - Je serai (ta meilleure amie) (Clip officiel).mp3" }
+];
+let songIndex = 0;
+let songStarted = false;
+let songWantsPlayback = false;
+const loadPlaylistTrack = (index, autoplay = false) => {
+  if (!songAudio || !songPlaylist.length) return;
+  songIndex = (index + songPlaylist.length) % songPlaylist.length;
+  const track = songPlaylist[songIndex];
+  songAudio.src = "assets/music/" + encodeURIComponent(track.file).replace(/%2F/g, "/");
+  songAudio.load();
+  if (songTitle) songTitle.textContent = track.title;
+  if (songStatus) songStatus.textContent = "Piste " + (songIndex + 1) + " sur " + songPlaylist.length + " · prête à écouter 💗";
+  if (autoplay) {
+    songWantsPlayback = true;
+    songAudio.play().then(() => {
+      songStarted = true;
+      if (songButton) songButton.textContent = "⏸ Mettre en pause";
+      if (songStatus) songStatus.textContent = "Lecture en cours · " + (songIndex + 1) + "/" + songPlaylist.length + " 💗";
+    }).catch(() => {
+      songWantsPlayback = false;
+      if (songButton) songButton.textContent = "▶️ Écouter la playlist";
+      if (songStatus) songStatus.textContent = "Appuie sur écouter pour lancer la musique 💗";
+    });
+  } else if (songButton) {
+    songButton.textContent = songStarted ? "▶️ Reprendre la playlist" : "▶️ Écouter la playlist";
+  }
+};
+if (songAudio && songButton && songNextButton) {
+  loadPlaylistTrack(0);
   songAudio.addEventListener("canplay", () => {
-    songButton.disabled = false;
-    songButton.textContent = "▶️ Écouter notre chanson";
-    songStatus.textContent = "Votre chanson est prête 💗";
+    if (songWantsPlayback && songAudio.paused) {
+      songAudio.play().then(() => {
+        songStarted = true;
+        songWantsPlayback = false;
+        songButton.textContent = "⏸ Mettre en pause";
+      }).catch(() => { songWantsPlayback = false; });
+    }
   });
   songAudio.addEventListener("error", () => {
-    if (!songAudio.src) return;
-    songButton.disabled = true;
-    songButton.textContent = "💗 Choisis d’abord le MP3";
-    songStatus.textContent = "Impossible de lire ce fichier. Essaie de sélectionner à nouveau le MP3.";
+    if (songStatus) songStatus.textContent = "Impossible de charger cette piste. Vérifie ta connexion et réessaie.";
   });
   songButton.addEventListener("click", async () => {
     if (songAudio.paused) {
       try {
         await songAudio.play();
+        songStarted = true;
         songButton.textContent = "⏸ Mettre en pause";
-        songStatus.textContent = "Votre chanson accompagne l’aventure 💗";
+        songStatus.textContent = "Lecture en cours · " + (songIndex + 1) + "/" + songPlaylist.length + " 💗";
       } catch {
         songStatus.textContent = "La lecture n’a pas pu démarrer. Réessaie.";
       }
     } else {
       songAudio.pause();
-      songButton.textContent = "▶️ Reprendre la chanson";
+      songButton.textContent = "▶️ Reprendre la playlist";
       songStatus.textContent = "Musique en pause";
     }
   });
-  songAudio.addEventListener("ended", () => {
-    songButton.textContent = "▶️ Réécouter la chanson";
-    songStatus.textContent = "À vous de rejouer 💗";
-  });
+  songNextButton.addEventListener("click", () => loadPlaylistTrack(songIndex + 1, songStarted && !songAudio.paused));
+  songAudio.addEventListener("ended", () => loadPlaylistTrack(songIndex + 1, true));
 }
 async function boot(){
   if(firebaseConfig.apiKey.startsWith("REMPLACER")) {
