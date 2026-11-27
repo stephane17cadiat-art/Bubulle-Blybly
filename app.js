@@ -853,6 +853,40 @@ $("observatoryWishBtn").addEventListener("click",()=>{
   spawnObservatoryBurst($("observatoryWishBtn"),26);
 });
 
+
+/* Fontaine des vœux — interaction indépendante, aucune écriture dans la partie */
+const fountainModal=$("fountainModal");
+let selectedFountainWish="duo";
+const fountainWishTexts={
+  duo:["Que votre complicité garde toujours une place pour les rires, les surprises et les petits bonheurs inattendus. 💗","Que deux chemins continuent de se croiser sous les plus belles étoiles, avec douceur et confiance. ✨","Que votre amitié reste un refuge lumineux, même lorsque les saisons changent. 🌷"],
+  bonheur:["Que les journées ordinaires se remplissent de petits instants extraordinaires. 🌸","Que la joie trouve toujours une fenêtre ouverte pour entrer dans votre vie. ☀️","Que chaque matin apporte une raison nouvelle de sourire. 🦋"],
+  reve:["Qu’un rêve longtemps gardé dans le cœur trouve enfin son chemin vers la lumière. 🌟","Que l’audace accompagne vos envies et que chaque étape vous rapproche de ce qui vous fait vibrer. ✨","Que l’imagination ouvre des portes là où l’on ne voyait que des murs. 🌙"],
+  courage:["Que la force revienne doucement, un pas après l’autre, chaque fois que vous en avez besoin. 🦋","Que les jours difficiles n’éteignent jamais la petite lumière qui vous guide. 💜","Que la confiance grandisse à chaque victoire, même la plus discrète. 🌷"]
+};
+$("fountainOpenBtn").addEventListener("click",()=>fountainModal.classList.remove("hidden"));
+$("fountainCloseBtn").addEventListener("click",()=>fountainModal.classList.add("hidden"));
+fountainModal.addEventListener("click",event=>{if(event.target===fountainModal)fountainModal.classList.add("hidden");});
+fountainModal.querySelector(".fountain-intentions").addEventListener("click",event=>{
+  const choice=event.target.closest("[data-wish-kind]");if(!choice)return;
+  selectedFountainWish=choice.dataset.wishKind;
+  fountainModal.querySelectorAll(".fountain-intention").forEach(item=>item.classList.toggle("selected",item===choice));
+});
+function fountainWishBurst(){
+  const scene=$("fountainScene"),rect=scene.getBoundingClientRect(),originX=rect.width/2,originY=rect.height*.68;
+  for(let i=0;i<34;i++){
+    const particle=document.createElement("span");particle.className="fountain-wish-particle";particle.textContent=["✦","✧","♡","✿","·","💫"][i%6];
+    particle.style.left=originX+"px";particle.style.top=originY+"px";
+    particle.style.setProperty("--particle-x",(Math.cos(i/34*Math.PI*2)*(45+Math.random()*145))+"px");
+    particle.style.setProperty("--particle-y",(Math.sin(i/34*Math.PI*2)*(35+Math.random()*135)-35)+"px");
+    particle.style.animationDelay=(Math.random()*.22)+"s";scene.appendChild(particle);
+    particle.addEventListener("animationend",()=>particle.remove(),{once:true});
+  }
+}
+$("fountainWishBtn").addEventListener("click",()=>{
+  const options=fountainWishTexts[selectedFountainWish]||fountainWishTexts.duo,message=options[Math.floor(Math.random()*options.length)],reveal=$("fountainWishReveal");
+  reveal.querySelector("p").textContent=message;reveal.classList.remove("revealed");void reveal.offsetWidth;reveal.classList.add("revealed");fountainWishBurst();
+});
+
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
