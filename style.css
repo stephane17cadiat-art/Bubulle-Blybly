@@ -2640,3 +2640,17 @@ button:not(:disabled):focus-visible{
 @media(prefers-reduced-motion:reduce){
   .ceremony-firework-burst,.ceremony-firework-burst span{animation:none!important;opacity:0!important}
 }
+
+
+/* Accessibilite : garder les gerbes visibles meme si les animations sont reduites */
+@media(prefers-reduced-motion:reduce){
+  .ceremony-firework-burst{
+    animation:none!important;
+    opacity:1!important;
+  }
+  .ceremony-firework-burst span{
+    animation:none!important;
+    opacity:1!important;
+    transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(.9)!important;
+  }
+}
