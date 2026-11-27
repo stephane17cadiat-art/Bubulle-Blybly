@@ -2118,3 +2118,43 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 @keyframes fountainCastRing{0%{opacity:.95;scale:.2}100%{opacity:0;scale:19}}
 @keyframes fountainFlash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.fountain-scene:after,.fountain-modal:not(.hidden),.fountain-modal:not(.hidden) .fountain-sanctuary,.fountain-modal:not(.hidden) .fountain-art,.fountain-art,.fountain-top-bowl:after,.fountain-lower-bowl:after,.fountain-column:after,.fountain-pool:before,.fountain-pool:after,.fountain-release-btn,.fountain-release-btn:before,.fountain-wish-card:before,.fountain-cast-ring,.fountain-cast-flash{animation:none!important}}
+
+
+/* FONTAINE V3 — netteté renforcée et sélection des quatre vœux */
+.fountain-scene{min-height:370px;background:radial-gradient(ellipse at 50% 76%,#8065a2 0,#423363 43%,#17172f 100%)}
+.fountain-art{width:min(100%,560px);height:315px;margin-top:12px;filter:drop-shadow(0 12px 12px #08051677);animation:fountainSanctuaryFloat 4s ease-in-out infinite}
+.fountain-modal:not(.hidden) .fountain-art{animation:fountainSanctuaryFloat 4s ease-in-out infinite}
+@keyframes fountainStructureArrive{from{opacity:0;scale:.94;filter:drop-shadow(0 12px 12px #08051677)}to{opacity:1;scale:1;filter:drop-shadow(0 12px 12px #08051677)}}
+.fountain-top-bowl,.fountain-lower-bowl{border-width:5px;box-shadow:inset 0 -9px 12px #fff5,0 4px 14px #f5c9e855,0 0 0 1px #fff6}
+.fountain-column{border-left-width:6px;border-right-width:6px;box-shadow:0 0 0 1px #fff5,0 0 18px #e9b9df99}
+.fountain-pool{border-width:3px;box-shadow:0 0 0 2px #fff3,0 0 25px #cba6ff99,inset 0 0 15px #fff8}
+.fountain-water-jet{filter:drop-shadow(0 0 5px #b8eaff) drop-shadow(0 0 10px #d8c5ff)}
+.fountain-choice-group{margin:15px 0;padding:14px;border:1px solid #e8c6e755;border-radius:16px;background:linear-gradient(135deg,#fff1ff0b,#d8c7ff0a);text-align:left}
+.fountain-choice-heading{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.fountain-choice-heading>span{font-size:25px;filter:drop-shadow(0 0 8px #f8c6e8)}
+.fountain-choice-heading h4{margin:0;color:#ffe9c9;font:700 16px Georgia,serif}
+.fountain-choice-heading p{margin:3px 0 0;color:#cdbedb;font:italic 11px Georgia,serif}
+.fountain-choice-heading small{margin-left:auto;color:#f5d9a6;font-size:9px;white-space:nowrap}
+.fountain-choice-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fountain-choice-option{display:flex;align-items:flex-start;gap:8px;min-height:66px;padding:10px;border:1px solid #d9c3eb44;border-radius:12px;background:#17152caa;color:#f4e9fa;text-align:left;font:12px/1.5 Georgia,serif;cursor:pointer;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+.fountain-choice-option:active{transform:scale(.98)}
+.fountain-choice-option .choice-star{flex:0 0 auto;color:#e8c68f;font-size:16px}
+.fountain-choice-option.selected{border-color:#ffe0a2;background:linear-gradient(120deg,#e7b9d52b,#b6a8ff2b);box-shadow:0 0 16px #eac6f033,inset 0 0 0 1px #ffe5b033;color:#fff}
+.fountain-choice-option.selected .choice-star{color:#ffe6a1;text-shadow:0 0 10px #ffe6a1}
+.fountain-selection-count{margin:8px 0 13px;color:#f6d9a6;font-size:11px;font-weight:800;letter-spacing:1px}
+.fountain-release-btn:disabled{opacity:.42;filter:saturate(.5);cursor:not-allowed;animation:none;box-shadow:none}
+.fountain-reveal-heading{margin:0 0 12px;color:#ffe5a4;font:800 12px Georgia,serif;letter-spacing:2px}
+.fountain-revealed-list{display:grid;gap:10px}
+.fountain-revealed-wish{padding:12px;border:1px solid #f5d9a766;border-radius:12px;background:linear-gradient(120deg,#f5c7e311,#d7caff12);text-align:left;animation:fountainWishReveal .8s cubic-bezier(.16,1,.3,1) both}
+.fountain-revealed-category{color:#ffe0a1;font-size:10px;font-weight:800;letter-spacing:.7px}
+.fountain-revealed-wish p{margin:6px 0 0;color:#fff2fa;font:italic 13px/1.55 Georgia,serif}
+.fountain-final-blessing{margin:14px 0 0;color:#f8d8ec;font:italic 13px Georgia,serif}
+@media(max-width:520px){
+ .fountain-scene{min-height:350px}
+ .fountain-art{width:100%;height:300px;transform:none;margin:12px auto 0}
+ .fountain-pool{width:min(360px,96vw);left:50%;transform:translateX(-50%)}
+ .fountain-choice-options{grid-template-columns:1fr}
+ .fountain-choice-option{min-height:54px;font-size:12px}
+ .fountain-choice-group{padding:12px}
+}
+@media(prefers-reduced-motion:reduce){.fountain-art{animation:none!important}.fountain-choice-option{transition:none}}
