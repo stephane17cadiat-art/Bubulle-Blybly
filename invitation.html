@@ -29,10 +29,15 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .seal:before{content:"";position:absolute;inset:4px;border:1px solid #fff0c7;border-radius:50%;box-shadow:inset 0 0 0 1px #9c743b55}
 .seal span{position:relative;font:bold 12px Georgia,serif;letter-spacing:-.08em;text-shadow:0 1px 1px #8b642f;color:#fff9e9}
 .seal span:after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:14px;height:1px;background:#fff0c7}
-.paper{position:absolute;z-index:4;left:7%;right:7%;bottom:12px;height:82%;background:#fffaf4;border:1px solid #ead8c8;padding:22px 18px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transform:translateY(35px);transition:transform 1s .35s,opacity .5s .35s}
-.paper small{font:10px Arial,sans-serif;letter-spacing:.2em;color:#b28c58;text-transform:uppercase}
-.paper strong{font-size:23px;font-weight:normal;color:#986a78;margin:12px 0}
-.paper span{font-size:14px;line-height:1.5}
+.paper{position:absolute;z-index:4;left:7%;right:7%;bottom:12px;height:82%;background:linear-gradient(135deg,#fffdf8 0%,#fbf2e8 52%,#fffaf4 100%);border:1px solid #d8bd8b;padding:22px 18px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transform:translateY(35px);transition:transform 3.2s 8.3s cubic-bezier(.2,.75,.25,1),opacity 2s 8.3s;box-shadow:inset 0 0 18px #c5a36b18,0 4px 14px #79565b20}
+.paper:before{content:"";position:absolute;inset:8px;border:1px solid #d8bd8b;pointer-events:none}
+.paper:after{content:"✧";position:absolute;top:11px;left:50%;transform:translateX(-50%);font-size:16px;color:#bd9654;background:#fffaf4;padding:0 7px}
+.paper small{font:9px Arial,sans-serif;letter-spacing:.24em;color:#a7834e;text-transform:uppercase;margin-top:8px}
+.paper strong{font-size:clamp(20px,5vw,25px);font-weight:normal;color:#946477;margin:12px 0;font-style:italic}
+.paper span{font-size:13px;line-height:1.65;color:#775b60;max-width:245px}
+.open .paper small{animation:letterReveal 1.5s 10.2s both}
+.open .paper strong{animation:letterReveal 1.8s 11s both}
+.open .paper span{animation:letterReveal 2s 11.8s both}
 .open .flap{animation:royalFlapOpen 3.2s 5.8s cubic-bezier(.45,0,.2,1) forwards;z-index:1}
 .open .seal{animation:royalSealGlow 2.8s .25s ease-in-out forwards}
 .open .bow{animation:royalBowRelease 3s 2.6s cubic-bezier(.2,.65,.25,1) forwards}
@@ -50,7 +55,17 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 @keyframes royalDust{0%{opacity:0;transform:translateY(12px) scale(.25)}25%{opacity:1;transform:translateY(-3px) scale(1.25)}75%{opacity:.85;transform:translateY(-28px) scale(.7)}100%{opacity:0;transform:translateY(-48px) scale(.15)}}
 
 .hint{font:12px Arial,sans-serif;letter-spacing:.08em;color:#987783}
-.message{display:none;margin:30px auto 0;padding:26px 22px;background:#fffaf6d9;border:1px solid #d9bd91;border-radius:14px;box-shadow:0 12px 35px #9a6e7820;animation:appear .7s ease}
+.message{display:none;margin:30px auto 0;padding:30px 24px;background:linear-gradient(145deg,#fffdf9,#fff8f2);border:3px double #d6bd91;border-radius:3px;box-shadow:0 12px 35px #9a6e7820;position:relative;animation:appear 1.8s 10s both}
+.message:before{content:"✧";position:absolute;top:8px;left:50%;transform:translateX(-50%);color:#bd9654;background:#fffdf9;padding:0 10px;font-size:18px}
+.message h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:.01em}
+.message p{color:#755b60}
+.opened .message h2{animation:letterReveal 1.8s 10.5s both}
+.opened .message p:nth-of-type(1){animation:letterReveal 1.5s 11.2s both}
+.opened .message p:nth-of-type(2){animation:letterReveal 1.7s 12s both}
+.opened .message p:nth-of-type(3){animation:letterReveal 1.9s 12.8s both}
+.opened .message p:nth-of-type(4){animation:letterReveal 2s 13.6s both}
+.opened .message .signature{font-family:'Segoe Script','Brush Script MT',cursive;font-size:21px;color:#a17b51;line-height:1.55}
+.opened .game-link{animation:letterReveal 1.8s 14.5s both}
 .opened .message{display:block}
 .message h2{font-size:27px;font-weight:normal;color:#946477;margin:0 0 18px}
 .message p{font-size:16px;line-height:1.75;margin:10px 0}
@@ -59,6 +74,7 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .game-link:focus,.game-link:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .foot{margin-top:28px;font:11px Arial,sans-serif;color:#a47f89;letter-spacing:.08em}
 @keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes letterReveal{from{opacity:0;transform:translateY(9px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
