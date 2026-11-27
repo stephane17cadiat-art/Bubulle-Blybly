@@ -21,11 +21,15 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .ribbon:before,.ribbon:after{content:"";position:absolute;background:linear-gradient(90deg,#d98fa5,#f8d4df 48%,#d98fa5);box-shadow:0 2px 5px #9d607433}
 .ribbon:before{left:0;right:0;top:47%;height:17px}
 .ribbon:after{top:0;bottom:0;left:calc(50% - 8px);width:16px;background:linear-gradient(90deg,#d98fa5,#f8d4df 50%,#d98fa5)}
-.bow{position:absolute;z-index:8;left:50%;top:47%;width:100px;height:58px;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #8e526044);transition:opacity .35s,transform .45s}
-.bow:before,.bow:after{content:"";position:absolute;top:5px;width:43px;height:39px;background:linear-gradient(145deg,#f9dce4,#d98fa5);border:1px solid #ca8498}
-.bow:before{left:5px;border-radius:75% 18% 68% 28%;transform:rotate(22deg)}
-.bow:after{right:5px;border-radius:18% 75% 28% 68%;transform:rotate(-22deg)}
-.bow span{position:absolute;z-index:2;left:40px;top:19px;width:21px;height:21px;border-radius:7px;background:radial-gradient(circle at 35% 30%,#ffeaf0,#c97991 80%);border:1px solid #f8dbe2;box-shadow:0 1px 3px #89526366}
+.bow{position:absolute;z-index:8;left:50%;top:47%;width:132px;height:88px;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 5px 5px #89536355);transition:opacity .4s,transform .5s}
+.bow:before,.bow:after{content:"";position:absolute;top:7px;width:57px;height:48px;border:1px solid #d18da1;box-shadow:inset 0 2px 5px #fff9, inset 0 -5px 8px #bd718b55}
+.bow:before{left:7px;border-radius:78% 18% 72% 25%;transform:rotate(19deg);background:linear-gradient(145deg,#fff0f3 0%,#f2bdcc 30%,#d98fa7 67%,#f7d5df 100%);clip-path:polygon(0 0,100% 9%,88% 100%,45% 78%,8% 100%)}
+.bow:after{right:7px;border-radius:18% 78% 25% 72%;transform:rotate(-19deg);background:linear-gradient(215deg,#fff0f3 0%,#f2bdcc 30%,#d98fa7 67%,#f7d5df 100%);clip-path:polygon(0 9%,100% 0,92% 100%,55% 78%,12% 100%)}
+.bow .tail{position:absolute;top:43px;width:28px;height:42px;background:linear-gradient(90deg,#d58aa0,#f8d8e1 45%,#d98fa7);border:1px solid #ce879b;box-shadow:inset 0 2px 4px #fff8}
+.bow .tail-left{left:39px;transform:rotate(18deg);clip-path:polygon(0 0,100% 0,88% 100%,50% 78%,12% 100%)}
+.bow .tail-right{right:39px;transform:rotate(-18deg);clip-path:polygon(0 0,100% 0,88% 100%,50% 78%,12% 100%)}
+.bow span{position:absolute;z-index:3;left:54px;top:22px;width:25px;height:25px;border-radius:9px;background:radial-gradient(circle at 30% 23%,#fff5f7 0%,#f2c2d0 30%,#cb7892 78%,#a95775 100%);border:1px solid #f9dce4;box-shadow:inset 0 1px 3px #fff,0 2px 5px #89526366}
+.bow span:after{content:"";position:absolute;left:5px;top:3px;width:6px;height:4px;border-radius:50%;background:#fff9}
 .open .ribbon,.open .bow{opacity:0}
 .open .bow{transform:translate(-50%,-50%) scale(.7)}
 .seal{position:absolute;z-index:7;left:50%;top:48%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#f8e3b2,#b98d49 75%);color:#fff8e9;font-size:25px;box-shadow:0 3px 10px #825b4a55;border:2px solid #f5dfb0;transition:opacity .3s,transform .3s}
@@ -57,7 +61,7 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 <div class="envelope-area" id="envelope" role="button" tabindex="0" aria-label="Ouvrir l’enveloppe">
  <div class="envelope">
   <div class="paper"><small>Invitation royale</small><strong>À toi, ma Blybly</strong><span>Une place t’attend dans un royaume imaginé pour nous deux…</span></div>
-  <div class="flap"></div><div class="ribbon"></div><div class="bow"><span></span></div><div class="seal">♥</div>
+  <div class="flap"></div><div class="ribbon"></div><div class="bow"><i class="tail tail-left"></i><i class="tail tail-right"></i><span></span></div><div class="seal">♥</div>
  </div>
 </div>
 <div class="hint" id="hint">TOUCHE L’ENVELOPPE POUR L’OUVRIR</div>
