@@ -17,6 +17,17 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .envelope{position:absolute;inset:30px 0 0;background:linear-gradient(145deg,#f3d9de,#e5b9c4);border:1px solid #d5aeb6;border-radius:5px;box-shadow:0 18px 35px #8d5d6b30;overflow:visible}
 .envelope:before{content:"";position:absolute;inset:0;background:linear-gradient(32deg,transparent 49.5%,#d7aab5 50%,transparent 50.5%),linear-gradient(-32deg,transparent 49.5%,#e0b5bf 50%,transparent 50.5%);z-index:3;pointer-events:none}
 .flap{position:absolute;z-index:5;left:0;right:0;top:0;height:62%;background:linear-gradient(160deg,#f8e6e8,#e8c4cc);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .9s ease;filter:drop-shadow(0 3px 2px #986b7530)}
+.ribbon{position:absolute;z-index:6;inset:0;pointer-events:none;transition:opacity .45s .2s}
+.ribbon:before,.ribbon:after{content:"";position:absolute;background:linear-gradient(90deg,#d98fa5,#f8d4df 48%,#d98fa5);box-shadow:0 2px 5px #9d607433}
+.ribbon:before{left:0;right:0;top:47%;height:17px}
+.ribbon:after{top:0;bottom:0;left:calc(50% - 8px);width:16px;background:linear-gradient(90deg,#d98fa5,#f8d4df 50%,#d98fa5)}
+.bow{position:absolute;z-index:8;left:50%;top:47%;width:100px;height:58px;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #8e526044);transition:opacity .35s,transform .45s}
+.bow:before,.bow:after{content:"";position:absolute;top:5px;width:43px;height:39px;background:linear-gradient(145deg,#f9dce4,#d98fa5);border:1px solid #ca8498}
+.bow:before{left:5px;border-radius:75% 18% 68% 28%;transform:rotate(22deg)}
+.bow:after{right:5px;border-radius:18% 75% 28% 68%;transform:rotate(-22deg)}
+.bow span{position:absolute;z-index:2;left:40px;top:19px;width:21px;height:21px;border-radius:7px;background:radial-gradient(circle at 35% 30%,#ffeaf0,#c97991 80%);border:1px solid #f8dbe2;box-shadow:0 1px 3px #89526366}
+.open .ribbon,.open .bow{opacity:0}
+.open .bow{transform:translate(-50%,-50%) scale(.7)}
 .seal{position:absolute;z-index:7;left:50%;top:48%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#f8e3b2,#b98d49 75%);color:#fff8e9;font-size:25px;box-shadow:0 3px 10px #825b4a55;border:2px solid #f5dfb0;transition:opacity .3s,transform .3s}
 .paper{position:absolute;z-index:4;left:7%;right:7%;bottom:12px;height:82%;background:#fffaf4;border:1px solid #ead8c8;padding:22px 18px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transform:translateY(35px);transition:transform 1s .35s,opacity .5s .35s}
 .paper small{font:10px Arial,sans-serif;letter-spacing:.2em;color:#b28c58;text-transform:uppercase}
@@ -46,7 +57,7 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 <div class="envelope-area" id="envelope" role="button" tabindex="0" aria-label="Ouvrir l’enveloppe">
  <div class="envelope">
   <div class="paper"><small>Invitation royale</small><strong>À toi, ma Blybly</strong><span>Une place t’attend dans un royaume imaginé pour nous deux…</span></div>
-  <div class="flap"></div><div class="seal">♥</div>
+  <div class="flap"></div><div class="ribbon"></div><div class="bow"><span></span></div><div class="seal">♥</div>
  </div>
 </div>
 <div class="hint" id="hint">TOUCHE L’ENVELOPPE POUR L’OUVRIR</div>
