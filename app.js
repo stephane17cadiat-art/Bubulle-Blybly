@@ -1431,7 +1431,13 @@ function resetCeremony(){
  });
  ceremonyLaunch.disabled=!ceremonySelected;
 }
+const ceremonyDateInput=$("ceremonyDateInput");
+function localTodayValue(){
+ const now=new Date();
+ return [now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");
+}
 $("ceremonyOpenBtn").addEventListener("click",()=>{
+ ceremonyDateInput.value=localTodayValue();
  resetCeremony();
  ceremonyModal.classList.remove("hidden");
  ceremonyModal.classList.remove("is-opening");
@@ -1457,8 +1463,17 @@ function launchCeremony(){
  if(!ceremonySelected)return;
  const data=ceremonyTexts[ceremonySelected];
  ceremonyStage.classList.remove("is-celebrating");void ceremonyStage.offsetWidth;ceremonyStage.classList.add("is-celebrating");
- ceremonyMessage.innerHTML="<span>✧</span><h3></h3><p></p>";
+ ceremonyMessage.innerHTML="<span>✧</span><h3></h3><time class=\"ceremony-reveal-date\"></time><p></p>";
  ceremonyMessage.querySelector("h3").textContent=data.title;
+ const selectedDate=ceremonyDateInput.value;
+ const dateLabel=ceremonyMessage.querySelector(".ceremony-reveal-date");
+ if(selectedDate){
+  const [year,month,day]=selectedDate.split("-").map(Number);
+  const date=new Date(year,month-1,day);
+  dateLabel.textContent=new Intl.DateTimeFormat("fr-FR",{day:"numeric",month:"long",year:"numeric"}).format(date);
+ }else{
+  dateLabel.textContent="";
+ }
  ceremonyMessage.querySelector("p").textContent=data.text;
  const confetti=ceremonyStage.querySelector(".ceremony-confetti");
  confetti.innerHTML="";
