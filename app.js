@@ -234,18 +234,20 @@ if (songAudio && songButton && songNextButton) {
   });
 }
 async function boot(){
+  $("createBtn").disabled = true; $("joinBtn").disabled = true;
+  say("welcomeMessage","Connexion sécurisée au royaume… un instant 💗");
   if(firebaseConfig.apiKey.startsWith("REMPLACER")) {
     say("welcomeMessage","Le site est prêt à configurer : ajoute d'abord les clés Firebase dans app.js (guide fourni).");
     $("createBtn").disabled = true; $("joinBtn").disabled = true; return;
   }
-  try { await setPersistence(auth, browserLocalPersistence); const cred = await signInAnonymously(auth); user = cred.user; say("syncStatus","● Connecté"); 
+  try { await setPersistence(auth, browserLocalPersistence); const cred = await signInAnonymously(auth); user = cred.user; $("createBtn").disabled = false; $("joinBtn").disabled = false; say("welcomeMessage","Connexion prête ! Tu peux créer ou rejoindre votre aventure."); say("syncStatus","● Connecté"); 
     if(roomFromUrl) { $("inviteInput").value = roomFromUrl; await joinRoom(roomFromUrl); }
-  } catch(e) { say("welcomeMessage","Connexion impossible : "+friendlyError(e)); }
+  } catch(e) { $("createBtn").disabled = true; $("joinBtn").disabled = true; say("welcomeMessage","Connexion impossible pour le moment : "+friendlyError(e)); }
 }
 function friendlyError(e){ console.error(e); return e.code==="auth/operation-not-allowed"?"Active la connexion anonyme dans Firebase.":e.message||"vérifie la configuration Firebase."; }
 
 async function createRoom(){
-  if(!user) return;
+  if(!user) { say("welcomeMessage","La connexion au royaume se prépare encore. Attends quelques secondes puis réessaie 💗"); return; }
   const code=inviteCode(); roomId=code; myRole="BUBULLE"; roomRef=doc(db,"rooms",roomId);
   const data={createdAt:serverTimestamp(),players:{
     BUBULLE:{uid:user.uid,score:0,stage:0,completed:[],joined:true},
@@ -255,31 +257,31 @@ async function createRoom(){
   catch(e){say("welcomeMessage","Impossible de créer la partie : "+friendlyError(e));}
 }
 async function joinRoom(code){
-  if(!user || !code) {say("welcomeMessage","Entre un code d'invitation valide.");return;}
-  roomId=code.trim().toUpperCase(); roomRef=doc(db,"rooms",roomId);
+  if(!user) {say("welcomeMessage","La connexion au royaume se prépare encore. Attends quelques secondes puis réessaie 💗");return;}
+  const rawInvite=String(code||"").trim();
+  if(!rawInvite) {say("welcomeMessage","Colle le code ou le lien complet que Bubulle t’a envoyé.");return;}
+  let normalizedInvite=rawInvite;
+  try {
+    if(rawInvite.startsWith("http://") || rawInvite.startsWith("https://")) normalizedInvite=new URL(rawInvite).searchParams.get("room")||"";
+  } catch {}
+  roomId=normalizedInvite.replace(/\s+/g,"").toUpperCase();
+  if(!/^[A-F0-9]{18}$/.test(roomId)) {say("welcomeMessage","Ce code ou ce lien ne semble pas valide. Essaie de coller le lien complet d’invitation.");return;}
+  roomRef=doc(db,"rooms",roomId);
   try{
     await runTransaction(db,async tx=>{
       const snap=await tx.get(roomRef); if(!snap.exists()) throw new Error("Cette invitation est introuvable ou expirée.");
       const data=snap.data();
-      if(data.players.BUBULLE.uid===user.uid){myRole="BUBULLE";return;}
+      if(data.players.BUBBULE.uid===user.uid){myRole="BUBBULE";return;}
       if(data.players.BLYBLY.uid===user.uid){myRole="BLYBLY";return;}
-
-      // Récupération d'un profil existant si le navigateur a créé une nouvelle identité anonyme.
-      if(data.players.BUBULLE.joined && data.players.BUBULLE.uid!==user.uid) {
+      if(data.players.BUBBULE.joined && data.players.BUBBULE.uid!==user.uid) {
         const recoverBubulle = window.confirm("Ce navigateur n'est plus reconnu.\n\nVeux-tu retrouver le profil BUBULLE et sa progression ?\n\nOK = retrouver BUBULLE. Annuler = choisir BLYBLY.");
-        if(recoverBubulle) {
-          myRole="BUBULLE";
-          tx.update(roomRef,{"players.BUBULLE.uid":user.uid,"players.BUBULLE.joined":true});
-          return;
-        }
+        if(recoverBubulle) {myRole="BUBBULE";tx.update(roomRef,{"players.BUBBULE.uid":user.uid,"players.BUBBULE.joined":true});return;}
       }
-
       if(data.players.BLYBLY.joined && data.players.BLYBLY.uid!==user.uid) {
         const takeover = window.confirm("Veux-tu retrouver le profil BLYBLY et sa progression sur cet appareil ?\n\nSes points seront conservés. L'autre appareil ne doit pas jouer en même temps.");
         if(!takeover) throw new Error("Connexion annulée. Aucun profil n'a été modifié.");
       }
-      myRole="BLYBLY";
-      tx.update(roomRef,{"players.BLYBLY.uid":user.uid,"players.BLYBLY.joined":true});
+      myRole="BLYBLY";tx.update(roomRef,{"players.BLYBLY.uid":user.uid,"players.BLYBLY.joined":true});
     });
     history.replaceState({}, "", "?room="+roomId); enterGame(); listen();
   }catch(e){say("welcomeMessage",friendlyError(e));}
