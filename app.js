@@ -301,7 +301,7 @@ async function joinRoom(code){
       const data=snap.data();
       // Validate room structure before accessing either player profile.
       const players=data && data.players && typeof data.players==="object" ? data.players : null;
-      const bubulle=players && players.BUBBULE && typeof players.BUBBULE==="object" ? players.BUBBULE : null;
+      const bubulle=players && players.BUBULLE && typeof players.BUBULLE==="object" ? players.BUBULLE : null;
       const blybly=players && players.BLYBLY && typeof players.BLYBLY==="object" ? players.BLYBLY : null;
       if(!bubulle || !blybly || !("uid" in bubulle) || !("uid" in blybly)){
         throw new Error("Cette salle existe, mais les profils Bubulle et Blybly sont incomplets. Aucune donnée n'a été modifiée. Vérifions la salle dans Firebase avant toute réparation.");
@@ -312,7 +312,7 @@ async function joinRoom(code){
       if(blybly.uid===user.uid){myRole="BLYBLY";return;}
       if(bubulle.joined && bubulle.uid!==user.uid) {
         const recoverBubulle = window.confirm("Ce navigateur n'est plus reconnu.\n\nVeux-tu retrouver le profil BUBULLE et sa progression ?\n\nOK = retrouver BUBULLE. Annuler = choisir BLYBLY.");
-        if(recoverBubulle) {myRole="BUBBULE";tx.update(roomRef,{"players.BUBBULE.uid":user.uid,"players.BUBBULE.joined":true});return;}
+        if(recoverBubulle) {myRole="BUBULLE";tx.update(roomRef,{"players.BUBULLE.uid":user.uid,"players.BUBULLE.joined":true});return;}
       }
       if(data.players.BLYBLY.joined && data.players.BLYBLY.uid!==user.uid) {
         const takeover = window.confirm("Veux-tu retrouver le profil BLYBLY et sa progression sur cet appareil ?\n\nSes points seront conservés. L'autre appareil ne doit pas jouer en même temps.");
