@@ -1340,4 +1340,56 @@ $("nextBtn").addEventListener("click",()=>render());
 $("leaveBtn").addEventListener("click",()=>{if(unsubscribe)unsubscribe();history.replaceState({},"",location.pathname);location.reload()});
 $("closeModal").addEventListener("click",()=>hide("modal"));
 $("modal").addEventListener("click",e=>{if(e.target.id==="modal") hide("modal");});
+
+/* Salle des cérémonies — animations locales, sans écriture Firebase ni progression */
+const ceremonyModal=$("ceremonyModal");
+const ceremonyStage=$("ceremonyStage");
+const ceremonyLaunch=$("ceremonyLaunchBtn");
+const ceremonyMessage=$("ceremonyStageMessage");
+const ceremonyTexts={
+ birthday:{title:"Joyeux anniversaire !",text:"Aujourd’hui, le royaume entier célèbre une lumière de plus dans votre histoire. Que cette journée soit remplie de douceur, de rires et de merveilles. 🎂"},
+ success:{title:"Une victoire à célébrer !",text:"Chaque effort mérite d’être honoré. Que cette réussite ouvre la porte à de nouvelles aventures et à mille belles fiertés. 🏆"},
+ friendship:{title:"À votre belle amitié",text:"Deux personnalités, deux chemins, et des instants qui deviennent précieux. Que votre constellation continue de briller. 💗"},
+ justbecause:{title:"Juste parce que…",text:"Pas besoin d’une date spéciale pour célébrer les petits bonheurs. Aujourd’hui, la magie existe simplement parce que vous êtes là. ✨"}
+};
+let ceremonySelected=null;
+function resetCeremony(){
+ ceremonyStage.classList.remove("is-celebrating");
+ ceremonyMessage.innerHTML="<span>✧</span><h3>Chaque instant mérite sa lumière</h3><p>Choisissez une occasion et ouvrez le bal.</p>";
+ ceremonyLaunch.textContent="✧ Lancer la cérémonie ✧";
+ ceremonyModal.querySelectorAll("[data-ceremony]").forEach(button=>button.classList.toggle("selected",button.dataset.ceremony===ceremonySelected));
+}
+$("ceremonyOpenBtn").addEventListener("click",()=>{resetCeremony();ceremonyModal.classList.remove("hidden");});
+$("ceremonyCloseBtn").addEventListener("click",()=>ceremonyModal.classList.add("hidden"));
+ceremonyModal.addEventListener("click",event=>{if(event.target===ceremonyModal)ceremonyModal.classList.add("hidden");});
+ceremonyModal.querySelector(".ceremony-occasions").addEventListener("click",event=>{
+ const button=event.target.closest("[data-ceremony]");if(!button)return;
+ ceremonySelected=button.dataset.ceremony;
+ ceremonyModal.querySelectorAll("[data-ceremony]").forEach(item=>item.classList.toggle("selected",item===button));
+ ceremonyLaunch.disabled=false;
+});
+function launchCeremony(){
+ if(!ceremonySelected)return;
+ const data=ceremonyTexts[ceremonySelected];
+ ceremonyStage.classList.remove("is-celebrating");void ceremonyStage.offsetWidth;ceremonyStage.classList.add("is-celebrating");
+ ceremonyMessage.innerHTML="<span>✧</span><h3></h3><p></p>";
+ ceremonyMessage.querySelector("h3").textContent=data.title;
+ ceremonyMessage.querySelector("p").textContent=data.text;
+ const confetti=ceremonyStage.querySelector(".ceremony-confetti");
+ confetti.innerHTML="";
+ const colors=["#ffe4a6","#ffd0e9","#d7caff","#ffffff","#f4b6ce"];
+ for(let i=0;i<46;i++){
+  const bit=document.createElement("i");bit.textContent=["✦","✧","❀","·","♡"][i%5];
+  bit.style.setProperty("--x",(Math.random()*100)+"%");
+  bit.style.setProperty("--c",colors[i%colors.length]);
+  bit.style.setProperty("--s",(9+Math.random()*15)+"px");
+  bit.style.setProperty("--d",(3.2+Math.random()*2.4)+"s");
+  bit.style.setProperty("--delay",(Math.random()*1.8)+"s");
+  bit.style.setProperty("--drift",(Math.random()*130-65)+"px");
+  confetti.appendChild(bit);
+ }
+ ceremonyLaunch.textContent="↻ Rejouer la cérémonie";
+}
+ceremonyLaunch.addEventListener("click",launchCeremony);
+
 boot();
