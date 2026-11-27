@@ -2176,3 +2176,31 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 .fountain-player-wishes li b{color:#f2d3a2;font-size:10px}
 .fountain-player-wishes li span{color:#f6eafa;font:11px/1.45 Georgia,serif}
 @media(max-width:520px){.fountain-shared-preview{grid-template-columns:1fr}.fountain-player-wishes{padding:11px}}
+
+
+/* GRAND RITUEL DES HUIT VŒUX — révélation cinématique */
+.fountain-ceremony-intro{margin:0 0 15px;color:#f4dff5;font:italic 13px/1.6 Georgia,serif;text-align:center}
+.fountain-revealed-wish{position:relative;overflow:hidden;border-color:#f8dba9aa;box-shadow:0 0 18px #eac4ff22,inset 0 0 18px #fff1;transform-origin:center;animation:fountainWishRise 1.15s cubic-bezier(.16,1,.3,1) both}
+.fountain-revealed-wish:nth-child(even){border-color:#f3c8e9aa;background:linear-gradient(120deg,#e8b8e522,#c8baff1b)}
+.fountain-revealed-wish:before{content:"✧";position:absolute;right:12px;top:8px;color:#ffe8ae;font-size:18px;text-shadow:0 0 12px #ffe8ae;animation:fountainStarTwinkle 1.8s ease-in-out infinite}
+.fountain-revealed-category{display:block;padding-right:24px}
+.fountain-final-blessing{padding:13px 8px;border-top:1px solid #f2d8a755;font-size:15px!important;line-height:1.7;text-shadow:0 0 15px #f2c4ec88}
+.fountain-heart-sky{position:absolute;z-index:8;left:50%;top:27%;width:min(76%,390px);height:190px;transform:translate(-50%,-50%);display:grid;place-items:center;pointer-events:none;opacity:0}
+.fountain-heart-symbol{font-family:Georgia,serif;font-size:clamp(112px,25vw,190px);line-height:1;color:#ffd4ed;text-shadow:0 0 8px #fff,0 0 24px #ffb9e8,0 0 55px #d4aaff,0 0 90px #ffe4a8;animation:fountainHeartBeat 1.7s ease-in-out infinite}
+.fountain-heart-sky>p{position:absolute;bottom:-5px;margin:0;color:#fff0d0;font:700 11px Georgia,serif;letter-spacing:3px;text-shadow:0 0 14px #ffcaed;white-space:nowrap}
+.fountain-heart-star{position:absolute;color:#fff5c9;text-shadow:0 0 15px #fff,0 0 25px #e9b7ff;animation:fountainStarTwinkle 1.4s ease-in-out infinite alternate}
+.fountain-heart-star.star-a{left:7%;top:24%;font-size:25px}
+.fountain-heart-star.star-b{right:8%;top:12%;font-size:31px;animation-delay:.4s}
+.fountain-heart-star.star-c{right:18%;bottom:20%;font-size:20px;animation-delay:.8s}
+.fountain-scene.fountain-grand-finale .fountain-heart-sky{animation:fountainHeartAppear 1.8s cubic-bezier(.16,1,.3,1) both}
+.fountain-scene.fountain-grand-finale .fountain-night-moon{filter:drop-shadow(0 0 28px #fff2b9);transform:scale(1.18)}
+.fountain-scene.fountain-grand-finale .fountain-crown{filter:drop-shadow(0 0 22px #ffe7a2);animation:fountainCrownAscend 1.8s ease-in-out infinite}
+.fountain-scene.fountain-grand-finale .fountain-pool{filter:brightness(1.7);box-shadow:0 0 0 3px #fff8,0 0 42px #f5c4ed,inset 0 0 24px #fff}
+.fountain-scene.fountain-grand-finale:before{animation:fountainStarsDrift 5s linear infinite,fountainSkyPulse 1.2s ease-in-out infinite alternate;opacity:1}
+.fountain-scene.fountain-grand-finale:after{opacity:1;animation:fountainHaloTurn 9s linear infinite}
+@keyframes fountainWishRise{0%{opacity:0;transform:translateY(24px) scale(.88);filter:blur(8px)}65%{opacity:1;transform:translateY(-3px) scale(1.02);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fountainStarTwinkle{from{opacity:.45;transform:scale(.75) rotate(-12deg)}to{opacity:1;transform:scale(1.2) rotate(12deg)}}
+@keyframes fountainHeartBeat{0%,100%{transform:scale(.94)}50%{transform:scale(1.08)}}
+@keyframes fountainHeartAppear{0%{opacity:0;transform:translate(-50%,-35%) scale(.25);filter:blur(15px)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.12);filter:blur(0)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@media(max-width:520px){.fountain-heart-sky{top:25%;height:145px}.fountain-heart-symbol{font-size:120px}.fountain-heart-sky>p{font-size:8px;letter-spacing:2px}.fountain-ceremony-intro{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.fountain-revealed-wish,.fountain-heart-symbol,.fountain-heart-star,.fountain-scene.fountain-grand-finale .fountain-heart-sky{animation:none!important}}
