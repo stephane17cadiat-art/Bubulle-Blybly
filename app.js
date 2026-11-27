@@ -796,6 +796,42 @@ $("libraryBackToShelves").addEventListener("click",closeSecretLibraryBook);
 $("libraryPreviousPage").addEventListener("click",()=>{if(!openedLibraryBook||libraryPageIndex<=0)return;libraryPageIndex--;showLibraryPage();});
 $("libraryNextPage").addEventListener("click",()=>{if(!openedLibraryBook)return;if(libraryPageIndex<openedLibraryBook.pages.length-1){libraryPageIndex++;showLibraryPage();}else closeSecretLibraryBook();});
 
+
+/* Observatoire des Besties — expérience visuelle autonome, sans sauvegarde ni écriture Firebase */
+const observatoryMessages = {
+  bubulle:{icon:"💗",title:"L’étoile de Bubulle",text:"Une lumière qui avance avec son propre éclat. Cette étoile rappelle que même les plus beaux royaumes commencent par une étincelle de curiosité."},
+  blybly:{icon:"🌷",title:"L’étoile de Blybly",text:"Une lumière douce et singulière. Elle rappelle qu’une présence peut embellir le ciel autour d’elle, simplement en restant elle-même."},
+  duo:{icon:"♡",title:"La constellation des Besties",text:"Deux étoiles n’ont pas besoin de se ressembler pour dessiner ensemble une constellation unique. Leur lien devient un chemin lumineux dans la nuit."}
+};
+const observatoryModal=$("observatoryModal");
+$("observatoryOpenBtn").addEventListener("click",()=>observatoryModal.classList.remove("hidden"));
+$("observatoryCloseBtn").addEventListener("click",()=>observatoryModal.classList.add("hidden"));
+observatoryModal.addEventListener("click",event=>{if(event.target===observatoryModal)observatoryModal.classList.add("hidden");});
+observatoryModal.querySelector(".observatory-constellation").addEventListener("click",event=>{
+  const star=event.target.closest("[data-observatory-note]");
+  if(!star)return;
+  const note=observatoryMessages[star.dataset.observatoryNote];
+  if(!note)return;
+  observatoryModal.querySelectorAll(".constellation-star").forEach(item=>item.classList.toggle("selected",item===star));
+  $("observatoryNoteIcon").textContent=note.icon;
+  $("observatoryNoteTitle").textContent=note.title;
+  $("observatoryNoteText").textContent=note.text;
+});
+const observatoryWishes=[
+  "Que les jours à venir vous réservent de belles surprises et de grands éclats de rire. ✨",
+  "Que vos projets trouvent leur chemin et que vos petites victoires brillent longtemps. 🌟",
+  "Que la douceur vous accompagne, même lorsque le ciel se couvre. 💗",
+  "Que votre imagination ne manque jamais d’étoiles où accrocher ses rêves. 🌙",
+  "Que chaque nouveau chapitre apporte son lot de magie et de merveilleux souvenirs. 🌷"
+];
+$("observatoryWishBtn").addEventListener("click",()=>{
+  const message=observatoryWishes[Math.floor(Math.random()*observatoryWishes.length)];
+  $("observatoryWishMessage").textContent=message;
+  $("observatoryWishMessage").classList.remove("wish-reveal");
+  void $("observatoryWishMessage").offsetWidth;
+  $("observatoryWishMessage").classList.add("wish-reveal");
+});
+
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
