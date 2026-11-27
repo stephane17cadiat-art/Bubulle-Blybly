@@ -854,22 +854,47 @@ $("observatoryWishBtn").addEventListener("click",()=>{
 });
 
 
-/* Fontaine des vœux — interaction indépendante, aucune écriture dans la partie */
+/* Fontaine des vœux — rituel indépendant, aucune écriture dans la partie */
 const fountainModal=$("fountainModal");
-let selectedFountainWish="duo";
 const fountainWishTexts={
-  duo:["Que votre complicité garde toujours une place pour les rires, les surprises et les petits bonheurs inattendus. 💗","Que deux chemins continuent de se croiser sous les plus belles étoiles, avec douceur et confiance. ✨","Que votre amitié reste un refuge lumineux, même lorsque les saisons changent. 🌷"],
-  bonheur:["Que les journées ordinaires se remplissent de petits instants extraordinaires. 🌸","Que la joie trouve toujours une fenêtre ouverte pour entrer dans votre vie. ☀️","Que chaque matin apporte une raison nouvelle de sourire. 🦋"],
-  reve:["Qu’un rêve longtemps gardé dans le cœur trouve enfin son chemin vers la lumière. 🌟","Que l’audace accompagne vos envies et que chaque étape vous rapproche de ce qui vous fait vibrer. ✨","Que l’imagination ouvre des portes là où l’on ne voyait que des murs. 🌙"],
-  courage:["Que la force revienne doucement, un pas après l’autre, chaque fois que vous en avez besoin. 🦋","Que les jours difficiles n’éteignent jamais la petite lumière qui vous guide. 💜","Que la confiance grandisse à chaque victoire, même la plus discrète. 🌷"]
+  duo:["Que votre complicité garde toujours une place pour les rires, les surprises et les petits bonheurs inattendus. 💗","Que deux chemins continuent de se croiser sous les plus belles étoiles, avec douceur et confiance. ✨","Que votre amitié reste un refuge lumineux, même lorsque les saisons changent. 🌷","Que vos souvenirs deviennent des trésors qui réchauffent le cœur, même à distance. 💞","Que rien n’efface cette magie rare qui rend votre duo si précieux. 🫶"],
+  bonheur:["Que les journées ordinaires se remplissent de petits instants extraordinaires. 🌸","Que la joie trouve toujours une fenêtre ouverte pour entrer dans votre vie. ☀️","Que chaque matin apporte une raison nouvelle de sourire. 🦋","Que les éclats de rire arrivent souvent sans prévenir et durent longtemps. 🎀","Que la douceur vous accompagne jusque dans les jours les plus simples. 🌼"],
+  reve:["Qu’un rêve longtemps gardé dans le cœur trouve enfin son chemin vers la lumière. 🌟","Que l’audace accompagne vos envies et que chaque étape vous rapproche de ce qui vous fait vibrer. ✨","Que l’imagination ouvre des portes là où l’on ne voyait que des murs. 🌙","Qu’une aventure inattendue vous mène vers un endroit dont vous n’osiez même pas rêver. 🗝️","Que vos projets les plus fous trouvent le courage de devenir réalité. 💫"],
+  courage:["Que la force revienne doucement, un pas après l’autre, chaque fois que vous en avez besoin. 🦋","Que les jours difficiles n’éteignent jamais la petite lumière qui vous guide. 💜","Que la confiance grandisse à chaque victoire, même la plus discrète. 🌷","Que vous trouviez en vous la force de recommencer autant de fois qu’il le faudra. 🌱","Que chaque épreuve révèle un peu plus la force que vous portez déjà. 🕊️"]
 };
+const fountainCategories=[
+  {id:"duo",title:"Pour votre duo",icon:"💗",hint:"Une pensée pour votre belle complicité"},
+  {id:"bonheur",title:"Pour le bonheur",icon:"🌷",hint:"Invitez la joie dans vos journées"},
+  {id:"reve",title:"Pour un rêve",icon:"✨",hint:"Ouvrez une porte vers demain"},
+  {id:"courage",title:"Pour le courage",icon:"🦋",hint:"Une lumière pour les jours plus difficiles"}
+];
+const fountainChosen={};
+const fountainChoices=$("fountainWishChoices");
+const fountainReleaseBtn=$("fountainWishBtn");
+function renderFountainChoices(){
+  fountainChoices.innerHTML=fountainCategories.map(category=>`
+    <section class="fountain-choice-group" data-category="${category.id}">
+      <div class="fountain-choice-heading"><span>${category.icon}</span><div><h4>${category.title}</h4><p>${category.hint}</p></div><small>1 vœu</small></div>
+      <div class="fountain-choice-options">${fountainWishTexts[category.id].map((wish,index)=>`
+        <button type="button" class="fountain-choice-option" data-wish-kind="${category.id}" data-wish-index="${index}" aria-pressed="false"><span class="choice-star">✧</span><span>${wish}</span></button>
+      `).join("")}</div>
+    </section>`).join("");
+  fountainReleaseBtn.disabled=true;
+}
+renderFountainChoices();
 $("fountainOpenBtn").addEventListener("click",()=>fountainModal.classList.remove("hidden"));
 $("fountainCloseBtn").addEventListener("click",()=>fountainModal.classList.add("hidden"));
 fountainModal.addEventListener("click",event=>{if(event.target===fountainModal)fountainModal.classList.add("hidden");});
-fountainModal.querySelector(".fountain-intentions").addEventListener("click",event=>{
+fountainChoices.addEventListener("click",event=>{
   const choice=event.target.closest("[data-wish-kind]");if(!choice)return;
-  selectedFountainWish=choice.dataset.wishKind;
-  fountainModal.querySelectorAll(".fountain-intention").forEach(item=>item.classList.toggle("selected",item===choice));
+  const kind=choice.dataset.wishKind,index=Number(choice.dataset.wishIndex);
+  fountainChosen[kind]=index;
+  fountainChoices.querySelectorAll(`[data-wish-kind="${kind}"]`).forEach(item=>{
+    const active=item===choice;item.classList.toggle("selected",active);item.setAttribute("aria-pressed",String(active));
+  });
+  fountainReleaseBtn.disabled=!fountainCategories.every(category=>Number.isInteger(fountainChosen[category.id]));
+  const count=fountainCategories.filter(category=>Number.isInteger(fountainChosen[category.id])).length;
+  $("fountainSelectionCount").textContent=count+" / 4 vœux choisis";
 });
 function fountainWishBurst(){
   const scene=$("fountainScene"),rect=scene.getBoundingClientRect(),originX=rect.width/2,originY=rect.height*.68;
@@ -891,13 +916,27 @@ function fountainWishBurst(){
     particle.style.animationDelay=(Math.random()*.55)+"s";scene.appendChild(particle);
     particle.addEventListener("animationend",()=>particle.remove(),{once:true});
   }
-  window.setTimeout(()=>scene.classList.remove("fountain-casting"),2600);
+  window.setTimeout(()=>scene.classList.remove("fountain-casting"),3200);
 }
-$("fountainWishBtn").addEventListener("click",()=>{
-  const options=fountainWishTexts[selectedFountainWish]||fountainWishTexts.duo,message=options[Math.floor(Math.random()*options.length)],reveal=$("fountainWishReveal");
-  reveal.querySelector("p").textContent=message;reveal.classList.remove("revealed");void reveal.offsetWidth;reveal.classList.add("revealed");fountainWishBurst();
+fountainReleaseBtn.addEventListener("click",()=>{
+  if(!fountainCategories.every(category=>Number.isInteger(fountainChosen[category.id])))return;
+  fountainReleaseBtn.disabled=true;
+  const reveal=$("fountainWishReveal");
+  reveal.innerHTML='<div class="fountain-reveal-heading">✧ VOS QUATRE VŒUX ✧</div><div class="fountain-revealed-list"></div><p class="fountain-final-blessing">Que la fontaine garde précieusement ces quatre souhaits… 💗</p>';
+  const list=reveal.querySelector(".fountain-revealed-list");
+  reveal.classList.remove("revealed");void reveal.offsetWidth;reveal.classList.add("revealed");
+  fountainWishBurst();
+  fountainCategories.forEach((category,index)=>{
+    window.setTimeout(()=>{
+      const item=document.createElement("article");item.className="fountain-revealed-wish";
+      item.innerHTML='<span class="fountain-revealed-category"></span><p></p>';
+      item.querySelector(".fountain-revealed-category").textContent=category.icon+" "+category.title;
+      item.querySelector("p").textContent=fountainWishTexts[category.id][fountainChosen[category.id]];
+      list.appendChild(item);
+    },900+index*1250);
+  });
+  window.setTimeout(()=>{fountainReleaseBtn.disabled=false;fountainReleaseBtn.innerHTML='<span>✧</span> Révéler à nouveau nos vœux <span>✧</span>';},6200);
 });
-
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
