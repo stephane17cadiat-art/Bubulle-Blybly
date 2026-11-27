@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261127-secret-library-v1">
+  <link rel="stylesheet" href="./style.css?v=20261127-observatory-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -95,6 +95,7 @@
           <button id="albumOpenBtn" class="command-button" type="button"><span>📖</span><b>Album secret</b></button>
           <button id="kingdomsOpenBtn" class="command-button" type="button"><span>🏰</span><b>Mes royaumes</b></button>
           <button id="secretLibraryBtn" class="command-button library-command" type="button"><span>📚</span><b>Bibliothèque</b></button>
+          <button id="observatoryOpenBtn" class="command-button observatory-command" type="button"><span>🔭</span><b>Observatoire</b></button>
         </div>
         <div class="song-player"><div class="song-player-heading"><span class="song-note">✦</span><div><b>Le gramophone enchanté</b><span class="song-title">La playlist de nos souvenirs</span></div><span class="song-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div><div class="gramophone-disc-wrap"><div class="gramophone-disc"><span class="disc-groove"></span><span class="disc-label">♥</span></div><span class="disc-sparkle sparkle-one">✧</span><span class="disc-sparkle sparkle-two">✦</span></div><div class="song-track-info"><b id="songTitle" class="song-title">Préparation de la playlist…</b></div><div class="song-progress" aria-hidden="true"><span id="songProgressFill"></span></div><span id="songTime" class="song-time">0:00 / 0:00</span><div class="song-controls"><button id="songToggleBtn" class="song-toggle" type="button">▶️ Écouter la playlist</button><button id="songNextBtn" class="song-next" type="button" aria-label="Chanson suivante">⏭ Suivante</button></div><span id="songStatus" class="song-status" role="status">5 chansons pour accompagner votre aventure 💗</span><audio id="bestiesSong" preload="metadata"></audio></div>
         <details class="more-options">
@@ -298,6 +299,48 @@
 <section id="libraryReading" class="library-reading hidden" aria-live="polite"><button id="libraryBackToShelves" class="library-back" type="button">← Retour aux étagères</button><div class="library-open-book"><div class="library-page-decoration">✧</div><p id="libraryBookCategory" class="library-page-kicker">UN MOT PRÉCIEUX</p><div id="libraryBookIcon" class="library-page-icon">💗</div><h3 id="libraryBookTitle">Un secret à garder</h3><div class="library-page-rule"><span>✦</span></div><p id="libraryBookText" class="library-page-text"></p><p id="libraryPageCount" class="library-page-count">Page 1 / 2</p><div class="library-page-controls"><button id="libraryPreviousPage" type="button" disabled>← Précédente</button><button id="libraryNextPage" type="button">Tourner la page →</button></div></div><p class="library-reading-footnote">Un petit secret de la bibliothèque, à lire à son rythme. ♡</p></section>
 <footer class="library-footer"><span>✦</span> Les plus beaux mots sont ceux que l’on garde près du cœur <span>✦</span></footer></section></div>
 
+
+  <div id="observatoryModal" class="observatory-modal hidden" role="dialog" aria-modal="true" aria-labelledby="observatoryTitle">
+    <section class="observatory-room">
+      <button id="observatoryCloseBtn" class="observatory-close" type="button" aria-label="Fermer l’observatoire">×</button>
+      <header class="observatory-header">
+        <p class="observatory-kicker">✦ LE CIEL DES BESTIES ✦</p>
+        <h2 id="observatoryTitle">L’Observatoire <em>des Besties</em></h2>
+        <p>Quand deux étoiles brillent chacune à leur façon, elles peuvent illuminer tout un ciel.</p>
+      </header>
+      <div class="observatory-sky">
+        <div class="observatory-moon" aria-hidden="true">☾</div>
+        <span class="observatory-sky-star sky-star-a">✦</span><span class="observatory-sky-star sky-star-b">✧</span><span class="observatory-sky-star sky-star-c">✦</span><span class="observatory-sky-star sky-star-d">✧</span>
+        <div class="observatory-constellation" aria-label="Deux constellations reliées par un cœur">
+          <svg viewBox="0 0 520 250" role="img" aria-label="Les étoiles de Bubulle et Blybly reliées par un cœur lumineux">
+            <path class="constellation-line" d="M72 142 L128 65 L183 132 L238 89 L260 126 L284 89 L339 132 L394 65 L450 142"/>
+            <path class="constellation-line constellation-bridge" d="M183 132 Q260 205 339 132"/>
+            <path class="constellation-line constellation-heart" d="M242 119 Q250 103 260 119 Q270 103 278 119 Q278 133 260 145 Q242 133 242 119Z"/>
+            <g class="constellation-points"><circle cx="72" cy="142" r="5"/><circle cx="128" cy="65" r="6"/><circle cx="183" cy="132" r="5"/><circle cx="238" cy="89" r="4"/><circle cx="260" cy="126" r="6"/><circle cx="284" cy="89" r="4"/><circle cx="339" cy="132" r="5"/><circle cx="394" cy="65" r="6"/><circle cx="450" cy="142" r="5"/></g>
+          </svg>
+          <button class="constellation-star star-bubulle" type="button" data-observatory-note="bubulle" aria-label="Découvrir l’étoile de Bubulle">✦</button>
+          <button class="constellation-star star-blybly" type="button" data-observatory-note="blybly" aria-label="Découvrir l’étoile de Blybly">✧</button>
+          <button class="constellation-star star-duo" type="button" data-observatory-note="duo" aria-label="Découvrir l’étoile du duo">♡</button>
+          <span class="constellation-name name-bubulle">BUBULLE</span><span class="constellation-name name-blybly">BLYBLY</span>
+        </div>
+        <div class="observatory-telescope" aria-hidden="true">🔭</div>
+        <p class="observatory-sky-caption">Touchez les étoiles pour découvrir leur secret</p>
+      </div>
+      <div class="observatory-discovery">
+        <div class="observatory-note-icon" id="observatoryNoteIcon">🌟</div>
+        <div><p class="observatory-note-kicker">MESSAGE DES CONSTELLATIONS</p><h3 id="observatoryNoteTitle">Un ciel rien qu’à vous</h3><p id="observatoryNoteText">Deux lumières, deux personnalités, et un petit univers qui se dessine entre elles. Choisissez une étoile pour révéler son message.</p></div>
+      </div>
+      <div class="observatory-wish-panel">
+        <div class="observatory-wish-stars" aria-hidden="true">✧　⋆　✦</div>
+        <p>LES VŒUX DE LA NUIT</p>
+        <h3>Et si vous faisiez un vœu ?</h3>
+        <button id="observatoryWishBtn" type="button">✨ Faire apparaître un vœu</button>
+        <div id="observatoryWishMessage" class="observatory-wish-message" aria-live="polite">Un vœu attend dans les étoiles…</div>
+      </div>
+      <footer class="observatory-footer">Bubulle & Blybly · Deux étoiles, une même galaxie ♡</footer>
+    </section>
+  </div>
+
 <div id="kingdomsModal" class="kingdoms-modal hidden" role="dialog" aria-modal="true" aria-labelledby="kingdomsTitle">
     <section class="kingdoms-book">
       <button id="kingdomsCloseBtn" class="kingdoms-close" type="button" aria-label="Fermer les royaumes">×</button>
@@ -331,6 +374,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261127-secret-library-v1"></script>
+  <script type="module" src="./app.js?v=20261127-observatory-v1"></script>
 </body>
 </html>
