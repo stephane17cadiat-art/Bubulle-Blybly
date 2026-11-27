@@ -2619,7 +2619,7 @@ button:not(:disabled):focus-visible{
   border-radius:50%;
   background:var(--spark-color);
   box-shadow:0 0 7px 2px var(--spark-color),0 0 15px var(--spark-color);
-  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.12);
+  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(.12);
   opacity:0;
   animation:ceremonyFireworkSpark 1.45s calc(var(--firework-delay) + .08s) cubic-bezier(.15,.7,.25,1) both;
 }
@@ -2630,9 +2630,9 @@ button:not(:disabled):focus-visible{
 }
 @keyframes ceremonyFireworkSpark{
   0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.15)}
-  18%{opacity:1;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-.45 * var(--distance))) scale(1.15)}
-  78%{opacity:.9;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1 * var(--distance))) scale(.8)}
-  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(-1.22 * var(--distance))) scale(.1)}
+  18%{opacity:1;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(var(--distance) * .45)) scale(1.15)}
+  78%{opacity:.9;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(.8)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(.1)}
 }
 @media(max-width:520px){
   .ceremony-firework-burst span{width:2.5px;height:2.5px}
