@@ -71,7 +71,12 @@
       <div class="connection-emblem">💗</div>
       <p class="eyebrow">LE PORTAIL DES BESTIES</p>
       <h2>Prête à entrer ?</h2>
-      <p class="connection-intro">Crée ton aventure ou retrouve Blybly grâce à son code secret.</p>
+      <p class="connection-intro">Choisis ton profil pour entrer dans votre aventure.</p>
+      <div class="profile-choice" role="group" aria-label="Choisir un profil">
+        <button id="chooseBubulle" class="profile-choice-button" type="button" data-role="BUBULLE"><img src="./assets/bubulle.jpg" alt=""><span><b>Bubulle</b><small>Mon royaume</small></span></button>
+        <button id="chooseBlybly" class="profile-choice-button" type="button" data-role="BLYBLY"><img src="./assets/blybly.jpg" alt=""><span><b>Blybly</b><small>Son royaume</small></span></button>
+      </div>
+      <p id="profileChoiceStatus" class="profile-choice-status" role="status">Sélectionne un profil pour continuer.</p>
       <div class="welcome-actions connection-actions">
         <button id="createBtn" class="primary home-create">Créer une nouvelle aventure <span>✦</span></button>
         <div class="home-divider"><span>OU REJOINDRE UNE AVENTURE</span></div>
@@ -104,7 +109,8 @@
           <summary>⚙️ Plus d’options</summary>
           <div class="more-options-actions">
             <button id="avatarBtn" class="secondary" type="button">✨ Personnaliser mon personnage</button>
-            <button id="copyInviteBtn" class="secondary" type="button" title="Copier l’invitation">🔗 Inviter</button>
+            <button id="copyInviteBtn" class="secondary" type="button" title="Copier le lien personnel du profil actif">🔗 Copier mon lien</button>
+            <button id="profileSwitchBtn" class="secondary" type="button">⇄ Changer de profil</button>
             <button id="resetGameBtn" class="secondary" type="button">↻ Réinitialiser</button>
           </div>
         </details>
