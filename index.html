@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261127-observatory-v2">
+  <link rel="stylesheet" href="./style.css?v=20261127-fountain-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -96,6 +96,7 @@
           <button id="kingdomsOpenBtn" class="command-button" type="button"><span>🏰</span><b>Mes royaumes</b></button>
           <button id="secretLibraryBtn" class="command-button library-command" type="button"><span>📚</span><b>Bibliothèque</b></button>
           <button id="observatoryOpenBtn" class="command-button observatory-command" type="button"><span>🔭</span><b>Observatoire</b></button>
+          <button id="fountainOpenBtn" class="command-button fountain-command" type="button"><span>⛲</span><b>Fontaine des vœux</b></button>
         </div>
         <div class="song-player"><div class="song-player-heading"><span class="song-note">✦</span><div><b>Le gramophone enchanté</b><span class="song-title">La playlist de nos souvenirs</span></div><span class="song-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div><div class="gramophone-disc-wrap"><div class="gramophone-disc"><span class="disc-groove"></span><span class="disc-label">♥</span></div><span class="disc-sparkle sparkle-one">✧</span><span class="disc-sparkle sparkle-two">✦</span></div><div class="song-track-info"><b id="songTitle" class="song-title">Préparation de la playlist…</b></div><div class="song-progress" aria-hidden="true"><span id="songProgressFill"></span></div><span id="songTime" class="song-time">0:00 / 0:00</span><div class="song-controls"><button id="songToggleBtn" class="song-toggle" type="button">▶️ Écouter la playlist</button><button id="songNextBtn" class="song-next" type="button" aria-label="Chanson suivante">⏭ Suivante</button></div><span id="songStatus" class="song-status" role="status">5 chansons pour accompagner votre aventure 💗</span><audio id="bestiesSong" preload="metadata"></audio></div>
         <details class="more-options">
@@ -341,6 +342,21 @@
     </section>
   </div>
 
+
+  <div id="fountainModal" class="fountain-modal hidden" role="dialog" aria-modal="true" aria-labelledby="fountainTitle">
+    <section class="fountain-sanctuary">
+      <button id="fountainCloseBtn" class="fountain-close" type="button" aria-label="Fermer la fontaine">×</button>
+      <header class="fountain-header"><p class="fountain-kicker">✧ LE SANCTUAIRE DES SOUHAITS ✧</p><h2 id="fountainTitle">La Fontaine <em>des vœux</em></h2><p>Approchez-vous… l’eau garde les rêves les plus précieux et les fait danser sous les étoiles.</p></header>
+      <div class="fountain-scene" id="fountainScene"><div class="fountain-night-moon">☾</div><span class="fountain-sky-gem gem-one">✦</span><span class="fountain-sky-gem gem-two">✧</span><span class="fountain-sky-gem gem-three">✦</span><div class="fountain-aurora aurora-one"></div><div class="fountain-aurora aurora-two"></div><div class="fountain-waterfall waterfall-left"></div><div class="fountain-waterfall waterfall-right"></div><div class="fountain-basin-glow"></div>
+        <div class="fountain-art" aria-hidden="true"><div class="fountain-crown">♕</div><div class="fountain-top-bowl"><span>✧</span><i></i></div><div class="fountain-column"></div><div class="fountain-lower-bowl"><span>♡</span></div><div class="fountain-pool"><i></i><i></i><i></i></div><div class="fountain-water-jet jet-one"></div><div class="fountain-water-jet jet-two"></div><div class="fountain-water-jet jet-three"></div><div class="fountain-floating-petals"><b>✿</b><b>✧</b><b>✿</b><b>✧</b><b>♡</b></div></div>
+        <p class="fountain-scene-caption">UN VŒU PEUT TOUT FAIRE FLEURIR</p></div>
+      <div class="fountain-wish-card"><div class="fountain-card-ornament">✦　♡　✦</div><p class="fountain-card-kicker">LE RITUEL DES BESTIES</p><h3>Quel rêve confier à la fontaine ?</h3><p class="fountain-intro">Fermez les yeux un instant, choisissez votre intention, puis laissez la magie répondre.</p>
+        <div class="fountain-intentions" role="group" aria-label="Choisir une intention"><button type="button" class="fountain-intention selected" data-wish-kind="duo">💗 Pour notre duo</button><button type="button" class="fountain-intention" data-wish-kind="bonheur">🌷 Pour le bonheur</button><button type="button" class="fountain-intention" data-wish-kind="reve">✨ Pour un rêve</button><button type="button" class="fountain-intention" data-wish-kind="courage">🦋 Pour le courage</button></div>
+        <button id="fountainWishBtn" class="fountain-release-btn" type="button"><span>✧</span> Lancer mon vœu dans la fontaine <span>✧</span></button><div id="fountainWishReveal" class="fountain-wish-reveal" aria-live="polite"><span class="fountain-reveal-icon">💧</span><p>Un vœu attend que vous lui donniez des ailes…</p></div></div>
+      <footer class="fountain-footer"><span>✦</span> Ici, les plus beaux vœux sont ceux qui viennent du cœur <span>✦</span></footer>
+    </section>
+  </div>
+
 <div id="kingdomsModal" class="kingdoms-modal hidden" role="dialog" aria-modal="true" aria-labelledby="kingdomsTitle">
     <section class="kingdoms-book">
       <button id="kingdomsCloseBtn" class="kingdoms-close" type="button" aria-label="Fermer les royaumes">×</button>
@@ -374,6 +390,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261127-observatory-v2"></script>
+  <script type="module" src="./app.js?v=20261127-fountain-v1"></script>
 </body>
 </html>
