@@ -2330,3 +2330,85 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 @media(max-width:520px){.ceremony-header{padding:26px 35px 20px}.ceremony-stage{min-height:285px}.ceremony-arch{width:84%;height:215px}.ceremony-person>span{width:54px;height:54px;font-size:28px}.ceremony-couple{gap:13px}.ceremony-occasions{gap:7px}.ceremony-occasions button{font-size:10px;padding:8px 5px;min-height:46px}}
 @media(prefers-reduced-motion:reduce){.ceremony-stars i,.ceremony-chandelier,.ceremony-person>span,.ceremony-heart,.ceremony-stage.is-celebrating .ceremony-stage-message,.ceremony-confetti i{animation:none!important}.ceremony-curtain{transition:none}}
 
+
+
+/* Finition spectaculaire des boutons enchantes */
+button:not(:disabled){
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease,border-color .25s ease,filter .25s ease;
+}
+button:not(:disabled)::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  top:-65%;
+  left:-75%;
+  width:42%;
+  height:230%;
+  pointer-events:none;
+  opacity:0;
+  transform:rotate(24deg);
+  background:linear-gradient(90deg,transparent,#fff9,transparent);
+  transition:left .65s cubic-bezier(.2,.7,.2,1),opacity .2s ease;
+}
+button:not(:disabled):hover::after,
+button:not(:disabled):focus-visible::after{
+  left:135%;
+  opacity:.8;
+}
+button:not(:disabled):hover{
+  transform:translateY(-3px) scale(1.015);
+  filter:brightness(1.1) saturate(1.12);
+}
+button:not(:disabled):active{
+  transform:translateY(1px) scale(.975);
+  filter:brightness(1.16);
+  transition-duration:.08s;
+}
+button:not(:disabled):focus-visible{
+  outline:2px solid #ffe6ad;
+  outline-offset:4px;
+  box-shadow:0 0 0 5px #f5a9d233,0 0 25px #f7d58b66;
+}
+.primary:not(:disabled){
+  border:1px solid #fff9;
+  box-shadow:0 8px 24px #d99bd755,0 0 0 1px #fff5 inset,0 0 22px #f5b8e433;
+  background-size:180% 100%;
+  animation:enchantedButtonBreath 3.8s ease-in-out infinite;
+}
+.primary:not(:disabled):hover{
+  box-shadow:0 12px 32px #d99bd977,0 0 0 1px #fff9 inset,0 0 34px #f5b8e477;
+  background-position:100% 50%;
+}
+.secondary:not(:disabled),.icon-button:not(:disabled){
+  border-color:#e9c8f277;
+  box-shadow:0 5px 18px #09081744,0 0 16px #c7b2ff18 inset;
+}
+.secondary:not(:disabled):hover,.icon-button:not(:disabled):hover{
+  border-color:#ffe5b8;
+  box-shadow:0 8px 24px #d99bd744,0 0 20px #c7b2ff55 inset;
+}
+.answer:not(:disabled){
+  position:relative;
+  border-color:#d9c5f044;
+  box-shadow:0 3px 12px #09081733;
+}
+.answer:not(:disabled):hover{
+  border-color:#f5c9ed;
+  box-shadow:0 0 0 1px #f5c9ed55,0 0 22px #d99bd755,0 7px 18px #09081744;
+}
+.text-button:not(:disabled):hover{
+  color:#ffe8b8;
+  text-shadow:0 0 12px #f7d58b99;
+}
+@keyframes enchantedButtonBreath{
+  0%,100%{box-shadow:0 8px 24px #d99bd744,0 0 0 1px #fff5 inset,0 0 15px #f5b8e422}
+  50%{box-shadow:0 9px 28px #d99bd766,0 0 0 1px #fff8 inset,0 0 25px #f5b8e455}
+}
+@media(prefers-reduced-motion:reduce){
+  button:not(:disabled),button:not(:disabled)::after,.primary:not(:disabled){animation:none!important;transition:none!important}
+  button:not(:disabled):hover,button:not(:disabled):active{transform:none}
+}
