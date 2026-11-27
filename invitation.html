@@ -72,6 +72,10 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .message h2{font-size:27px;font-weight:normal;color:#946477;margin:0 0 18px}
 .message p{font-size:16px;line-height:1.75;margin:10px 0}
 .signature{margin-top:20px!important;color:#a27c54;font-style:italic}
+.tulip-bouquet{width:min(150px,42vw);margin:5px auto 2px;opacity:0;transform:translateY(12px) scale(.92);filter:drop-shadow(0 3px 3px #a77c4630)}
+.tulip-bouquet svg{display:block;width:100%;height:auto;overflow:visible}
+.opened .tulip-bouquet{animation:tulipReveal 3.2s 18.2s cubic-bezier(.2,.7,.25,1) both}
+@keyframes tulipReveal{0%{opacity:0;transform:translateY(12px) scale(.88);filter:blur(3px) drop-shadow(0 0 0 #f4d58c)}65%{opacity:1;transform:translateY(-2px) scale(1.03);filter:blur(0) drop-shadow(0 0 9px #f4d58c88)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0) drop-shadow(0 3px 3px #a77c4630)}}
 .game-link{display:inline-block;margin-top:18px;padding:14px 23px;border-radius:30px;background:linear-gradient(135deg,#c59c5b,#e0c58f);color:#fff;text-decoration:none;font: bold 13px Arial,sans-serif;letter-spacing:.04em;box-shadow:0 5px 15px #a77c4635}
 .game-link:focus,.game-link:hover{filter:brightness(1.05);transform:translateY(-1px)}
 .foot{margin-top:28px;font:11px Arial,sans-serif;color:#a47f89;letter-spacing:.08em}
@@ -126,6 +130,32 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
  <p>Je t’invite officiellement à pousser les portes de <strong>Bubulle &amp; Blybly</strong>. La forêt enchantée, les jardins, le château et tous nos petits secrets t’attendent.</p>
  <p>Ce jeu est à nous. Et même si l’aventure est terminée, notre royaume restera ouvert chaque fois que tu voudras y retourner.</p>
  <p class="signature">Avec toute mon affection,<br>Bubulle<span class="dedication">L’amour de ma vie</span></p>
+ <div class="tulip-bouquet" aria-label="Petit bouquet de trois tulipes rose poudré" role="img">
+  <svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg">
+   <defs>
+    <linearGradient id="tulipPink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0f3"/><stop offset=".48" stop-color="#e9a9bb"/><stop offset="1" stop-color="#c87996"/></linearGradient>
+    <linearGradient id="tulipLeaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9c99c"/><stop offset="1" stop-color="#66866a"/></linearGradient>
+    <linearGradient id="tulipGold" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#b88b48"/><stop offset=".5" stop-color="#f0d59a"/><stop offset="1" stop-color="#b88b48"/></linearGradient>
+   </defs>
+   <g fill="none" stroke-linecap="round">
+    <path d="M88 115 Q84 78 54 42 M91 115 Q91 72 91 31 M94 115 Q105 77 128 47" stroke="#718c6d" stroke-width="3"/>
+    <path d="M84 91 C54 68 39 82 48 101 C59 111 75 103 84 91Z" fill="url(#tulipLeaf)" stroke="#66866a" stroke-width="1"/>
+    <path d="M96 99 C119 73 143 81 136 101 C124 113 108 108 96 99Z" fill="url(#tulipLeaf)" stroke="#66866a" stroke-width="1"/>
+    <path d="M89 78 C66 59 59 68 69 88 C79 94 87 86 89 78Z" fill="url(#tulipLeaf)" stroke="#66866a" stroke-width="1"/>
+   </g>
+   <g stroke="#c77d98" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M35 48 C31 35 36 22 47 17 C51 25 57 26 62 17 C74 24 77 38 68 50 C59 59 44 58 35 48Z" fill="url(#tulipPink)"/>
+    <path d="M74 34 C71 19 79 7 91 4 C96 13 102 13 108 4 C120 12 124 27 114 39 C104 49 84 47 74 34Z" fill="url(#tulipPink)"/>
+    <path d="M116 54 C111 41 117 29 128 24 C133 32 139 32 145 24 C156 31 160 45 150 57 C140 66 125 64 116 54Z" fill="url(#tulipPink)"/>
+   </g>
+   <g fill="none" stroke="#fff5f6" stroke-width="2.2" stroke-linecap="round" opacity=".8">
+    <path d="M42 45 Q42 31 48 25 M84 31 Q87 17 93 13 M126 51 Q127 38 133 32"/>
+   </g>
+   <path d="M48 119 Q90 126 132 118" fill="none" stroke="url(#tulipGold)" stroke-width="1.5" stroke-linecap="round"/>
+   <path d="M83 117 Q90 121 97 117" fill="none" stroke="#e6c98e" stroke-width="2" stroke-linecap="round"/>
+   <g fill="#d5b16d"><circle cx="27" cy="68" r="1.5"/><circle cx="154" cy="77" r="1.5"/><circle cx="106" cy="11" r="1.2"/></g>
+  </svg>
+ </div>
  <a class="game-link" href="https://stephane17cadiat-art.github.io/Bubulle-Blybly/" target="_blank" rel="noopener">ENTRER DANS NOTRE ROYAUME</a>
 </section>
 <div class="foot">SCELLÉ AVEC UN PEU DE MAGIE · BUBULLE &amp; BLYBLY</div>
