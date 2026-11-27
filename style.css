@@ -2654,3 +2654,73 @@ button:not(:disabled):focus-visible{
     transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(.9)!important;
   }
 }
+
+
+/* Grand spectacle pyrotechnique royal */
+.ceremony-rocket{
+  position:absolute;z-index:9;left:var(--rocket-x);bottom:7px;
+  width:4px;height:9px;border-radius:50%;
+  background:#fffbe8;box-shadow:0 0 7px 3px var(--rocket-color),0 0 15px 5px #fff;
+  opacity:0;pointer-events:none;
+  animation:ceremonyRocketRise 1.08s cubic-bezier(.25,.65,.3,1) var(--rocket-delay) both;
+}
+.ceremony-rocket:after{
+  content:"";position:absolute;left:1px;bottom:2px;width:2px;height:58px;
+  background:linear-gradient(to bottom,var(--rocket-color),#fff8df88,transparent);
+  filter:drop-shadow(0 0 5px var(--rocket-color));
+}
+@keyframes ceremonyRocketRise{
+  0%{opacity:0;transform:translateY(0) scale(.5)}
+  9%{opacity:1}
+  82%{opacity:1;transform:translateY(calc(-1 * var(--rocket-rise))) scale(1)}
+  100%{opacity:0;transform:translateY(calc(-1 * var(--rocket-rise))) scale(.25)}
+}
+.ceremony-firework-burst{
+  position:absolute!important;z-index:8!important;left:var(--firework-x);top:var(--firework-y);
+  width:1px;height:1px;opacity:1!important;pointer-events:none;
+  animation:none!important;
+}
+.ceremony-firework-burst:before{
+  content:"";position:absolute;left:-5px;top:-5px;width:10px;height:10px;border:2px solid var(--firework-color);
+  border-radius:50%;box-shadow:0 0 14px 4px var(--firework-color),inset 0 0 8px #fff;
+  opacity:0;animation:ceremonyBurstRing 1.65s var(--firework-delay) ease-out both;
+}
+.ceremony-firework-burst:after{
+  content:"";position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;
+  background:#fff;box-shadow:0 0 18px 8px #fff,0 0 38px 16px var(--firework-color);
+  opacity:0;animation:ceremonyBurstFlash .7s var(--firework-delay) ease-out both;
+}
+.ceremony-firework-burst span{
+  position:absolute!important;left:0;top:0;width:4px;height:4px;display:block;
+  border-radius:50%;background:var(--spark-color);
+  box-shadow:0 0 8px 3px var(--spark-color),0 0 18px 5px var(--spark-color),0 0 28px #fff8;
+  opacity:0!important;
+  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.2)!important;
+  animation:ceremonyBurstParticle 1.9s var(--spark-delay) cubic-bezier(.12,.65,.22,1) both!important;
+}
+@keyframes ceremonyBurstRing{
+  0%{opacity:1;transform:scale(.15)}
+  75%{opacity:.8}
+  100%{opacity:0;transform:scale(12)}
+}
+@keyframes ceremonyBurstFlash{
+  0%{opacity:0;transform:scale(.2)}
+  12%{opacity:1;transform:scale(2.2)}
+  45%{opacity:.8;transform:scale(1.2)}
+  100%{opacity:0;transform:scale(.1)}
+}
+@keyframes ceremonyBurstParticle{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.2)}
+  12%{opacity:1}
+  72%{opacity:1;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(var(--distance)) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(calc(var(--distance) * 1.16)) scale(.12)}
+}
+@media(max-width:520px){
+  .ceremony-firework-burst span{width:3px;height:3px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ceremony-rocket{animation:ceremonyRocketRise 1.08s cubic-bezier(.25,.65,.3,1) var(--rocket-delay) both!important}
+  .ceremony-firework-burst:before{animation:ceremonyBurstRing 1.65s var(--firework-delay) ease-out both!important}
+  .ceremony-firework-burst:after{animation:ceremonyBurstFlash .7s var(--firework-delay) ease-out both!important}
+  .ceremony-firework-burst span{animation:ceremonyBurstParticle 1.9s var(--spark-delay) cubic-bezier(.12,.65,.22,1) both!important}
+}
