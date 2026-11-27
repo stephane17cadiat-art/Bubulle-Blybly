@@ -282,9 +282,16 @@ async function joinRoom(code){
     await runTransaction(db,async tx=>{
       const snap=await tx.get(roomRef); if(!snap.exists()) throw new Error("Cette invitation est introuvable ou expirée.");
       const data=snap.data();
-      if(data.players.BUBBULE.uid===user.uid){myRole="BUBBULE";return;}
-      if(data.players.BLYBLY.uid===user.uid){myRole="BLYBLY";return;}
-      if(data.players.BUBBULE.joined && data.players.BUBBULE.uid!==user.uid) {
+      // Validate room structure before accessing either player profile.
+      const players=data && data.players && typeof data.players==="object" ? data.players : null;
+      const bubulle=players && players.BUBBULE && typeof players.BUBBULE==="object" ? players.BUBBULE : null;
+      const blybly=players && players.BLYBLY && typeof players.BLYBLY==="object" ? players.BLYBLY : null;
+      if(!bubulle || !blybly || !("uid" in bubulle) || !("uid" in blybly)){
+        throw new Error("Cette salle existe, mais les profils Bubulle et Blybly sont incomplets. Aucune donnée n'a été modifiée. Vérifions la salle dans Firebase avant toute réparation.");
+      }
+      if(bubulle.uid===user.uid){myRole="BUBULLE";return;}
+      if(blybly.uid===user.uid){myRole="BLYBLY";return;}
+      if(bubulle.joined && bubulle.uid!==user.uid) {
         const recoverBubulle = window.confirm("Ce navigateur n'est plus reconnu.\n\nVeux-tu retrouver le profil BUBULLE et sa progression ?\n\nOK = retrouver BUBULLE. Annuler = choisir BLYBLY.");
         if(recoverBubulle) {myRole="BUBBULE";tx.update(roomRef,{"players.BUBBULE.uid":user.uid,"players.BUBBULE.joined":true});return;}
       }
