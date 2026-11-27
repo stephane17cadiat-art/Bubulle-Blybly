@@ -1416,11 +1416,12 @@ const ceremonyTexts={
  birthday:{title:"Joyeux anniversaire, majestés !",text:"Aujourd’hui, tout le royaume célèbre votre lumière. Que cette journée soit remplie de douceur, de rires et de merveilles."},
  success:{title:"Une victoire royale !",text:"Chaque effort mérite d’être honoré. Que cette réussite ouvre les portes d’aventures encore plus belles."},
  friendship:{title:"À votre amitié précieuse",text:"Deux princesses, deux chemins, une même constellation. Que votre complicité continue de faire briller le royaume."},
- justbecause:{title:"La magie est dans l’instant",text:"Pas besoin d’une date spéciale pour célébrer les petits bonheurs. Aujourd’hui, le palais fête simplement votre duo."}
+ justbecause:{title:"La magie est dans l’instant",text:"Pas besoin d’une date spéciale pour célébrer les petits bonheurs. Aujourd’hui, le palais fête simplement votre duo."},
+ grandball:{title:"Le Grand Bal Royal est ouvert !",text:"Les lustres scintillent, le parquet s’illumine et la musique enveloppe le palais. Que Bubulle et Blybly dansent jusqu’aux étoiles !"}
 };
 let ceremonySelected=null;
 function resetCeremony(){
- ceremonyStage.classList.remove("is-celebrating");
+ ceremonyStage.classList.remove("is-celebrating","is-grand-ball");
  ceremonyStage.querySelector(".ceremony-confetti").innerHTML="";
  ceremonyMessage.innerHTML="<span>✧</span><h3>Le palais attend votre célébration</h3><p>Choisissez une occasion pour ouvrir le grand bal.</p>";
  ceremonyLaunch.innerHTML="<span>♛</span> Ouvrir la cérémonie <span>♛</span>";
@@ -1457,12 +1458,14 @@ ceremonyModal.querySelector(".ceremony-occasions").addEventListener("click",even
   item.setAttribute("aria-pressed",String(selected));
  });
  ceremonyLaunch.disabled=false;
- ceremonyLaunch.innerHTML="<span>♛</span> Ouvrir la cérémonie <span>♛</span>";
+ ceremonyLaunch.innerHTML=ceremonySelected==="grandball"?"<span>♫</span> Lancer le Grand Bal <span>♫</span>":"<span>♛</span> Ouvrir la cérémonie <span>♛</span>";
 });
 function launchCeremony(){
  if(!ceremonySelected)return;
  const data=ceremonyTexts[ceremonySelected];
- ceremonyStage.classList.remove("is-celebrating");void ceremonyStage.offsetWidth;ceremonyStage.classList.add("is-celebrating");
+ ceremonyStage.classList.remove("is-celebrating","is-grand-ball");
+ if(ceremonySelected==="grandball")ceremonyStage.classList.add("is-grand-ball");
+ void ceremonyStage.offsetWidth;ceremonyStage.classList.add("is-celebrating");
  ceremonyMessage.innerHTML="<span>✧</span><h3></h3><time class=\"ceremony-reveal-date\"></time><p></p>";
  ceremonyMessage.querySelector("h3").textContent=data.title;
  const selectedDate=ceremonyDateInput.value;
