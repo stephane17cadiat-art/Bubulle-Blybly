@@ -2942,3 +2942,43 @@ button:not(:disabled):focus-visible{
 @media(max-width:520px){
   .ceremony-royal-hall{background:linear-gradient(180deg,#563b50 0,#3b293f 48%,#f8e9e7 48%,#fff8f4 100%)}
 }
+
+
+/* Fenêtres cintrées et voilages du palais */
+.ceremony-palace-windows{
+  position:absolute;z-index:0;inset:0;pointer-events:none;overflow:hidden;
+}
+.ceremony-palace-windows i{
+  position:absolute;top:17%;bottom:16%;width:17%;max-width:112px;
+  border:3px solid #f4d8c6;border-bottom-width:5px;
+  border-radius:90px 90px 7px 7px;
+  background:
+    linear-gradient(90deg,transparent 47%,#f4d8c788 49%,#fff3e8aa 50%,#f4d8c788 52%,transparent 54%),
+    linear-gradient(180deg,transparent 46%,#f4d8c788 48%,#fff3e8aa 50%,#f4d8c788 52%,transparent 54%),
+    linear-gradient(180deg,#fff5eeaa 0%,#f5d8e077 48%,#f8e6e244 100%);
+  box-shadow:0 0 0 4px #9a6b8055,0 0 22px #ffe8df77,inset 0 0 24px #fff5ec99;
+  opacity:.88;
+}
+.ceremony-palace-windows i:before{
+  content:"";position:absolute;inset:7px;border:1px solid #fff0dfaa;
+  border-radius:80px 80px 3px 3px;
+}
+.ceremony-palace-windows i:after{
+  content:"✦";position:absolute;top:13%;left:50%;transform:translateX(-50%);
+  color:#fff5e7;font-size:clamp(12px,2vw,19px);
+  text-shadow:0 0 12px #fff,0 0 22px #f6cddd;
+}
+.ceremony-palace-windows i:first-child{left:5%}
+.ceremony-palace-windows i:last-child{right:5%}
+.ceremony-royal-stage .ceremony-palace-windows i{
+  border-color:#f6dece;
+  background:
+    linear-gradient(90deg,transparent 47%,#f4d8c788 49%,#fff3e8aa 50%,#f4d8c788 52%,transparent 54%),
+    linear-gradient(180deg,transparent 46%,#f4d8c788 48%,#fff3e8aa 50%,#f4d8c788 52%,transparent 54%),
+    linear-gradient(180deg,#fff9f0bb 0%,#f5d8e088 48%,#f8e6e255 100%);
+}
+@media(max-width:520px){
+  .ceremony-palace-windows i{top:19%;bottom:19%;width:18%;border-width:2px}
+  .ceremony-palace-windows i:first-child{left:2%}
+  .ceremony-palace-windows i:last-child{right:2%}
+}
