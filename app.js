@@ -1407,32 +1407,51 @@ $("leaveBtn").addEventListener("click",()=>{if(unsubscribe)unsubscribe();history
 $("closeModal").addEventListener("click",()=>hide("modal"));
 $("modal").addEventListener("click",e=>{if(e.target.id==="modal") hide("modal");});
 
-/* Salle des cérémonies — animations locales, sans écriture Firebase ni progression */
+/* Salle des cérémonies — mise en scène royale, sans écriture Firebase ni progression */
 const ceremonyModal=$("ceremonyModal");
 const ceremonyStage=$("ceremonyStage");
 const ceremonyLaunch=$("ceremonyLaunchBtn");
 const ceremonyMessage=$("ceremonyStageMessage");
 const ceremonyTexts={
- birthday:{title:"Joyeux anniversaire !",text:"Aujourd’hui, le royaume entier célèbre une lumière de plus dans votre histoire. Que cette journée soit remplie de douceur, de rires et de merveilles. 🎂"},
- success:{title:"Une victoire à célébrer !",text:"Chaque effort mérite d’être honoré. Que cette réussite ouvre la porte à de nouvelles aventures et à mille belles fiertés. 🏆"},
- friendship:{title:"À votre belle amitié",text:"Deux personnalités, deux chemins, et des instants qui deviennent précieux. Que votre constellation continue de briller. 💗"},
- justbecause:{title:"Juste parce que…",text:"Pas besoin d’une date spéciale pour célébrer les petits bonheurs. Aujourd’hui, la magie existe simplement parce que vous êtes là. ✨"}
+ birthday:{title:"Joyeux anniversaire, majestés !",text:"Aujourd’hui, tout le royaume célèbre votre lumière. Que cette journée soit remplie de douceur, de rires et de merveilles."},
+ success:{title:"Une victoire royale !",text:"Chaque effort mérite d’être honoré. Que cette réussite ouvre les portes d’aventures encore plus belles."},
+ friendship:{title:"À votre amitié précieuse",text:"Deux princesses, deux chemins, une même constellation. Que votre complicité continue de faire briller le royaume."},
+ justbecause:{title:"La magie est dans l’instant",text:"Pas besoin d’une date spéciale pour célébrer les petits bonheurs. Aujourd’hui, le palais fête simplement votre duo."}
 };
 let ceremonySelected=null;
 function resetCeremony(){
  ceremonyStage.classList.remove("is-celebrating");
- ceremonyMessage.innerHTML="<span>✧</span><h3>Chaque instant mérite sa lumière</h3><p>Choisissez une occasion et ouvrez le bal.</p>";
- ceremonyLaunch.textContent="✧ Lancer la cérémonie ✧";
- ceremonyModal.querySelectorAll("[data-ceremony]").forEach(button=>button.classList.toggle("selected",button.dataset.ceremony===ceremonySelected));
+ ceremonyStage.querySelector(".ceremony-confetti").innerHTML="";
+ ceremonyMessage.innerHTML="<span>✧</span><h3>Le palais attend votre célébration</h3><p>Choisissez une occasion pour ouvrir le grand bal.</p>";
+ ceremonyLaunch.innerHTML="<span>♛</span> Ouvrir la cérémonie <span>♛</span>";
+ ceremonyModal.querySelectorAll("[data-ceremony]").forEach(button=>{
+  const selected=button.dataset.ceremony===ceremonySelected;
+  button.classList.toggle("selected",selected);
+  button.setAttribute("aria-pressed",String(selected));
+ });
+ ceremonyLaunch.disabled=!ceremonySelected;
 }
-$("ceremonyOpenBtn").addEventListener("click",()=>{resetCeremony();ceremonyModal.classList.remove("hidden");});
-$("ceremonyCloseBtn").addEventListener("click",()=>ceremonyModal.classList.add("hidden"));
-ceremonyModal.addEventListener("click",event=>{if(event.target===ceremonyModal)ceremonyModal.classList.add("hidden");});
+$("ceremonyOpenBtn").addEventListener("click",()=>{
+ resetCeremony();
+ ceremonyModal.classList.remove("hidden");
+ ceremonyModal.classList.remove("is-opening");
+ void ceremonyModal.offsetWidth;
+ ceremonyModal.classList.add("is-opening");
+ window.setTimeout(()=>ceremonyModal.classList.remove("is-opening"),1450);
+});
+function closeCeremony(){ceremonyModal.classList.add("hidden");ceremonyModal.classList.remove("is-opening");}
+$("ceremonyCloseBtn").addEventListener("click",closeCeremony);
+ceremonyModal.addEventListener("click",event=>{if(event.target===ceremonyModal)closeCeremony();});
 ceremonyModal.querySelector(".ceremony-occasions").addEventListener("click",event=>{
  const button=event.target.closest("[data-ceremony]");if(!button)return;
  ceremonySelected=button.dataset.ceremony;
- ceremonyModal.querySelectorAll("[data-ceremony]").forEach(item=>item.classList.toggle("selected",item===button));
+ ceremonyModal.querySelectorAll("[data-ceremony]").forEach(item=>{
+  const selected=item===button;
+  item.classList.toggle("selected",selected);
+  item.setAttribute("aria-pressed",String(selected));
+ });
  ceremonyLaunch.disabled=false;
+ ceremonyLaunch.innerHTML="<span>♛</span> Ouvrir la cérémonie <span>♛</span>";
 });
 function launchCeremony(){
  if(!ceremonySelected)return;
@@ -1443,18 +1462,20 @@ function launchCeremony(){
  ceremonyMessage.querySelector("p").textContent=data.text;
  const confetti=ceremonyStage.querySelector(".ceremony-confetti");
  confetti.innerHTML="";
- const colors=["#ffe4a6","#ffd0e9","#d7caff","#ffffff","#f4b6ce"];
- for(let i=0;i<46;i++){
-  const bit=document.createElement("i");bit.textContent=["✦","✧","❀","·","♡"][i%5];
+ const colors=["#ffe4a6","#ffd0e9","#d7caff","#ffffff","#f4b6ce","#fff0c8","#c9a7e8"];
+ const symbols=["✦","✧","❀","·","♡","♛","✺"];
+ for(let i=0;i<88;i++){
+  const bit=document.createElement("i");
+  bit.textContent=symbols[i%symbols.length];
   bit.style.setProperty("--x",(Math.random()*100)+"%");
   bit.style.setProperty("--c",colors[i%colors.length]);
-  bit.style.setProperty("--s",(9+Math.random()*15)+"px");
-  bit.style.setProperty("--d",(3.2+Math.random()*2.4)+"s");
-  bit.style.setProperty("--delay",(Math.random()*1.8)+"s");
-  bit.style.setProperty("--drift",(Math.random()*130-65)+"px");
+  bit.style.setProperty("--s",(8+Math.random()*19)+"px");
+  bit.style.setProperty("--d",(3+Math.random()*3.2)+"s");
+  bit.style.setProperty("--delay",(Math.random()*2.2)+"s");
+  bit.style.setProperty("--drift",(Math.random()*180-90)+"px");
   confetti.appendChild(bit);
  }
- ceremonyLaunch.textContent="↻ Rejouer la cérémonie";
+ ceremonyLaunch.innerHTML="<span>✧</span> Rejouer la cérémonie <span>✧</span>";
 }
 ceremonyLaunch.addEventListener("click",launchCeremony);
 
