@@ -1490,26 +1490,42 @@ function launchCeremony(){
   bit.style.setProperty("--drift",(Math.random()*180-90)+"px");
   confetti.appendChild(bit);
  }
- // Quatre gerbes de feux d'artifice royaux, au-dessus du décor
- const fireworkColors=["#ffe7a8","#ffb8df","#d8c5ff","#ffffff","#f6c4a0"];
- const bursts=[
-  {x:18,y:27,delay:0},
-  {x:43,y:17,delay:.45},
-  {x:69,y:25,delay:.9},
-  {x:86,y:15,delay:1.35}
+ // Grand spectacle royal : fusees, montees lumineuses et bouquets successifs
+ const fireworkColors=["#ffe7a8","#ff8acb","#c9a7ff","#ffffff","#ffca86","#a9eaff"];
+ const shells=[
+  {x:12,y:24,delay:0,color:0},
+  {x:34,y:17,delay:.65,color:1},
+  {x:57,y:23,delay:1.3,color:2},
+  {x:82,y:16,delay:1.95,color:3},
+  {x:23,y:40,delay:3.25,color:4},
+  {x:72,y:38,delay:3.9,color:5},
+  {x:45,y:13,delay:4.65,color:0},
+  {x:90,y:31,delay:5.35,color:1},
+  {x:10,y:20,delay:6.25,color:2},
+  {x:52,y:18,delay:6.9,color:3},
+  {x:86,y:19,delay:7.55,color:4}
  ];
- bursts.forEach((burst,index)=>{
+ shells.forEach(shell=>{
+  const rocket=document.createElement("i");
+  rocket.className="ceremony-rocket";
+  rocket.style.setProperty("--rocket-x",shell.x+"%");
+  rocket.style.setProperty("--rocket-rise",(ceremonyStage.clientHeight*(.72-shell.y/150))+"px");
+  rocket.style.setProperty("--rocket-delay",shell.delay+"s");
+  rocket.style.setProperty("--rocket-color",fireworkColors[shell.color]);
+  confetti.appendChild(rocket);
   const burstNode=document.createElement("div");
   burstNode.className="ceremony-firework-burst";
-  burstNode.style.setProperty("--firework-x",burst.x+"%");
-  burstNode.style.setProperty("--firework-y",burst.y+"%");
-  burstNode.style.setProperty("--firework-delay",burst.delay+"s");
-  const color=fireworkColors[index%fireworkColors.length];
-  for(let spark=0;spark<22;spark++){
+  burstNode.style.setProperty("--firework-x",shell.x+"%");
+  burstNode.style.setProperty("--firework-y",shell.y+"%");
+  burstNode.style.setProperty("--firework-delay",(shell.delay+1.02)+"s");
+  burstNode.style.setProperty("--firework-color",fireworkColors[shell.color]);
+  const count=window.matchMedia("(max-width: 600px)").matches?30:42;
+  for(let spark=0;spark<count;spark++){
    const ray=document.createElement("span");
-   ray.style.setProperty("--angle",(spark*(360/22)+index*9)+"deg");
-   ray.style.setProperty("--distance",-(34+(spark%4)*9)+"px");
-   ray.style.setProperty("--spark-color",spark%5===0?"#fff7d9":color);
+   ray.style.setProperty("--angle",(spark*(360/count)+(Math.random()-.5)*5)+"deg");
+   ray.style.setProperty("--distance",(48+Math.random()*48)+"px");
+   ray.style.setProperty("--spark-color",spark%6===0?"#fffbe8":fireworkColors[shell.color]);
+   ray.style.setProperty("--spark-delay",(shell.delay+1.02+Math.random()*.12)+"s");
    burstNode.appendChild(ray);
   }
   confetti.appendChild(burstNode);
