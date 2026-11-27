@@ -2541,3 +2541,58 @@ button:not(:disabled):focus-visible{
     line-height:1.45;
   }
 }
+
+
+/* Calendrier royal de la salle des cérémonies */
+.ceremony-date-picker{
+  display:grid;
+  justify-items:center;
+  gap:7px;
+  margin:2px auto 15px;
+  padding:13px 16px 12px;
+  max-width:360px;
+  border:1px solid #dfc99f;
+  border-radius:15px;
+  background:linear-gradient(145deg,#fffaf0,#f5eaf0);
+  box-shadow:inset 0 1px #fff,0 5px 16px #68475a12;
+}
+.ceremony-date-picker label{
+  color:#8d6946;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.6px;
+}
+.ceremony-date-picker label span{color:#bd965c;padding-right:5px}
+.ceremony-date-picker input{
+  width:min(100%,245px);
+  min-height:42px;
+  padding:8px 12px;
+  border:1px solid #c9ad83;
+  border-radius:10px;
+  color:#563d5d;
+  background:#fffdf8;
+  font:600 14px 'DM Sans',sans-serif;
+  color-scheme:light;
+  box-shadow:0 3px 10px #6b4c5c12;
+}
+.ceremony-date-picker input:focus{
+  outline:3px solid #d9b97966;
+  border-color:#a9824f;
+}
+.ceremony-date-picker>small{
+  color:#967d8c;
+  font:italic 11px Georgia,serif;
+}
+.ceremony-stage-message .ceremony-reveal-date{
+  display:block;
+  margin:0 auto 7px;
+  color:#ffe2a5;
+  font:italic 600 14px Georgia,serif;
+  letter-spacing:.5px;
+  text-shadow:0 1px 5px #090611;
+}
+@media(max-width:520px){
+  .ceremony-date-picker{margin:0 auto 13px;padding:11px 12px}
+  .ceremony-date-picker input{min-height:40px;font-size:13px}
+  .ceremony-stage-message .ceremony-reveal-date{font-size:13px}
+}
