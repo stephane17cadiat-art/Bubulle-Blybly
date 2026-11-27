@@ -2728,3 +2728,98 @@ button:not(:disabled):focus-visible{
 
 /* Salle des cérémonies : supprimer les anneaux autour des explosions */
 .ceremony-firework-burst:before{display:none!important;content:none!important}
+
+
+/* Grand Bal Royal : piste lumineuse, projecteurs et danse des princesses */
+.ceremony-occasion-grandball{
+  grid-column:1/-1;
+  border-color:#c49a62!important;
+  background:linear-gradient(110deg,#fff1ce,#f4dff0 52%,#fff5dc)!important;
+  box-shadow:inset 0 1px #fff,0 5px 16px #9a6b8a22;
+}
+.ceremony-occasion-grandball>span{font-size:19px}
+.ceremony-ballroom-effects,.ceremony-music-notes{
+  position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;opacity:0;
+}
+.ceremony-ballroom-effects i{
+  position:absolute;top:-18%;width:30%;height:100%;
+  background:linear-gradient(180deg,#fff2c855 0%,#f8d8ff22 42%,transparent 100%);
+  clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);
+  filter:blur(5px);transform-origin:50% 0;
+}
+.ceremony-ballroom-effects i:nth-child(1){left:7%;--swing:-18deg}
+.ceremony-ballroom-effects i:nth-child(2){left:36%;--swing:12deg}
+.ceremony-ballroom-effects i:nth-child(3){right:5%;--swing:-12deg}
+.ceremony-dance-floor{
+  position:absolute;z-index:1;left:8%;right:8%;bottom:0;height:37%;
+  opacity:0;pointer-events:none;clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);
+  background:
+    linear-gradient(90deg,transparent 49.5%,#ffe8b766 50%,transparent 50.5%),
+    repeating-linear-gradient(90deg,transparent 0 12%,#f8d9ff30 12.5% 13%,transparent 13.5% 25%),
+    linear-gradient(180deg,#f8d9ff12,#e9c4ff55 55%,#f4d59b44);
+  border-top:1px solid #ffe8b788;
+  transform:perspective(220px) rotateX(18deg);
+  box-shadow:0 -8px 30px #f4d6ff33;
+}
+.ceremony-dance-floor i{
+  position:absolute;inset:12% 20%;border:1px solid #ffe9b766;
+  box-shadow:inset 0 0 20px #f6d8ff33,0 0 16px #f6d8ff33;
+}
+.ceremony-music-notes i{
+  position:absolute;bottom:-12%;color:#ffe8b5;font:30px Georgia,serif;
+  text-shadow:0 0 12px #fff,0 0 24px #f3bde8;
+}
+.ceremony-music-notes i:nth-child(1){left:14%;--note-x:18px;--note-r:16deg;--note-delay:0s}
+.ceremony-music-notes i:nth-child(2){left:34%;--note-x:-12px;--note-r:-14deg;--note-delay:.8s}
+.ceremony-music-notes i:nth-child(3){left:58%;--note-x:16px;--note-r:12deg;--note-delay:1.5s}
+.ceremony-music-notes i:nth-child(4){left:77%;--note-x:-15px;--note-r:-18deg;--note-delay:2.1s}
+.ceremony-music-notes i:nth-child(5){left:90%;--note-x:10px;--note-r:10deg;--note-delay:2.7s}
+.ceremony-stage.is-grand-ball .ceremony-ballroom-effects,
+.ceremony-stage.is-grand-ball .ceremony-music-notes{opacity:1}
+.ceremony-stage.is-grand-ball .ceremony-dance-floor{opacity:.9}
+.ceremony-stage.is-grand-ball .ceremony-ballroom-effects i{
+  animation:ceremonySpotlightSweep 4.8s ease-in-out infinite alternate;
+  animation-delay:calc(var(--swing) * .01);
+}
+.ceremony-stage.is-grand-ball .ceremony-music-notes i{
+  animation:ceremonyMusicNote 4.8s var(--note-delay) ease-in-out infinite;
+}
+.ceremony-stage.is-grand-ball .ceremony-person>span{
+  animation:ceremonyPrincessDance 1.15s ease-in-out infinite;
+}
+.ceremony-stage.is-grand-ball .ceremony-person:last-child>span{animation-delay:-.57s}
+.ceremony-stage.is-grand-ball .ceremony-heart{animation:ceremonyBallHeart .9s ease-in-out infinite}
+.ceremony-stage.is-grand-ball .ceremony-chandelier{
+  filter:drop-shadow(0 0 20px #ffe5a9);
+  animation:ceremonyGlow 1.5s ease-in-out infinite;
+}
+@keyframes ceremonySpotlightSweep{
+  from{transform:rotate(-18deg);opacity:.35}
+  to{transform:rotate(18deg);opacity:.9}
+}
+@keyframes ceremonyMusicNote{
+  0%{transform:translate3d(0,0,0) rotate(0);opacity:0}
+  15%{opacity:1}
+  100%{transform:translate3d(var(--note-x),-360px,0) rotate(var(--note-r));opacity:0}
+}
+@keyframes ceremonyPrincessDance{
+  0%,100%{transform:translateY(0) rotate(-7deg) scale(1)}
+  25%{transform:translateY(-9px) rotate(8deg) scale(1.04)}
+  50%{transform:translateY(0) rotate(7deg) scale(1)}
+  75%{transform:translateY(-7px) rotate(-8deg) scale(1.04)}
+}
+@keyframes ceremonyBallHeart{
+  0%,100%{transform:scale(.92) rotate(-8deg)}
+  50%{transform:scale(1.28) rotate(8deg);filter:drop-shadow(0 0 12px #ffc9e7)}
+}
+@media(max-width:520px){
+  .ceremony-occasion-grandball{grid-column:1/-1}
+  .ceremony-dance-floor{left:2%;right:2%;height:32%}
+  .ceremony-music-notes i{font-size:24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ceremony-stage.is-grand-ball .ceremony-ballroom-effects i,
+  .ceremony-stage.is-grand-ball .ceremony-music-notes i,
+  .ceremony-stage.is-grand-ball .ceremony-person>span,
+  .ceremony-stage.is-grand-ball .ceremony-heart{animation:none!important}
+}
