@@ -983,7 +983,10 @@ function showFountainReveal(){
   if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
   fountainRevealing=true;fountainReleaseBtn.disabled=true;
   const all=roomData.fountainWishes||{};
-  fountainReveal.innerHTML='<div class="fountain-reveal-heading">✧ LES HUIT VŒUX DES BESTIES ✧</div><div class="fountain-revealed-list"></div><p class="fountain-final-blessing">Deux cœurs, huit souhaits… que la magie vous accompagne. 💗</p>';
+  const scene=$("fountainScene");
+  scene.classList.remove("fountain-grand-finale");
+  scene.querySelector(".fountain-heart-sky")?.remove();
+  fountainReveal.innerHTML='<div class="fountain-reveal-heading">✧ LE GRAND RITUEL DES HUIT VŒUX ✧</div><p class="fountain-ceremony-intro">La fontaine ouvre ses eaux… vos huit lumières vont rejoindre le ciel.</p><div class="fountain-revealed-list"></div><p class="fountain-final-blessing">Deux cœurs, huit souhaits… que la magie vous accompagne. 💗</p>';
   const list=fountainReveal.querySelector(".fountain-revealed-list");
   fountainReveal.classList.remove("revealed");void fountainReveal.offsetWidth;fountainReveal.classList.add("revealed");
   fountainWishBurst();
@@ -995,9 +998,19 @@ function showFountainReveal(){
       item.querySelector(".fountain-revealed-category").textContent=(entry.role==="BUBULLE"?"💗 Bubulle":"🌷 Blybly")+" · "+entry.category.icon+" "+entry.category.title;
       item.querySelector("p").textContent=fountainWishTexts[entry.category.id][entry.index];
       list.appendChild(item);
-    },650+index*900);
+      if(index===sequence.length-1){
+        const scene=$("fountainScene");
+        const heart=document.createElement("div");
+        heart.className="fountain-heart-sky";
+        heart.innerHTML='<span class="fountain-heart-symbol">♥</span><span class="fountain-heart-star star-a">✦</span><span class="fountain-heart-star star-b">✧</span><span class="fountain-heart-star star-c">✧</span><p>DEUX CŒURS, HUIT VŒUX…</p>';
+        scene.appendChild(heart);
+        window.setTimeout(()=>scene.classList.add("fountain-grand-finale"),350);
+        fountainReveal.querySelector(".fountain-final-blessing").textContent="Une seule constellation. Que vos rêves trouvent toujours leur chemin vers la lumière. 💗";
+        fountainReleaseBtn.innerHTML='<span>✧</span> Revoir le rituel des huit vœux <span>✧</span>';
+      }
+    },950+index*1500);
   });
-  window.setTimeout(()=>{fountainRevealing=false;renderFountainSharedState();},8500);
+  window.setTimeout(()=>{fountainRevealing=false;renderFountainSharedState();},20500);
 }
 fountainReleaseBtn.addEventListener("click",async()=>{
   if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
