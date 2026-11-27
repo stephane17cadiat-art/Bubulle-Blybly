@@ -142,6 +142,15 @@ const songButton = $("songToggleBtn");
 const songNextButton = $("songNextBtn");
 const songStatus = $("songStatus");
 const songTitle = $("songTitle");
+const songPlayer = songAudio ? songAudio.closest(".song-player") : null;
+const songProgressFill = $("songProgressFill");
+const songTime = $("songTime");
+const formatSongTime = (seconds) => {
+  if (!Number.isFinite(seconds)) return "0:00";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return mins + ":" + secs;
+};
 const songPlaylist = [
   { title: "Lorie — Sur un air latino", file: "Lorie - Sur un air Lotino.mp3" },
   { title: "Britney Spears — Do You Wanna Come Over?", file: "Britney Spears Glory - 07 Do You Wanna Come Over.mp3" },
@@ -207,6 +216,22 @@ if (songAudio && songButton && songNextButton) {
   });
   songNextButton.addEventListener("click", () => loadPlaylistTrack(songIndex + 1, songStarted && !songAudio.paused));
   songAudio.addEventListener("ended", () => loadPlaylistTrack(songIndex + 1, true));
+  songAudio.addEventListener("play", () => {
+    if (songPlayer) songPlayer.classList.add("is-playing");
+  });
+  songAudio.addEventListener("pause", () => {
+    if (songPlayer) songPlayer.classList.remove("is-playing");
+  });
+  songAudio.addEventListener("timeupdate", () => {
+    if (songProgressFill && Number.isFinite(songAudio.duration) && songAudio.duration > 0) {
+      songProgressFill.style.width = (songAudio.currentTime / songAudio.duration * 100) + "%";
+    }
+    if (songTime) songTime.textContent = formatSongTime(songAudio.currentTime) + " / " + formatSongTime(songAudio.duration);
+  });
+  songAudio.addEventListener("loadedmetadata", () => {
+    if (songTime) songTime.textContent = "0:00 / " + formatSongTime(songAudio.duration);
+    if (songProgressFill) songProgressFill.style.width = "0%";
+  });
 }
 async function boot(){
   if(firebaseConfig.apiKey.startsWith("REMPLACER")) {
