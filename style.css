@@ -1986,3 +1986,36 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 @keyframes observatoryWishReveal{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:520px){.observatory-header{padding:27px 30px 20px}.observatory-sky{min-height:290px;padding:12px 8px}.observatory-constellation{height:220px;margin-top:20px}.constellation-star{width:42px;height:42px}.star-duo{left:calc(50% - 21px)}.name-bubulle{left:8%}.name-blybly{right:8%}.observatory-discovery{margin:12px;padding:13px;gap:11px}.observatory-note-icon{flex-basis:45px;width:45px;height:45px}.observatory-discovery h3{font-size:16px}.observatory-discovery p:last-child{font-size:11px}.observatory-wish-panel{margin:0 12px 13px;padding:14px}.observatory-telescope{right:10px;font-size:26px}}
 @media(prefers-reduced-motion:reduce){.observatory-sky:before,.observatory-sky-star{animation:none}.observatory-wish-message.wish-reveal{animation:none}}
+
+
+/* Observatoire vivant — animations enrichies */
+.observatory-sky:after{content:"";position:absolute;z-index:0;top:18%;left:-35%;width:30%;height:2px;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent,#fff8d7 45%,#f7c9ff 70%,transparent);filter:drop-shadow(0 0 7px #f7d58b);transform:rotate(-19deg);animation:observatoryShootingStar 8.5s ease-in-out infinite}
+.observatory-sky-star{transform-origin:center;will-change:transform,opacity}
+.observatory-moon{animation:observatoryMoonGlow 5s ease-in-out infinite alternate}
+.observatory-constellation svg{overflow:visible}
+.constellation-line{stroke-dasharray:2 8;animation:constellationFlow 7s linear infinite, constellationGlow 3.8s ease-in-out infinite alternate}
+.constellation-bridge{animation-duration:5.5s,2.8s}
+.constellation-heart{transform-origin:260px 125px;animation:constellationHeartBeat 2.2s ease-in-out infinite}
+.constellation-points{animation:constellationPointsGlow 2.6s ease-in-out infinite alternate}
+.constellation-star{animation:constellationStarFloat 3.2s ease-in-out infinite, constellationStarGlow 2.4s ease-in-out infinite alternate;will-change:transform,box-shadow}
+.star-blybly{animation-delay:-1.4s,-.8s}
+.star-duo{animation-delay:-.7s,-1.2s}
+.constellation-star:hover,.constellation-star.selected{animation:constellationStarPop .55s ease both;z-index:4}
+.observatory-telescope{transform-origin:80% 90%;animation:telescopeLook 7s ease-in-out infinite alternate}
+.observatory-wish-panel{position:relative;overflow:hidden}
+.observatory-wish-panel:after{content:"✧　·　✦　·　✧";position:absolute;left:0;right:0;top:-22px;color:#f7d58b77;font-size:15px;letter-spacing:12px;pointer-events:none;animation:wishSparkleDrift 6s linear infinite}
+.observatory-burst-particle{position:absolute;z-index:8;pointer-events:none;color:#ffe9ae;font-size:17px;text-shadow:0 0 9px #f7d58b,0 0 17px #f5a9d2;animation:observatoryParticleBurst 1.15s cubic-bezier(.15,.7,.25,1) forwards}
+.observatory-burst-particle:nth-child(3n){color:#f8c9ec}.observatory-burst-particle:nth-child(3n+1){color:#d9c5ff}
+@keyframes observatoryShootingStar{0%,13%{left:-35%;top:18%;opacity:0;transform:translate(0,0) rotate(-19deg)}16%{opacity:1}23%{left:115%;top:70%;opacity:0;transform:translate(0,0) rotate(-19deg)}100%{left:115%;top:70%;opacity:0}}
+@keyframes observatoryMoonGlow{from{filter:drop-shadow(0 0 5px #f7d58b55);transform:rotate(-18deg) scale(.98)}to{filter:drop-shadow(0 0 20px #f7d58bcc);transform:rotate(-12deg) scale(1.05)}}
+@keyframes constellationFlow{to{stroke-dashoffset:-80}}
+@keyframes constellationGlow{from{opacity:.5;filter:drop-shadow(0 0 3px #c7b2ff)}to{opacity:1;filter:drop-shadow(0 0 10px #f5a9d2)}}
+@keyframes constellationHeartBeat{0%,100%{transform:scale(1);filter:drop-shadow(0 0 6px #f5a9d2)}50%{transform:scale(1.16);filter:drop-shadow(0 0 15px #f5a9d2)}}
+@keyframes constellationPointsGlow{from{opacity:.6;filter:drop-shadow(0 0 3px #f7d58b)}to{opacity:1;filter:drop-shadow(0 0 11px #fff0bb)}}
+@keyframes constellationStarFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes constellationStarGlow{from{box-shadow:0 0 0 5px #e5d5ff08,0 0 14px #d5b8ff66}to{box-shadow:0 0 0 9px #f5a9d21a,0 0 27px #f5a9d2bb}}
+@keyframes constellationStarPop{0%{scale:1}45%{scale:1.28}100%{scale:1.18}}
+@keyframes telescopeLook{0%{transform:rotate(-5deg) translateY(0)}45%{transform:rotate(4deg) translateY(-3px)}100%{transform:rotate(-2deg) translateY(0)}}
+@keyframes wishSparkleDrift{0%{transform:translateY(0);opacity:.25}50%{opacity:.9}100%{transform:translateY(160px);opacity:0}}
+@keyframes observatoryParticleBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--burst-x)),calc(-50% + var(--burst-y))) scale(1.15) rotate(170deg)}}
+@media(prefers-reduced-motion:reduce){.observatory-sky:after,.observatory-moon,.constellation-line,.constellation-heart,.constellation-points,.constellation-star,.observatory-telescope,.observatory-wish-panel:after{animation:none!important}.observatory-burst-particle{display:none}}
