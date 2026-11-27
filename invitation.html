@@ -88,23 +88,47 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 body{position:relative}
 .wrap{position:relative;z-index:1}
 .petal-field{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.floating-petal{position:absolute;width:15px;height:24px;border-radius:90% 8% 90% 8%;background:linear-gradient(145deg,#fff1f3 0%,#e9b5c3 58%,#d58da3 100%);box-shadow:inset 2px 1px 3px #fff9,0 3px 8px #a76f8020;opacity:0}
-.floating-petal:nth-child(1){left:8%;top:18%;--drift:115px;--turn:210deg;animation:petalFloat 13s 1s ease-in-out infinite}
-.floating-petal:nth-child(2){left:82%;top:12%;width:12px;height:19px;--drift:-90px;--turn:-190deg;animation:petalFloat 15s 2.5s ease-in-out infinite}
-.floating-petal:nth-child(3){left:18%;top:72%;width:11px;height:18px;--drift:80px;--turn:260deg;animation:petalFloat 14s 4s ease-in-out infinite}
-.floating-petal:nth-child(4){left:90%;top:66%;width:16px;height:25px;--drift:-120px;--turn:180deg;animation:petalFloat 16s 3s ease-in-out infinite}
-.floating-petal:nth-child(5){left:48%;top:4%;width:10px;height:16px;--drift:65px;--turn:230deg;animation:petalFloat 12s 5s ease-in-out infinite}
-.floating-petal:nth-child(6){left:64%;top:85%;width:13px;height:21px;--drift:-75px;--turn:-220deg;animation:petalFloat 17s 1.8s ease-in-out infinite}
-.arrival-intro{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,#fffaf7 0%,#f7e4e8 58%,#e9c5ce 100%);animation:introCurtain 1.5s 1.35s ease-in-out forwards;pointer-events:none}
-.arrival-medallion{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 32% 24%,#fff8df 0%,#efd18e 25%,#bd9145 68%,#805b30 100%);border:3px double #f9e9bd;box-shadow:inset 0 3px 7px #fff9,inset 0 -7px 12px #76502055,0 10px 28px #875d4638;color:#fff9e9;animation:medallionGlow 2.5s ease-in-out both}
+.floating-petal{position:absolute;width:15px;height:24px;border-radius:90% 8% 90% 8%;background:linear-gradient(145deg,#fff1f3 0%,#e9b5c3 58%,#d58da3 100%);box-shadow:inset 2px 1px 3px #fff9,0 3px 8px #a76f8020;opacity:0;will-change:transform,opacity}
+.floating-petal:nth-child(1){left:46%;top:59%;width:12px;height:19px;--drift:-73px;--turn:-137deg;animation:petalFloat 26s 5.85s ease-in-out infinite}
+.floating-petal:nth-child(2){left:83%;top:16%;width:14px;height:22px;--drift:-26px;--turn:-54deg;animation:petalFloat 28s 11.70s ease-in-out infinite}
+.floating-petal:nth-child(3){left:24%;top:69%;width:16px;height:25px;--drift:21px;--turn:29deg;animation:petalFloat 30s 4.50s ease-in-out infinite}
+.floating-petal:nth-child(4){left:61%;top:26%;width:18px;height:28px;--drift:68px;--turn:112deg;animation:petalFloat 32s 10.35s ease-in-out infinite}
+.floating-petal:nth-child(5){left:2%;top:79%;width:10px;height:16px;--drift:115px;--turn:195deg;animation:petalFloat 34s 3.15s ease-in-out infinite}
+.floating-petal:nth-child(6){left:39%;top:36%;width:12px;height:19px;--drift:-79px;--turn:-162deg;animation:petalFloat 36s 9.00s ease-in-out infinite}
+.floating-petal:nth-child(7){left:76%;top:89%;width:14px;height:22px;--drift:-32px;--turn:-79deg;animation:petalFloat 24s 1.80s ease-in-out infinite}
+.floating-petal:nth-child(8){left:17%;top:46%;width:16px;height:25px;--drift:15px;--turn:4deg;animation:petalFloat 26s 7.65s ease-in-out infinite}
+.floating-petal:nth-child(9){left:54%;top:3%;width:18px;height:28px;--drift:62px;--turn:87deg;animation:petalFloat 28s 0.45s ease-in-out infinite}
+.floating-petal:nth-child(10){left:91%;top:56%;width:10px;height:16px;--drift:109px;--turn:170deg;animation:petalFloat 30s 6.30s ease-in-out infinite}
+.floating-petal:nth-child(11){left:32%;top:13%;width:12px;height:19px;--drift:-85px;--turn:-187deg;animation:petalFloat 32s 12.15s ease-in-out infinite}
+.floating-petal:nth-child(12){left:69%;top:66%;width:14px;height:22px;--drift:-38px;--turn:-104deg;animation:petalFloat 34s 4.95s ease-in-out infinite}
+.floating-petal:nth-child(13){left:10%;top:23%;width:16px;height:25px;--drift:9px;--turn:-21deg;animation:petalFloat 36s 10.80s ease-in-out infinite}
+.floating-petal:nth-child(14){left:47%;top:76%;width:18px;height:28px;--drift:56px;--turn:62deg;animation:petalFloat 24s 3.60s ease-in-out infinite}
+.floating-petal:nth-child(15){left:84%;top:33%;width:10px;height:16px;--drift:103px;--turn:145deg;animation:petalFloat 26s 9.45s ease-in-out infinite}
+.floating-petal:nth-child(16){left:25%;top:86%;width:12px;height:19px;--drift:-91px;--turn:-212deg;animation:petalFloat 28s 2.25s ease-in-out infinite}
+.floating-petal:nth-child(17){left:62%;top:43%;width:14px;height:22px;--drift:-44px;--turn:-129deg;animation:petalFloat 30s 8.10s ease-in-out infinite}
+.floating-petal:nth-child(18){left:3%;top:96%;width:16px;height:25px;--drift:3px;--turn:-46deg;animation:petalFloat 32s 0.90s ease-in-out infinite}
+.floating-petal:nth-child(19){left:40%;top:53%;width:18px;height:28px;--drift:50px;--turn:37deg;animation:petalFloat 34s 6.75s ease-in-out infinite}
+.floating-petal:nth-child(20){left:77%;top:10%;width:10px;height:16px;--drift:97px;--turn:120deg;animation:petalFloat 36s 12.60s ease-in-out infinite}
+.floating-petal:nth-child(21){left:18%;top:63%;width:12px;height:19px;--drift:-97px;--turn:203deg;animation:petalFloat 24s 5.40s ease-in-out infinite}
+.floating-petal:nth-child(22){left:55%;top:20%;width:14px;height:22px;--drift:-50px;--turn:-154deg;animation:petalFloat 26s 11.25s ease-in-out infinite}
+.floating-petal:nth-child(23){left:92%;top:73%;width:16px;height:25px;--drift:-3px;--turn:-71deg;animation:petalFloat 28s 4.05s ease-in-out infinite}
+.floating-petal:nth-child(24){left:33%;top:30%;width:18px;height:28px;--drift:44px;--turn:12deg;animation:petalFloat 30s 9.90s ease-in-out infinite}
+.floating-petal:nth-child(25){left:70%;top:83%;width:10px;height:16px;--drift:91px;--turn:95deg;animation:petalFloat 32s 2.70s ease-in-out infinite}
+.floating-petal:nth-child(26){left:11%;top:40%;width:12px;height:19px;--drift:-103px;--turn:178deg;animation:petalFloat 34s 8.55s ease-in-out infinite}
+.floating-petal:nth-child(27){left:48%;top:93%;width:14px;height:22px;--drift:-56px;--turn:-179deg;animation:petalFloat 36s 1.35s ease-in-out infinite}
+.floating-petal:nth-child(28){left:85%;top:50%;width:16px;height:25px;--drift:-9px;--turn:-96deg;animation:petalFloat 24s 7.20s ease-in-out infinite}
+.floating-petal:nth-child(29){left:26%;top:7%;width:18px;height:28px;--drift:38px;--turn:-13deg;animation:petalFloat 26s 0.00s ease-in-out infinite}
+.floating-petal:nth-child(30){left:63%;top:60%;width:10px;height:16px;--drift:85px;--turn:70deg;animation:petalFloat 28s 5.85s ease-in-out infinite}
+.arrival-intro{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,#fffaf7 0%,#f7e4e8 58%,#e9c5ce 100%);animation:introCurtain 2.6s 2.1s ease-in-out forwards;pointer-events:none}
+.arrival-medallion{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 32% 24%,#fff8df 0%,#efd18e 25%,#bd9145 68%,#805b30 100%);border:3px double #f9e9bd;box-shadow:inset 0 3px 7px #fff9,inset 0 -7px 12px #76502055,0 10px 28px #875d4638;color:#fff9e9;animation:medallionGlow 3.8s ease-in-out both}
 .arrival-medallion:before,.arrival-medallion:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
 .arrival-medallion:before{inset:8px;border:1px solid #fff0c7}
 .arrival-medallion:after{inset:14px;border:1px solid #9c743b80}
 .arrival-medallion strong{font:normal 27px Georgia,serif;letter-spacing:-.08em;text-shadow:0 2px 2px #805b30}
-.arrival-caption{position:absolute;top:calc(50% + 78px);font:10px Arial,sans-serif;letter-spacing:.28em;color:#98764a;text-transform:uppercase;white-space:nowrap;animation:captionFade 2.3s ease both}
-.kicker,.wrap h1,.intro,.hint{animation:contentArrival 1.3s 1.8s both}
-.envelope-area{animation:envelopeArrival 2s 2.35s cubic-bezier(.2,.7,.25,1) both}
-@keyframes introCurtain{0%{opacity:1;visibility:visible}75%{opacity:1}100%{opacity:0;visibility:hidden}}
+.arrival-caption{position:absolute;top:calc(50% + 78px);font:10px Arial,sans-serif;letter-spacing:.28em;color:#98764a;text-transform:uppercase;white-space:nowrap;animation:captionFade 3.5s ease both}
+.kicker,.wrap h1,.intro,.hint{animation:contentArrival 2s 3s both}
+.envelope-area{animation:envelopeArrival 3s 3.8s cubic-bezier(.2,.7,.25,1) both}
+@keyframes introCurtain{0%{opacity:1;visibility:visible}82%{opacity:1}100%{opacity:0;visibility:hidden}}
 @keyframes medallionGlow{0%{opacity:0;transform:scale(.62) rotate(-18deg);filter:blur(5px)}28%{opacity:1;transform:scale(1.08) rotate(4deg);filter:blur(0);box-shadow:inset 0 3px 7px #fff9,0 0 35px #f4d58c99,0 10px 28px #875d4638}55%{transform:scale(1) rotate(0);filter:brightness(1.12)}100%{opacity:0;transform:scale(.82) translateY(-18px);filter:blur(2px)}}
 @keyframes captionFade{0%,55%{opacity:0;transform:translateY(8px)}70%{opacity:1;transform:translateY(0)}100%{opacity:0}}
 @keyframes contentArrival{from{opacity:0;transform:translateY(12px);filter:blur(2px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
@@ -115,7 +139,7 @@ body{position:relative}
 </style>
 </head>
 <body>
-<div class="petal-field" aria-hidden="true"><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i></div>
+<div class="petal-field" aria-hidden="true"><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i><i class="floating-petal"></i></div>
 <div class="arrival-intro" aria-hidden="true"><div class="arrival-medallion"><strong>B&amp;B</strong></div><div class="arrival-caption">Bubulle &amp; Blybly</div></div>
 <main class="wrap">
 <div class="kicker">Un courrier très spécial</div>
