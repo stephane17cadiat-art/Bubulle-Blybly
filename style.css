@@ -2724,3 +2724,7 @@ button:not(:disabled):focus-visible{
   .ceremony-firework-burst:after{animation:ceremonyBurstFlash .7s var(--firework-delay) ease-out both!important}
   .ceremony-firework-burst span{animation:ceremonyBurstParticle 1.9s var(--spark-delay) cubic-bezier(.12,.65,.22,1) both!important}
 }
+
+
+/* Salle des cérémonies : supprimer les anneaux autour des explosions */
+.ceremony-firework-burst:before{display:none!important;content:none!important}
