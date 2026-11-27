@@ -257,7 +257,18 @@ async function createRoom(){
   catch(e){say("welcomeMessage","Impossible de créer la partie : "+friendlyError(e));}
 }
 async function joinRoom(code){
-  if(!user) {say("welcomeMessage","La connexion au royaume se prépare encore. Attends quelques secondes puis réessaie 💗");return;}
+  // Secours : si l'utilisateur anonyme n'est pas encore prêt sur cet appareil,
+  // terminer la connexion avant de tenter de lire le salon partagé.
+  if(!user){
+    say("welcomeMessage","Connexion à votre royaume… 💗");
+    try {
+      if(auth.currentUser) user=auth.currentUser;
+      else { const credential=await signInAnonymously(auth); user=credential.user; }
+    } catch(error) {
+      say("welcomeMessage","La connexion Firebase a échoué : "+friendlyError(error)+" Réessaie avec une connexion Internet stable.");
+      return;
+    }
+  }
   const rawInvite=String(code||"").trim();
   if(!rawInvite) {say("welcomeMessage","Colle le code ou le lien complet que Bubulle t’a envoyé.");return;}
   let normalizedInvite=rawInvite;
