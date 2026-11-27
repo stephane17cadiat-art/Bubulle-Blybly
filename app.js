@@ -1508,7 +1508,7 @@ function launchCeremony(){
   for(let spark=0;spark<22;spark++){
    const ray=document.createElement("span");
    ray.style.setProperty("--angle",(spark*(360/22)+index*9)+"deg");
-   ray.style.setProperty("--distance",(34+(spark%4)*9)+"px");
+   ray.style.setProperty("--distance",-(34+(spark%4)*9)+"px");
    ray.style.setProperty("--spark-color",spark%5===0?"#fff7d9":color);
    burstNode.appendChild(ray);
   }
