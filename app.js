@@ -875,6 +875,7 @@ const fountainResetBtn=$("fountainResetBtn");
 const fountainOwnCount=$("fountainSelectionCount");
 const fountainReveal=$("fountainWishReveal");
 let fountainRevealing=false;
+let fountainLastChoicesSignature=null,fountainLastRevealToken=null;
 function fountainRoleName(role){return role==="BUBULLE"?"Bubulle":"Blybly";}
 function fountainRoleCount(role){
   const chosen=roomData?.fountainWishes?.[role]||{};
@@ -893,6 +894,13 @@ renderFountainChoices();
 function renderFountainSharedState(){
   if(!roomData||!myRole||!fountainChoices)return;
   const all=roomData.fountainWishes||{};
+  const signature=["BUBULLE","BLYBLY"].map(role=>fountainCategories.map(category=>all[role]?.[category.id]??"-").join(",")).join("|");
+  if(fountainLastChoicesSignature!==null&&signature!==fountainLastChoicesSignature){
+    fountainRevealing=false;
+    fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Les choix ont changé. La révélation attend que vous soyez prêtes à nouveau. 💗</p>';
+    fountainReleaseBtn.innerHTML='<span>✧</span> Révéler nos huit vœux <span>✧</span>';
+  }
+  fountainLastChoicesSignature=signature;
   const mine=all[myRole]||{};
   const ownCount=fountainRoleCount(myRole);
   fountainChoices.querySelectorAll("[data-wish-kind]").forEach(button=>{
@@ -917,6 +925,11 @@ function renderFountainSharedState(){
       }).join("")+'</ul></section>';
   }).join("");
   fountainReleaseBtn.disabled=!bothReady||fountainRevealing;
+  const revealToken=roomData.fountainRevealAt||null;
+  if(revealToken&&revealToken!==fountainLastRevealToken){
+    fountainLastRevealToken=revealToken;
+    if(bothReady)showFountainReveal();
+  }
 }
 $("fountainOpenBtn").addEventListener("click",()=>{renderFountainSharedState();fountainModal.classList.remove("hidden");});
 $("fountainCloseBtn").addEventListener("click",()=>fountainModal.classList.add("hidden"));
@@ -966,7 +979,7 @@ function fountainWishBurst(){
   }
   window.setTimeout(()=>scene.classList.remove("fountain-casting"),3200);
 }
-fountainReleaseBtn.addEventListener("click",()=>{
+function showFountainReveal(){
   if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
   fountainRevealing=true;fountainReleaseBtn.disabled=true;
   const all=roomData.fountainWishes||{};
@@ -985,6 +998,12 @@ fountainReleaseBtn.addEventListener("click",()=>{
     },650+index*900);
   });
   window.setTimeout(()=>{fountainRevealing=false;renderFountainSharedState();},8500);
+}
+fountainReleaseBtn.addEventListener("click",async()=>{
+  if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
+  fountainRevealing=true;fountainReleaseBtn.disabled=true;
+  try{await updateDoc(roomRef,{fountainRevealAt:Date.now()});}
+  catch(error){fountainRevealing=false;renderFountainSharedState();say("fountainSharedStatus","La révélation n’a pas pu démarrer : "+(error.message||"réessaie."));}
 });
 
 function playRewardAnimation(){
