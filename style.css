@@ -1860,3 +1860,16 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
   .portal-transition{animation:none!important;opacity:1}
   .portal-gate,.portal-vortex,.portal-vortex:before,.portal-vortex:after,.portal-heart,.portal-transition p{animation:none!important;opacity:1}
 }
+
+
+/* Playlist partagée : lecteur compact et lisible sur mobile */
+.song-player{display:grid;gap:9px;justify-items:center;margin:0 0 18px;padding:13px;border:1px solid #f5a9d266;border-radius:18px;background:linear-gradient(135deg,#f5a9d21a,#c7b2ff12)}
+.song-player-heading{display:flex;align-items:center;justify-content:center;gap:10px;text-align:left}
+.song-player-heading>div{display:grid;gap:3px}
+.song-player-heading b{font:700 13px Georgia,serif;color:#ffe4f2}
+.song-note{font-size:25px;filter:drop-shadow(0 0 7px #f5a9d2)}
+.song-title{font-size:11px;color:var(--muted)}
+.song-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
+.song-toggle,.song-next{border:1px solid #f5a9d277;border-radius:999px;padding:10px 14px;background:linear-gradient(135deg,#fff1f8,#f2eaff);color:#744b70;font:700 12px "DM Sans";cursor:pointer}
+.song-status{font-size:10px;color:var(--muted);text-align:center}
+.song-player audio{display:none}
