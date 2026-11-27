@@ -1001,7 +1001,7 @@ function showFountainReveal(){
 }
 fountainReleaseBtn.addEventListener("click",async()=>{
   if(fountainRoleCount("BUBULLE")!==4||fountainRoleCount("BLYBLY")!==4||fountainRevealing)return;
-  fountainRevealing=true;fountainReleaseBtn.disabled=true;
+  fountainReleaseBtn.disabled=true;
   try{await updateDoc(roomRef,{fountainRevealAt:Date.now()});}
   catch(error){fountainRevealing=false;renderFountainSharedState();say("fountainSharedStatus","La révélation n’a pas pu démarrer : "+(error.message||"réessaie."));}
 });
