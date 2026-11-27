@@ -2694,8 +2694,8 @@ button:not(:disabled):focus-visible{
   position:absolute!important;left:0;top:0;width:4px;height:4px;display:block;
   border-radius:50%;background:var(--spark-color);
   box-shadow:0 0 8px 3px var(--spark-color),0 0 18px 5px var(--spark-color),0 0 28px #fff8;
-  opacity:0!important;
-  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.2)!important;
+  opacity:0;
+  transform:translate(-50%,-50%) rotate(var(--angle)) translateY(0) scale(.2);
   animation:ceremonyBurstParticle 1.9s var(--spark-delay) cubic-bezier(.12,.65,.22,1) both!important;
 }
 @keyframes ceremonyBurstRing{
