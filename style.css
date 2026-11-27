@@ -2204,3 +2204,28 @@ body.portal-leaving .enchanted-home .home-footnote{animation:portalCopyFade .48s
 @keyframes fountainHeartAppear{0%{opacity:0;transform:translate(-50%,-35%) scale(.25);filter:blur(15px)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.12);filter:blur(0)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @media(max-width:520px){.fountain-heart-sky{top:25%;height:145px}.fountain-heart-symbol{font-size:120px}.fountain-heart-sky>p{font-size:8px;letter-spacing:2px}.fountain-ceremony-intro{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.fountain-revealed-wish,.fountain-heart-symbol,.fountain-heart-star,.fountain-scene.fountain-grand-finale .fountain-heart-sky{animation:none!important}}
+
+
+/* FONTAINE V5 — bassin recentré sur mobile sans perdre son animation */
+@keyframes fountainPoolRippleMobile {
+  0%,100% { transform:translateX(-50%) scaleX(.97); }
+  50% { transform:translateX(-50%) scaleX(1.03); }
+}
+@media (max-width:520px) {
+  .fountain-scene { overflow:hidden; }
+  .fountain-art {
+    width:100%;
+    max-width:420px;
+    margin-left:auto;
+    margin-right:auto;
+    transform:none;
+    transform-origin:top center;
+  }
+  .fountain-pool {
+    left:50%;
+    width:min(360px,92%);
+    transform:translateX(-50%);
+    animation-name:fountainPoolRippleMobile;
+  }
+  .fountain-basin-glow { left:12%; right:12%; width:auto; }
+}
