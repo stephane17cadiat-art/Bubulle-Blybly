@@ -1490,6 +1490,30 @@ function launchCeremony(){
   bit.style.setProperty("--drift",(Math.random()*180-90)+"px");
   confetti.appendChild(bit);
  }
+ // Quatre gerbes de feux d'artifice royaux, au-dessus du décor
+ const fireworkColors=["#ffe7a8","#ffb8df","#d8c5ff","#ffffff","#f6c4a0"];
+ const bursts=[
+  {x:18,y:27,delay:0},
+  {x:43,y:17,delay:.45},
+  {x:69,y:25,delay:.9},
+  {x:86,y:15,delay:1.35}
+ ];
+ bursts.forEach((burst,index)=>{
+  const burstNode=document.createElement("div");
+  burstNode.className="ceremony-firework-burst";
+  burstNode.style.setProperty("--firework-x",burst.x+"%");
+  burstNode.style.setProperty("--firework-y",burst.y+"%");
+  burstNode.style.setProperty("--firework-delay",burst.delay+"s");
+  const color=fireworkColors[index%fireworkColors.length];
+  for(let spark=0;spark<22;spark++){
+   const ray=document.createElement("span");
+   ray.style.setProperty("--angle",(spark*(360/22)+index*9)+"deg");
+   ray.style.setProperty("--distance",(34+(spark%4)*9)+"px");
+   ray.style.setProperty("--spark-color",spark%5===0?"#fff7d9":color);
+   burstNode.appendChild(ray);
+  }
+  confetti.appendChild(burstNode);
+ });
  ceremonyLaunch.innerHTML="<span>✧</span> Rejouer la cérémonie <span>✧</span>";
 }
 ceremonyLaunch.addEventListener("click",launchCeremony);
