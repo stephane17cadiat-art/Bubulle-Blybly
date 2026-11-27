@@ -764,6 +764,38 @@ $("albumModal").addEventListener("click",event=>{
 });
 
 
+
+/* Bibliothèque des secrets — contenu autonome, sans sauvegarde ni écriture Firebase */
+const secretLibraryBooks = [
+{id:"douceur",category:"Mots doux",icon:"💗",title:"La douceur des petites choses",pages:["Il existe des présences qui rendent les journées plus légères sans même avoir besoin de faire de grands gestes. Un mot, un sourire ou une pensée peuvent devenir de véritables trésors.","Que ce grimoire rappelle à Bubulle et Blybly que les petites attentions ont parfois la plus grande magie. Les plus beaux liens se nourrissent de douceur, un instant après l’autre."]},
+{id:"etoile",category:"Mots doux",icon:"🌟",title:"Une étoile rien qu’à toi",pages:["Même lorsque le ciel semble immense, chaque étoile trouve sa place. Certaines brillent doucement, d’autres illuminent tout un paysage.","Et puis il y a ces étoiles particulières : celles dont la lumière donne envie de sourire. Puisses-tu toujours te souvenir de la belle lumière que tu apportes autour de toi."]},
+{id:"fleur",category:"Mots doux",icon:"🌷",title:"Fleurir à son rythme",pages:["Une fleur ne se presse jamais pour éclore. Elle prend le temps qu’il lui faut, traverse les saisons et s’ouvre quand le moment est venu.","Alors, n’oublie jamais : tu as le droit d’avancer à ton rythme, de te reposer, de recommencer et de fleurir à ta manière."]},
+{id:"foret",category:"Petites légendes",icon:"🌲",title:"La forêt des deux lumières",pages:["On raconte qu’au cœur d’une forêt vivaient deux petites lumières. Chacune suivait son sentier, mais leurs éclats se reconnaissaient au loin.","Un soir, elles découvrirent qu’en éclairant le même chemin, elles faisaient apparaître des merveilles invisibles jusque-là. Depuis, la forêt garde la trace de leurs pas lumineux."]},
+{id:"cle",category:"Petites légendes",icon:"🗝️",title:"La clé du château",pages:["Dans une tour oubliée reposait une clé dorée. Elle n’ouvrait ni coffre ni porte ordinaire : elle révélait les endroits où se cachaient les plus beaux souvenirs.","La clé ne choisissait pas les plus courageux, mais ceux qui savaient regarder avec le cœur. Et chaque fois qu’elle tournait, une nouvelle page s’écrivait."]},
+{id:"lucioles",category:"Petites légendes",icon:"✨",title:"Le secret des lucioles",pages:["Les lucioles de la vallée avaient un drôle de pouvoir : elles recueillaient les rires, les vœux et les pensées que l’on n’osait pas toujours prononcer.","Quand la nuit tombait, elles se rassemblaient pour former un ciel miniature. Les anciens disaient que chaque lumière était un petit bonheur qui refusait de s’éteindre."]},
+{id:"courage",category:"Confidences enchantées",icon:"🦋",title:"Les jours sans soleil",pages:["Il y aura parfois des jours plus lourds, des moments où l’on doute ou où l’on manque d’élan. Cela ne retire rien à la valeur de la personne que l’on est.","Même les ailes les plus délicates ont besoin de repos. Tu n’as pas à être forte à chaque instant : tu peux souffler, demander de la douceur et reprendre ton envol quand tu le souhaites."]},
+{id:"merci",category:"Confidences enchantées",icon:"🕊️",title:"Un merci tout simple",pages:["Merci pour les instants spontanés, les conversations qui s’étirent, les fous rires inattendus et ces petits détails qui rendent une journée différente.","Ce livre ne cherche pas à enfermer les souvenirs dans des phrases parfaites. Il veut simplement leur offrir une place, pour qu’ils puissent être retrouvés avec tendresse."]},
+{id:"voeu",category:"Confidences enchantées",icon:"👑",title:"Le vœu des Besties",pages:["Si la bibliothèque pouvait exaucer un seul vœu, elle choisirait de préserver les instants précieux, de faire grandir les projets qui font sourire et d’apporter de la lumière aux jours gris.","Et sur la dernière page, elle écrirait ceci : que Bubulle et Blybly continuent de découvrir, d’imaginer et de rire, chacune à sa façon, avec toujours un peu de magie dans les poches. 💗"]}
+];
+let openedLibraryBook=null,libraryPageIndex=0;
+function renderLibraryShelves(){
+[["Mots doux","libraryBooksSweet"],["Petites légendes","libraryBooksLegends"],["Confidences enchantées","libraryBooksWhispers"]].forEach(([category,target])=>{$(target).innerHTML=secretLibraryBooks.filter(book=>book.category===category).map(book=>'<button class="library-book" type="button" data-library-book="'+book.id+'"><span class="library-book-icon">'+book.icon+'</span><strong>'+book.title+'</strong><small>Ouvrir le grimoire</small></button>').join("");});
+}
+function showLibraryPage(){
+if(!openedLibraryBook)return;
+$("libraryBookCategory").textContent=openedLibraryBook.category.toUpperCase();$("libraryBookIcon").textContent=openedLibraryBook.icon;$("libraryBookTitle").textContent=openedLibraryBook.title;$("libraryBookText").textContent=openedLibraryBook.pages[libraryPageIndex];$("libraryPageCount").textContent="Page "+(libraryPageIndex+1)+" / "+openedLibraryBook.pages.length;$("libraryPreviousPage").disabled=libraryPageIndex===0;$("libraryNextPage").textContent=libraryPageIndex===openedLibraryBook.pages.length-1?"Revenir aux étagères":"Tourner la page →";
+}
+function closeSecretLibraryBook(){openedLibraryBook=null;$("libraryReading").classList.add("hidden");$("libraryShelves").classList.remove("hidden");}
+function openSecretLibraryBook(bookId){openedLibraryBook=secretLibraryBooks.find(book=>book.id===bookId)||null;if(!openedLibraryBook)return;libraryPageIndex=0;$("libraryShelves").classList.add("hidden");$("libraryReading").classList.remove("hidden");showLibraryPage();}
+const secretLibraryModal=$("secretLibraryModal");
+$("secretLibraryBtn").addEventListener("click",()=>{renderLibraryShelves();closeSecretLibraryBook();secretLibraryModal.classList.remove("hidden");});
+$("secretLibraryClose").addEventListener("click",()=>secretLibraryModal.classList.add("hidden"));
+secretLibraryModal.addEventListener("click",event=>{if(event.target===secretLibraryModal)secretLibraryModal.classList.add("hidden");});
+$("libraryShelves").addEventListener("click",event=>{const book=event.target.closest("[data-library-book]");if(book)openSecretLibraryBook(book.dataset.libraryBook);});
+$("libraryBackToShelves").addEventListener("click",closeSecretLibraryBook);
+$("libraryPreviousPage").addEventListener("click",()=>{if(!openedLibraryBook||libraryPageIndex<=0)return;libraryPageIndex--;showLibraryPage();});
+$("libraryNextPage").addEventListener("click",()=>{if(!openedLibraryBook)return;if(libraryPageIndex<openedLibraryBook.pages.length-1){libraryPageIndex++;showLibraryPage();}else closeSecretLibraryBook();});
+
 function playRewardAnimation(){
   if(!activeReward) return;
   const visual=$("rewardVisual");
