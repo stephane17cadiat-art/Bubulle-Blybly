@@ -25,7 +25,10 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 .bow svg{display:block;width:100%;height:100%;overflow:visible}
 .open .ribbon,.open .bow{opacity:0}
 .open .bow{transform:translate(-50%,-50%) scale(.7)}
-.seal{position:absolute;z-index:7;left:50%;top:48%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#f8e3b2,#b98d49 75%);color:#fff8e9;font-size:25px;box-shadow:0 3px 10px #825b4a55;border:2px solid #f5dfb0;transition:opacity .3s,transform .3s}
+.seal{position:absolute;z-index:9;left:50%;top:83%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 24%,#fff5d8 0%,#e8c77e 28%,#bd9145 67%,#8d642e 100%);color:#fff8e8;box-shadow:inset 0 2px 4px #fff9,inset 0 -4px 7px #76502066,0 3px 8px #825b4a66;border:2px solid #f5dfb0;transition:opacity .3s,transform .3s}
+.seal:before{content:"";position:absolute;inset:4px;border:1px solid #fff0c7;border-radius:50%;box-shadow:inset 0 0 0 1px #9c743b55}
+.seal span{position:relative;font:bold 12px Georgia,serif;letter-spacing:-.08em;text-shadow:0 1px 1px #8b642f;color:#fff9e9}
+.seal span:after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:14px;height:1px;background:#fff0c7}
 .paper{position:absolute;z-index:4;left:7%;right:7%;bottom:12px;height:82%;background:#fffaf4;border:1px solid #ead8c8;padding:22px 18px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transform:translateY(35px);transition:transform 1s .35s,opacity .5s .35s}
 .paper small{font:10px Arial,sans-serif;letter-spacing:.2em;color:#b28c58;text-transform:uppercase}
 .paper strong{font-size:23px;font-weight:normal;color:#986a78;margin:12px 0}
@@ -79,7 +82,7 @@ h1{font-size:clamp(28px,7vw,42px);font-weight:normal;margin:0 0 12px;color:#865c
 <path d="M78 48 Q90 39 102 48 L105 63 Q90 76 75 63Z" fill="url(#bowKnot)" stroke="#b96583" stroke-width="1.5"/>
 <path d="M82 50 Q90 45 98 50" fill="none" stroke="#fff8fa" stroke-width="2.8" opacity=".8" stroke-linecap="round"/>
 <ellipse cx="85" cy="56" rx="3" ry="5" fill="#fff" opacity=".25"/>
-</svg></div><div class="seal">♥</div>
+</svg></div><div class="seal" aria-label="Sceau Bubulle et Blybly"><span>B&amp;B</span></div>
  </div>
 </div>
 <div class="hint" id="hint">TOUCHE L’ENVELOPPE POUR L’OUVRIR</div>
