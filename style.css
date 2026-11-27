@@ -2822,3 +2822,123 @@ button:not(:disabled):focus-visible{
   .ceremony-stage.is-grand-ball .ceremony-person>span,
   .ceremony-stage.is-grand-ball .ceremony-heart{animation:none!important}
 }
+
+
+/* Salle des cérémonies : décor rose poudré et or */
+.ceremony-royal-hall{
+  border-color:#d9b3ad;
+  background:linear-gradient(180deg,#563b50 0,#3b293f 48%,#f8e9e7 48%,#fff8f4 100%);
+  box-shadow:0 28px 110px #170d1dcc,0 0 0 5px #d9b3ad35,0 0 65px #e9c2c755;
+}
+.ceremony-gold-frame{border-color:#f0d7c477}
+.ceremony-royal-hall .ceremony-header{
+  background:
+    radial-gradient(ellipse at 50% -15%,#bd8e9e 0,#80566f 48%,#493348 100%);
+}
+.ceremony-royal-seal{
+  border-color:#f5d9c7;
+  color:#fff0d9;
+  background:radial-gradient(circle,#a9768b,#56394f);
+  box-shadow:0 0 0 4px #f4d5d322,0 0 25px #f2c9d855;
+}
+.ceremony-royal-stage{
+  background:
+    radial-gradient(ellipse at 50% 70%,#ffe8df88,transparent 43%),
+    linear-gradient(180deg,#6e4a68 0%,#a8758d 58%,#d4a0aa 100%);
+}
+.ceremony-royal-stage:before{
+  background:
+    radial-gradient(ellipse at 0 50%,#f9d9df33,transparent 42%),
+    radial-gradient(ellipse at 100% 50%,#f9d9df33,transparent 42%),
+    repeating-linear-gradient(90deg,transparent 0 11.8%,#fff0e20d 12% 12.35%,transparent 12.6% 24%),
+    radial-gradient(ellipse at 50% 100%,#fff0e255,transparent 58%);
+}
+.ceremony-royal-stage .ceremony-chandelier{
+  border-bottom-color:#f5d9c7;
+  color:#fff0d9;
+  filter:drop-shadow(0 0 12px #ffe8d9);
+}
+.ceremony-chandelier i{text-shadow:0 0 20px #ffe8d9}
+.ceremony-royal-pillars i{
+  border-color:#f0d0bf99;
+  background:linear-gradient(90deg,#d9aeb044,#fff0e288,#d9aeb044);
+  box-shadow:0 0 20px #ffe8e055;
+}
+.ceremony-royal-pillars i:before,.ceremony-royal-pillars i:after{
+  border-color:#f1d2c2;
+  background:#a8758d;
+}
+.ceremony-royal-stage .ceremony-arch{
+  border-color:#f3d7c3;
+  background:linear-gradient(90deg,#f9e4dc44,#fff8ee66 50%,#f9e4dc44);
+  box-shadow:0 0 0 3px #8a5d78,0 0 35px #ffe6df88,inset 0 0 28px #fff4e877;
+}
+.ceremony-royal-stage .ceremony-arch:before{border-color:#fff0dfbb}
+.ceremony-royal-stage .ceremony-person>span{
+  border-color:#f6ddc9;
+  background:radial-gradient(circle at 35% 25%,#fffaf2bb,#e6b8c888 75%);
+  box-shadow:0 0 0 5px #f5d6c522,0 0 30px #ffe6df99;
+}
+.ceremony-royal-stage .ceremony-person>b{color:#fff3e9}
+.ceremony-person small{color:#ffe7e8}
+.ceremony-heart{color:#ffe0e8;text-shadow:0 0 18px #ffd5e7}
+.ceremony-royal-stage .ceremony-stage-plinth{
+  border-color:#f4d9c4;
+  background:linear-gradient(90deg,#86536f,#f0cbb6,#86536f);
+}
+.ceremony-stage-caption{color:#fff0df}
+.ceremony-royal-controls{
+  background:linear-gradient(180deg,#f8e9e7,#fff9f5);
+}
+.ceremony-section-heading,.ceremony-section-heading>span{color:#a87982}
+.ceremony-section-heading small{color:#9a7888}
+.ceremony-royal-controls .ceremony-occasions button{
+  border-color:#dfbdc5;
+  background:linear-gradient(145deg,#fffdfa,#f6e5e9);
+  box-shadow:0 4px 12px #8b5d7112;
+}
+.ceremony-royal-controls .ceremony-occasions button>span{
+  background:#f1dce0;
+}
+.ceremony-royal-controls .ceremony-occasions button>b{color:#684b61}
+.ceremony-royal-controls .ceremony-occasions button>small{color:#9b7889}
+.ceremony-royal-controls .ceremony-occasions button.selected{
+  border-color:#c49a72;
+  background:linear-gradient(145deg,#fff3df,#f5dce7);
+  box-shadow:0 0 0 2px #e6c6b266,0 8px 20px #8c6b7b22;
+}
+.ceremony-royal-controls .ceremony-occasions button.selected>span{
+  background:#ead0b5;
+  box-shadow:0 0 15px #e3c1a788;
+}
+.ceremony-royal-controls .ceremony-launch{
+  border-color:#f0d2bb;
+  background:linear-gradient(110deg,#704b68,#bd8298 48%,#704b68);
+  box-shadow:0 8px 25px #9a6a8055,inset 0 1px #ffffff66;
+}
+.ceremony-royal-hall .ceremony-footer{
+  color:#f8e4d7;
+  background:#563b50;
+}
+.ceremony-royal-hall .ceremony-footer span{color:#f3d1b5}
+.ceremony-royal-stage .ceremony-stage-message{
+  border-color:#f1d3bd;
+  background:linear-gradient(145deg,rgba(73,47,68,.97),rgba(92,56,79,.97));
+  box-shadow:0 8px 28px #241322bb,inset 0 1px 0 #fff3d633,0 0 18px #f4d49a33;
+}
+.ceremony-royal-stage .ceremony-stage-message>span{color:#ffe6d2}
+.ceremony-royal-stage .ceremony-stage-message h3{color:#fff0e7;text-shadow:0 0 16px #f7dba4}
+.ceremony-light-rays{
+  background:conic-gradient(from 250deg at 50% 0%,transparent 0deg,#ffe8e322 18deg,transparent 35deg,#fff0e633 52deg,transparent 70deg,#ffe8e322 88deg,transparent 110deg);
+}
+.ceremony-royal-stage .ceremony-curtain{
+  background:linear-gradient(90deg,#69465e,#bd8499 55%,#70485f);
+  box-shadow:inset -8px 0 16px #38203688,0 0 20px #38203688;
+}
+.ceremony-royal-stage .ceremony-curtain:after{
+  background:linear-gradient(transparent,#f5d7bd,#f5d7bd,transparent);
+}
+.ceremony-royal-stage .ceremony-stage-plinth{color:#fff3df}
+@media(max-width:520px){
+  .ceremony-royal-hall{background:linear-gradient(180deg,#563b50 0,#3b293f 48%,#f8e9e7 48%,#fff8f4 100%)}
+}
