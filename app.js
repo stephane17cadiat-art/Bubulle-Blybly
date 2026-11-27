@@ -429,6 +429,9 @@ function renderRealmAtlas(completed){
 }
 function render(){
   const p=roomData.players;
+  // Rafraîchir aussi la Fontaine à chaque snapshot Firestore :
+  // les choix de l'autre appareil deviennent visibles sans fermer/réouvrir le panneau.
+  renderFountainSharedState();
   if(!$("kingdomsModal").classList.contains("hidden")) renderKingdoms();
   // Chaque appareil affiche uniquement le profil de la joueuse connectée.
   $("bubulleCard").style.display = myRole === "BUBULLE" ? "" : "none";
