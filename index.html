@@ -394,6 +394,47 @@
     </section>
   </div>
 
+  <div id="ceremonyModal" class="ceremony-modal hidden" role="dialog" aria-modal="true" aria-labelledby="ceremonyTitle">
+    <section class="ceremony-hall">
+      <button id="ceremonyCloseBtn" class="ceremony-close" type="button" aria-label="Fermer la salle des cérémonies">×</button>
+      <header class="ceremony-header">
+        <p>✦ LE GRAND PALAIS DES BESTIES ✦</p>
+        <h2 id="ceremonyTitle">La salle des <em>cérémonies</em></h2>
+        <span>Un instant précieux à célébrer ensemble</span>
+      </header>
+      <div id="ceremonyStage" class="ceremony-stage">
+        <div class="ceremony-stars" aria-hidden="true"><i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i><i>✧</i></div>
+        <div class="ceremony-chandelier" aria-hidden="true">✧</div>
+        <div class="ceremony-arch" aria-hidden="true">
+          <div class="ceremony-arch-inner">
+            <div class="ceremony-couple">
+              <div class="ceremony-person"><span>👑</span><b>BUBULLE</b></div>
+              <div class="ceremony-heart">♥</div>
+              <div class="ceremony-person"><span>👑</span><b>BLYBLY</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="ceremony-stage-plinth" aria-hidden="true"><span>✦</span><span>♥</span><span>✦</span></div>
+        <div class="ceremony-curtain curtain-left" aria-hidden="true"></div>
+        <div class="ceremony-curtain curtain-right" aria-hidden="true"></div>
+        <div class="ceremony-confetti" aria-hidden="true"></div>
+        <div id="ceremonyStageMessage" class="ceremony-stage-message" aria-live="polite"><span>✧</span><h3>Chaque instant mérite sa lumière</h3><p>Choisissez une occasion et ouvrez le bal.</p></div>
+      </div>
+      <div class="ceremony-controls">
+        <p class="ceremony-kicker">CHOISISSEZ VOTRE CÉLÉBRATION</p>
+        <div class="ceremony-occasions">
+          <button type="button" data-ceremony="birthday">🎂 Anniversaire</button>
+          <button type="button" data-ceremony="success">🏆 Réussite</button>
+          <button type="button" data-ceremony="friendship">💗 Amitié</button>
+          <button type="button" data-ceremony="justbecause">✨ Juste pour le plaisir</button>
+        </div>
+        <button id="ceremonyLaunchBtn" class="ceremony-launch" type="button" disabled>✧ Lancer la cérémonie ✧</button>
+        <p class="ceremony-footnote">Choisissez votre occasion, puis laissez la magie opérer.</p>
+      </div>
+      <footer class="ceremony-footer">✦ Une belle occasion, deux cœurs réunis ✦</footer>
+    </section>
+  </div>
+
   <div id="avatarWorkshopOverlay" class="avatar-workshop-overlay hidden" role="dialog" aria-modal="true" aria-label="Atelier de création du personnage">
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
