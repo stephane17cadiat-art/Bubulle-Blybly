@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#211b3d">
   <title>Bubulle & Blybly — La Forêt des Trésors</title>
-  <link rel="stylesheet" href="./style.css?v=20261127-gramophone-v1">
+  <link rel="stylesheet" href="./style.css?v=20261127-secret-library-v1">
 </head>
 <body>
   <div class="stars" aria-hidden="true"></div>
@@ -94,6 +94,7 @@
           <button id="saveGameBtn" class="command-button command-save" type="button"><span>💾</span><b>Sauvegarder</b></button>
           <button id="albumOpenBtn" class="command-button" type="button"><span>📖</span><b>Album secret</b></button>
           <button id="kingdomsOpenBtn" class="command-button" type="button"><span>🏰</span><b>Mes royaumes</b></button>
+          <button id="secretLibraryBtn" class="command-button library-command" type="button"><span>📚</span><b>Bibliothèque</b></button>
         </div>
         <div class="song-player"><div class="song-player-heading"><span class="song-note">✦</span><div><b>Le gramophone enchanté</b><span class="song-title">La playlist de nos souvenirs</span></div><span class="song-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div><div class="gramophone-disc-wrap"><div class="gramophone-disc"><span class="disc-groove"></span><span class="disc-label">♥</span></div><span class="disc-sparkle sparkle-one">✧</span><span class="disc-sparkle sparkle-two">✦</span></div><div class="song-track-info"><b id="songTitle" class="song-title">Préparation de la playlist…</b></div><div class="song-progress" aria-hidden="true"><span id="songProgressFill"></span></div><span id="songTime" class="song-time">0:00 / 0:00</span><div class="song-controls"><button id="songToggleBtn" class="song-toggle" type="button">▶️ Écouter la playlist</button><button id="songNextBtn" class="song-next" type="button" aria-label="Chanson suivante">⏭ Suivante</button></div><span id="songStatus" class="song-status" role="status">5 chansons pour accompagner votre aventure 💗</span><audio id="bestiesSong" preload="metadata"></audio></div>
         <details class="more-options">
@@ -285,7 +286,19 @@
       </div>
     </section>
   </div>
-\n  <div id="kingdomsModal" class="kingdoms-modal hidden" role="dialog" aria-modal="true" aria-labelledby="kingdomsTitle">
+\n  <div id="secretLibraryModal" class="secret-library-modal hidden" role="dialog" aria-modal="true" aria-labelledby="secretLibraryTitle">
+<section class="secret-library-room">
+<button id="secretLibraryClose" class="secret-library-close" type="button" aria-label="Fermer la bibliothèque">×</button>
+<header class="library-header"><div class="library-header-ornament">✦ ❧ ✦</div><p class="library-kicker">LE SANCTUAIRE DES MOTS PRÉCIEUX</p><h2 id="secretLibraryTitle">La Bibliothèque <em>des secrets</em></h2><p>Entre doucement… chaque livre garde une petite merveille pour Bubulle & Blybly.</p><div class="library-header-glow" aria-hidden="true">✧</div></header>
+<div class="library-arch" aria-hidden="true"><span>♡</span><i>✦</i><i>✧</i><i>✦</i></div>
+<div id="libraryShelves" class="library-shelves"><p class="library-welcome-note">Choisissez un grimoire sur les étagères. Chaque couverture cache deux pages à découvrir.</p>
+<section class="library-shelf-group"><div class="library-shelf-title"><span>♡</span><div><small>PREMIÈRE ÉTAGÈRE</small><h3>Mots doux</h3></div><span>♡</span></div><div class="library-book-grid" id="libraryBooksSweet"></div></section>
+<section class="library-shelf-group"><div class="library-shelf-title"><span>✧</span><div><small>DEUXIÈME ÉTAGÈRE</small><h3>Petites légendes</h3></div><span>✧</span></div><div class="library-book-grid" id="libraryBooksLegends"></div></section>
+<section class="library-shelf-group"><div class="library-shelf-title"><span>🌷</span><div><small>TROISIÈME ÉTAGÈRE</small><h3>Confidences enchantées</h3></div><span>🌷</span></div><div class="library-book-grid" id="libraryBooksWhispers"></div></section></div>
+<section id="libraryReading" class="library-reading hidden" aria-live="polite"><button id="libraryBackToShelves" class="library-back" type="button">← Retour aux étagères</button><div class="library-open-book"><div class="library-page-decoration">✧</div><p id="libraryBookCategory" class="library-page-kicker">UN MOT PRÉCIEUX</p><div id="libraryBookIcon" class="library-page-icon">💗</div><h3 id="libraryBookTitle">Un secret à garder</h3><div class="library-page-rule"><span>✦</span></div><p id="libraryBookText" class="library-page-text"></p><p id="libraryPageCount" class="library-page-count">Page 1 / 2</p><div class="library-page-controls"><button id="libraryPreviousPage" type="button" disabled>← Précédente</button><button id="libraryNextPage" type="button">Tourner la page →</button></div></div><p class="library-reading-footnote">Un petit secret de la bibliothèque, à lire à son rythme. ♡</p></section>
+<footer class="library-footer"><span>✦</span> Les plus beaux mots sont ceux que l’on garde près du cœur <span>✦</span></footer></section></div>
+
+<div id="kingdomsModal" class="kingdoms-modal hidden" role="dialog" aria-modal="true" aria-labelledby="kingdomsTitle">
     <section class="kingdoms-book">
       <button id="kingdomsCloseBtn" class="kingdoms-close" type="button" aria-label="Fermer les royaumes">×</button>
       <header class="kingdoms-cover">
@@ -318,6 +331,6 @@
     <button id="closeAvatarWorkshop" class="avatar-workshop-close" type="button" aria-label="Fermer l’atelier">✕ Fermer l’atelier</button>
     <iframe id="avatarWorkshopFrame" title="Atelier féerique Bubulle et Blybly" allow="fullscreen"></iframe>
   </div>
-  <script type="module" src="./app.js?v=20261127-gramophone-v1"></script>
+  <script type="module" src="./app.js?v=20261127-secret-library-v1"></script>
 </body>
 </html>
