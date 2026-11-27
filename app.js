@@ -940,26 +940,54 @@ fountainModal.addEventListener("click",event=>{if(event.target===fountainModal)f
 fountainChoices.addEventListener("click",async event=>{
   const choice=event.target.closest("[data-wish-kind]");if(!choice||!roomRef||!myRole)return;
   const kind=choice.dataset.wishKind,index=Number(choice.dataset.wishIndex);
+  if(!fountainWishTexts[kind]||!Number.isInteger(index)||index<0||index>=fountainWishTexts[kind].length)return;
   fountainChoices.querySelectorAll(`[data-wish-kind="${kind}"]`).forEach(item=>{
     const active=item===choice;item.classList.toggle("selected",active);item.setAttribute("aria-pressed",String(active));
   });
-  fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Un vœu a rejoint la fontaine… La révélation attend les deux cœurs. 💗</p>';
+  fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Enregistrement du vœu dans votre partie…</p>';
   fountainRevealing=false;
   try{
-    await updateDoc(roomRef,{["fountainWishes."+myRole+"."+kind]:index});
-    say("fountainSharedStatus","Vœu transmis à l’autre joueuse… ✨");
-  }catch(error){console.error(error);say("fountainSharedStatus","Synchronisation impossible : "+(error.message||"réessaie."));}
+    await runTransaction(db,async tx=>{
+      const snap=await tx.get(roomRef);
+      if(!snap.exists())throw new Error("La partie est introuvable.");
+      const data=snap.data();
+      if(data.players?.[myRole]?.uid!==user?.uid)throw new Error("Ce profil n’est plus associé à cet appareil. Reconnecte-toi à la bonne place.");
+      const current=data.fountainWishes||{};
+      const own={...(current[myRole]||{}),[kind]:index};
+      tx.update(roomRef,{fountainWishes:{...current,[myRole]:own}});
+    });
+    say("fountainSharedStatus","✓ Vœu enregistré dans Firebase pour "+fountainRoleName(myRole)+" · Partie "+roomId+" ✨");
+  }catch(error){
+    console.error("Fontaine — enregistrement impossible",error);
+    say("fountainSharedStatus","ÉCHEC de synchronisation : "+(error.message||"réessaie."));
+    fountainReveal.innerHTML='<span class="fountain-reveal-icon">⚠️</span><p>Ce vœu n’a pas été enregistré. Vérifie la connexion et réessaie.</p>';
+    renderFountainSharedState();
+  }
 });
 $("fountainResetBtn").addEventListener("click",async()=>{
   if(!roomRef||!myRole)return;
-  const reset={};fountainCategories.forEach(category=>reset["fountainWishes."+myRole+"."+category.id]=null);
   try{
-    await updateDoc(roomRef,reset);
+    await runTransaction(db,async tx=>{
+      const snap=await tx.get(roomRef);
+      if(!snap.exists())throw new Error("La partie est introuvable.");
+      const data=snap.data();
+      if(data.players?.[myRole]?.uid!==user?.uid)throw new Error("Ce profil n’est plus associé à cet appareil.");
+      const current=data.fountainWishes||{};
+      const own={...(current[myRole]||{})};
+      fountainCategories.forEach(category=>delete own[category.id]);
+      tx.update(roomRef,{fountainWishes:{...current,[myRole]:own},fountainRevealAt:null});
+    });
     fountainRevealing=false;
+    fountainLastRevealToken=null;
     fountainReveal.innerHTML='<span class="fountain-reveal-icon">💧</span><p>Tes quatre choix ont été effacés. Tu peux recommencer quand tu veux. 💗</p>';
     $("fountainWishBtn").innerHTML='<span>✧</span> Révéler nos huit vœux <span>✧</span>';
-  }catch(error){console.error(error);say("fountainSharedStatus","Impossible de réinitialiser : "+(error.message||"réessaie."));}
+    say("fountainSharedStatus","Tes choix ont été réinitialisés dans la partie. 💗");
+  }catch(error){
+    console.error("Fontaine — réinitialisation impossible",error);
+    say("fountainSharedStatus","ÉCHEC de réinitialisation : "+(error.message||"réessaie."));
+  }
 });
+
 function fountainWishBurst(){
   const scene=$("fountainScene"),rect=scene.getBoundingClientRect(),originX=rect.width/2,originY=rect.height*.68;
   scene.classList.remove("fountain-casting");void scene.offsetWidth;scene.classList.add("fountain-casting");
