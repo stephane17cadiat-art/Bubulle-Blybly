@@ -2412,3 +2412,14 @@ button:not(:disabled):focus-visible{
   button:not(:disabled),button:not(:disabled)::after,.primary:not(:disabled){animation:none!important;transition:none!important}
   button:not(:disabled):hover,button:not(:disabled):active{transform:none}
 }
+
+
+/* Sélecteur de profil Bubulle & Blybly */
+.profile-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:410px;margin:18px auto 8px}
+.profile-choice-button{display:flex;align-items:center;gap:11px;text-align:left;padding:12px;border:1px solid #ffffff30;border-radius:17px;background:#ffffff0b;color:var(--white);cursor:pointer;transition:transform .18s,border-color .18s,background .18s,box-shadow .18s}
+.profile-choice-button img{width:48px;height:48px;object-fit:cover;border-radius:14px;border:2px solid #ffffff55}
+.profile-choice-button b{display:block;font:700 14px 'DM Sans'}
+.profile-choice-button small{display:block;margin-top:4px;color:var(--muted);font-size:10px}
+.profile-choice-button.selected{border-color:var(--pink);background:#f5a9d222;box-shadow:0 0 0 2px #f5a9d233,0 8px 24px #d99bd722;transform:translateY(-2px)}
+.profile-choice-status{min-height:18px;margin:7px auto 13px;color:var(--gold);font-size:12px;text-align:center}
+@media(max-width:420px){.profile-choice{gap:8px}.profile-choice-button{padding:9px;gap:7px}.profile-choice-button img{width:39px;height:39px}.profile-choice-button b{font-size:12px}}
