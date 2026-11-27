@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Bubulle & Blybly — La Forêt des Trésors",
+  "short_name": "Bubulle & Blybly",
+  "description": "Une aventure enchantée à deux.",
+  "lang": "fr-FR",
+  "start_url": "./?source=application",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8e8ef",
+  "theme_color": "#d98fae",
+  "icons": [
+    {
+      "src": "./assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
