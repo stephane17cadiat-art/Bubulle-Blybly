@@ -2747,9 +2747,9 @@ button:not(:disabled):focus-visible{
   clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);
   filter:blur(5px);transform-origin:50% 0;
 }
-.ceremony-ballroom-effects i:nth-child(1){left:7%;--swing:-18deg}
-.ceremony-ballroom-effects i:nth-child(2){left:36%;--swing:12deg}
-.ceremony-ballroom-effects i:nth-child(3){right:5%;--swing:-12deg}
+.ceremony-ballroom-effects i:nth-child(1){left:7%;--spot-delay:0s}
+.ceremony-ballroom-effects i:nth-child(2){left:36%;--spot-delay:-1.6s}
+.ceremony-ballroom-effects i:nth-child(3){right:5%;--spot-delay:-3.2s}
 .ceremony-dance-floor{
   position:absolute;z-index:1;left:8%;right:8%;bottom:0;height:37%;
   opacity:0;pointer-events:none;clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);
@@ -2778,8 +2778,7 @@ button:not(:disabled):focus-visible{
 .ceremony-stage.is-grand-ball .ceremony-music-notes{opacity:1}
 .ceremony-stage.is-grand-ball .ceremony-dance-floor{opacity:.9}
 .ceremony-stage.is-grand-ball .ceremony-ballroom-effects i{
-  animation:ceremonySpotlightSweep 4.8s ease-in-out infinite alternate;
-  animation-delay:calc(var(--swing) * .01);
+  animation:ceremonySpotlightSweep 4.8s ease-in-out var(--spot-delay) infinite alternate;
 }
 .ceremony-stage.is-grand-ball .ceremony-music-notes i{
   animation:ceremonyMusicNote 4.8s var(--note-delay) ease-in-out infinite;
