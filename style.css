@@ -2489,3 +2489,55 @@ button:not(:disabled):focus-visible{
 @keyframes royalRayGlow{0%{opacity:.35;transform:scale(.96)}100%{opacity:.9;transform:scale(1.04)}}
 @media(max-width:520px){.ceremony-royal-hall .ceremony-header{padding:22px 34px 17px}.ceremony-royal-stage{min-height:350px}.ceremony-royal-stage .ceremony-arch{width:84%;height:235px}.ceremony-royal-stage .ceremony-person>span{width:59px;height:59px;font-size:30px}.ceremony-person small{font-size:8px}.ceremony-royal-controls .ceremony-occasions button{min-height:62px;padding:8px 7px;grid-template-columns:28px 1fr;column-gap:6px}.ceremony-royal-controls .ceremony-occasions button>span{width:27px;height:27px;font-size:15px}.ceremony-royal-controls .ceremony-occasions button>b{font-size:10px}.ceremony-royal-controls .ceremony-occasions button>small{font-size:9px}.ceremony-stage-caption{font-size:7px;letter-spacing:2px}}
 @media(prefers-reduced-motion:reduce){.ceremony-modal.is-opening .ceremony-hall,.ceremony-modal.is-opening .ceremony-royal-seal,.ceremony-modal.is-opening .ceremony-curtain,.ceremony-light-rays{animation:none!important}}
+
+
+/* Lisibilité renforcée du message de cérémonie */
+.ceremony-royal-stage .ceremony-stage-message{
+  left:5%;
+  right:5%;
+  bottom:12px;
+  padding:15px 18px 16px;
+  border:1px solid #f4d49a;
+  border-radius:17px;
+  background:linear-gradient(145deg,rgba(37,20,45,.97),rgba(32,23,50,.97));
+  box-shadow:0 8px 28px #080510bb,inset 0 1px 0 #fff3d633,0 0 18px #f4d49a33;
+  backdrop-filter:blur(8px);
+  text-shadow:none;
+}
+.ceremony-royal-stage .ceremony-stage-message>span{
+  display:block;
+  color:#ffe4a6;
+  font-size:23px;
+  line-height:1.1;
+  text-shadow:0 0 12px #f7d58b99;
+}
+.ceremony-royal-stage .ceremony-stage-message h3{
+  margin:5px 0 7px;
+  color:#fff7e8;
+  font:700 clamp(20px,4.4vw,29px)/1.2 Georgia,serif;
+  text-shadow:0 2px 5px #090611,0 0 14px #f7d58b55;
+}
+.ceremony-royal-stage .ceremony-stage-message p{
+  max-width:440px;
+  margin:0 auto;
+  color:#fffaf4;
+  font:600 clamp(13px,2.8vw,15px)/1.55 'DM Sans',sans-serif;
+  text-shadow:0 1px 3px #090611;
+}
+@media(max-width:520px){
+  .ceremony-royal-stage .ceremony-stage-message{
+    left:4%;
+    right:4%;
+    bottom:10px;
+    padding:12px 12px 13px;
+    border-radius:14px;
+  }
+  .ceremony-royal-stage .ceremony-stage-message h3{
+    font-size:clamp(18px,5vw,23px);
+    line-height:1.2;
+  }
+  .ceremony-royal-stage .ceremony-stage-message p{
+    font-size:13px;
+    line-height:1.45;
+  }
+}
